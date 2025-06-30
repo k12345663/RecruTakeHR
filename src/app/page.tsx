@@ -12,6 +12,7 @@ import { BrainCircuit, Loader2, FileUp } from 'lucide-react';
 import { generateInterviewKit, GenerateInterviewKitOutput } from '@/ai/flows/generate-interview-kit';
 import { useToast } from "@/hooks/use-toast"
 import { Checkbox } from '@/components/ui/checkbox';
+import { ThemeToggle } from '@/components/theme-toggle';
 
 export default function Home() {
   const [jobDescription, setJobDescription] = useState('');
@@ -82,8 +83,9 @@ export default function Home() {
       <header className="container mx-auto px-4 lg:px-6 h-16 flex items-center justify-between border-b">
         <div className="flex items-center gap-2">
           <BrainCircuit className="h-6 w-6 text-primary" />
-          <span className="text-lg font-semibold">InterviewerAI</span>
+          <span className="text-lg font-semibold">RecruTake</span>
         </div>
+        <ThemeToggle />
       </header>
 
       <main className="flex-1 p-4 md:p-8">
@@ -254,6 +256,9 @@ export default function Home() {
           </div>
         </div>
       </main>
+      <footer className="py-4 text-center text-sm text-muted-foreground border-t">
+        RecruTake by Unstop
+      </footer>
     </div>
   );
 }

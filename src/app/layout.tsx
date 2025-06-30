@@ -1,10 +1,11 @@
 import type {Metadata} from 'next';
 import { Toaster } from "@/components/ui/toaster";
 import { cn } from '@/lib/utils';
+import { ThemeProvider } from '@/components/theme-provider';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'InterviewerAI',
+  title: 'RecruTake',
   description: 'Craft the perfect interview, every time.',
 };
 
@@ -14,7 +15,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -23,8 +24,15 @@ export default function RootLayout({
       <body className={cn(
           "min-h-screen bg-background font-body antialiased"
       )}>
-        {children}
-        <Toaster />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   );
