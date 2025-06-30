@@ -12,6 +12,7 @@
 import { ai } from '@/ai/genkit';
 import { z } from 'genkit';
 import type { QuestionDifficulty } from '@/types/interview-kit'; // For difficultyTimeMap
+import { randomUUID } from 'crypto';
 
 // This map is used in post-processing if AI doesn't provide estimatedTimeMinutes
 const difficultyTimeMap: Record<QuestionDifficulty, number> = {
@@ -33,6 +34,7 @@ const GenerateInterviewKitInputSchema = z.object({
 export type GenerateInterviewKitInput = z.infer<typeof GenerateInterviewKitInputSchema>;
 
 const QuestionAnswerPairSchema = z.object({
+  id: z.string().optional().describe("A unique identifier for the question. This is for internal use and will be added automatically. Do not generate this field."),
   question: z.string().describe("A crisp and concise interview question, ONE or TWO lines at most. It must be designed to validate and probe the depth of skills and experiences claimed on the resume. Instead of just asking if they know a technology, ask them to demonstrate their expertise with specific examples of challenges, architectural decisions, or complex problems they solved. The question must be insightful and highly specific, directly derived from projects or skills mentioned in the Candidate's Unstop Profile and, most importantly, the Resume File. Every detail in the resume is a potential source for a probing question. Do NOT include the candidate's name in the question itself."),
   interviewerNote: z.string().describe("A brief, one-sentence note FOR THE INTERVIEWER. This note MUST explain the strategic purpose of the question, guiding the interviewer on what to look for. For example, 'This tests the candidate's ability to articulate the business impact of their technical work' or 'This probes the depth of their hands-on experience with [Technology from Resume]'. This note should NOT be visible to the candidate."),
   answer: z.string().describe("A model answer from the INTERVIEWER'S PERSPECTIVE. Crucially, you MUST format the model answer as a newline-separated list of 3-4 concise bullet points, where each point starts with a hyphen (e.g., '- First point.\\n- Second point.'). These bullet points for the recruiter must be very brief and crisp, ideally just a few key words or a very short phrase, serving as a quick checklist of essential elements the candidate should touch upon. Each bullet point MUST outline KEY POINTS A CANDIDATE SHOULD COVER for a strong answer, making it exceptionally easy for a non-technical recruiter to judge. While generally informed by the overall context (Job Description, candidate profile including Unstop link, resume file content [AI to analyze if provided], projects, tech stack, goals, accomplishments, challenges, educational background, academic achievements, and past work experiences), for many general questions, the key points should strongly emphasize fundamental concepts or general best practices for answering, rather than requiring every point to be explicitly tied to a specific line in the Job Description. The goal is to provide a solid baseline for evaluation. Answers must be basic, clear, and easy for a non-technical recruiter to evaluate. EXPLICITLY reference key terms, skills, projects, or experiences from the Job Description AND/OR the Candidate's Unstop Profile/Resume File Content when crucial for context. Furthermore, each bullet point MUST also include a textual suggestion of its indicative weight or contribution (e.g., 'approx. 2-3 points', 'around 4 points') towards the question's total 10-point score, using whole numbers or small, clear ranges of whole numbers. This textual guidance is to help the panelist understand the relative importance of each point when they assign their overall 1-10 score for the question using the slider. The collective indicative contributions for all bullet points should paint a clear picture of what constitutes a strong, comprehensive answer that would merit a high score, conceptually aligning towards the 10-point maximum if all aspects are well addressed. Include guidance on evaluating real-life examples and relevant information shared by the candidate not present on the resume using a note like: 'Note: If the candidate provides relevant real-life examples or discusses experiences/skills not detailed on their resume/profile but clearly relevant to the role, this can indicate greater depth, initiative, or broader experience. The interviewer should assess the relevance and substance of such unstated information against the job requirements.' For the 'Tell me about yourself' question: the model answer MUST be a guide for the INTERVIEWER. It should outline key points from the candidate's specific background (such as their name, key qualifications, relevant educational background, academic achievements, significant projects from Unstop/resume, and notable work history) that would constitute a strong, relevant, and well-structured introduction. This model answer must be written from the interviewer's perspective to help a non-technical recruiter assess relevance and completeness against the candidate's documented profile, and MUST NOT be a script for the candidate."),
@@ -89,7 +91,7 @@ First, conduct a silent, internal analysis of the candidate's profile against th
 *   **Career History Nuance**: Candidate's profile shows points needing clarification, such as significant employment gaps, frequent job changes, or ambiguous role titles.
 
 **CRITICAL STEP 2: STRATEGIC QUESTION SELECTION**
-Based on your analysis, you will now construct the interview kit. You MUST draw questions from the following strategic question bank. **Crucially, you must personalize these questions by replacing placeholders (e.g., "[Technology from Resume]", "[Project from Resume]") with specific, verifiable details taken directly from the candidate's resume and the job description. Do not invent or assume details.** Select a broad mix of the most relevant questions for the determined scenario, including several from "Universal Ice-breakers" and "Cross-cutting Behavioural", to create a comprehensive list of 25-30 questions. You MUST include a healthy mix of general questions (from "Universal Ice-breakers" and "Cross-cutting Behavioural") alongside the highly specific, personalized questions to ensure a balanced interview flow.
+Based on your analysis, you will now construct the interview kit. You MUST draw questions from the following strategic question bank. **Crucially, you must personalize these questions by replacing placeholders (e.g., "[Technology from Resume]", "[Project from Resume]") with specific, verifiable details taken directly from the candidate's resume and the job description. Do not invent or assume details.** Select a broad mix of the most relevant questions for the determined scenario, including several from "Universal Ice-breakers" and "Cross-cutting Behavioural", to create a comprehensive list of around 30 questions. You MUST include a healthy mix of general questions (from "Universal Ice-breakers" and "Cross-cutting Behavioural") alongside the highly specific, personalized questions to ensure a balanced interview flow.
 
 ---
 **STRATEGIC QUESTION BANK**
@@ -120,7 +122,7 @@ Based on your analysis, you will now construct the interview kit. You MUST draw 
 **5. Domain-Shift Scenarios**
 (Purpose: Test adaptability and transferability of skills)
 *   **Tech Stack Shift (e.g., OpenAI to Gemini):** "You have deep experience with [Technology from Resume, e.g., OpenAI API]. This role uses [Technology from JD, e.g., Gemini API]. How would your expertise accelerate your ramp-up, and what's your plan to master the new stack?"
-*   **Industry Shift (e.g., e-commerce to fintech):** "What sparked your interest in moving from [Previous Domain, e.g., e-commerce] to [Our Domain, e.g., fintech], and how do you plan to get up to speed on industry-specific regulations?"
+*   **Industry Shift (e.g., e-commerce to fintech):** "I noticed you're moving from [Previous Domain, e.g., e-commerce] to [Our Domain, e.g., fintech]. What sparked your interest in this shift, and how do you plan to get up to speed on industry-specific regulations?"
 *   **Role Type Shift (e.g., QA to DevOps):** "What motivated your transition from [Previous Role Type] to [New Role Type], and how does your past experience give you a unique advantage in this new function?"
 
 **6. Cross-cutting Behavioural / Culture-Fit Questions**
@@ -130,7 +132,7 @@ Based on your analysis, you will now construct the interview kit. You MUST draw 
 
 **7. Career History Clarification**
 (Purpose: Respectfully probe for context on resume details)
-*   (If Gap) "Your resume shows an employment gap between [Start Date] and [End Date]. Could you tell me more about what you were focused on during that time?"
+*   (If Gap) "I noticed on your resume there's an employment gap between [Start Date] and [End Date]. Could you tell me more about what you were focused on during that time?"
 *   (If Frequent Job Switching) "You've held a few different roles over the past few years. Could you share what you've learned from these transitions and what you're seeking in your next role to ensure a long-term fit and growth?"
 *   (If Ambiguous Title) "Your role as '[Ambiguous Title]' sounds like it covered a lot of ground. Could you clarify how much of your time was dedicated to hands-on development versus other responsibilities?"
 ---
@@ -163,6 +165,7 @@ const generateInterviewKitFlow = ai.defineFlow(
         name: comp.name || "Unnamed Competency",
         importance: comp.importance || "Medium",
         questions: (comp.questions || []).map(q => ({
+          id: randomUUID(),
           question: q.question || "Missing question text",
           interviewerNote: q.interviewerNote || "Assess candidate based on their response clarity, depth, and relevance to the role.",
           answer: q.answer || "Missing model answer. (Guidance: For the interviewer, list 3-4 brief, crisp bullet points of key elements a strong candidate should cover, with indicative marks for each, e.g., 'approx. 2-3 points'. Note how to evaluate off-resume info.)",

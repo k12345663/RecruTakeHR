@@ -12,6 +12,7 @@ import { generateInterviewKit, GenerateInterviewKitOutput } from '@/ai/flows/gen
 import { useToast } from "@/hooks/use-toast"
 import { Checkbox } from '@/components/ui/checkbox';
 import { ThemeToggle } from '@/components/theme-toggle';
+import { Slider } from '@/components/ui/slider';
 
 export default function Home() {
   const [jobDescription, setJobDescription] = useState('');
@@ -19,6 +20,7 @@ export default function Home() {
   const [resumeFile, setResumeFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [interviewKit, setInterviewKit] = useState<GenerateInterviewKitOutput | null>(null);
+  const [scores, setScores] = useState<Record<string, number>>({});
   const { toast } = useToast();
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,6 +58,7 @@ export default function Home() {
     }
     setIsLoading(true);
     setInterviewKit(null);
+    setScores({});
 
     try {
         let resumeDataUri: string | undefined;
@@ -83,6 +86,23 @@ export default function Home() {
     } finally {
         setIsLoading(false);
     }
+  };
+
+  const handleScoreChange = (questionId: string, value: number[]) => {
+    const newScore = value[0];
+    setScores(prevScores => ({
+        ...prevScores,
+        [questionId]: newScore,
+    }));
+  };
+
+  const calculateAverageScore = () => {
+    if (!interviewKit) return 0;
+    const allQuestions = interviewKit.competencies.flatMap(c => c.questions);
+    if (allQuestions.length === 0) return 0;
+    const totalScore = allQuestions.reduce((acc, q) => acc + (scores[q.id!] || 0), 0);
+    const average = totalScore / allQuestions.length;
+    return average;
   };
 
   return (
@@ -205,7 +225,7 @@ export default function Home() {
                                const note = noteLineIndex > -1 ? answerLines.slice(noteLineIndex).join('\n') : null;
 
                                return (
-                                 <div key={qIndex} className="p-4 rounded-lg bg-background border">
+                                 <div key={q.id} className="p-4 rounded-lg bg-background border">
                                    <p className="font-semibold">{q.question}</p>
                                    {(q as any).interviewerNote && (
                                         <div className="flex items-start gap-2 mt-3 text-xs italic text-muted-foreground bg-muted/50 p-2 rounded-md">
@@ -242,6 +262,22 @@ export default function Home() {
                                         <p className="mt-4 text-xs italic text-muted-foreground/90 bg-muted/50 p-2 rounded-md border">{note}</p>
                                       )}
                                    </div>
+                                    <div className="mt-4 pt-4 border-t">
+                                        <div className="flex justify-between items-center mb-2">
+                                            <Label htmlFor={`score-slider-${q.id}`} className="text-base font-medium">Score Answer</Label>
+                                            <div className="flex items-baseline gap-1">
+                                                <span className="font-bold text-2xl text-primary">{scores[q.id!] || 0}</span>
+                                                <span className="text-sm text-muted-foreground">/ 10</span>
+                                            </div>
+                                        </div>
+                                        <Slider
+                                            id={`score-slider-${q.id}`}
+                                            value={[scores[q.id!] || 0]}
+                                            max={10}
+                                            step={1}
+                                            onValueChange={(value) => handleScoreChange(q.id!, value)}
+                                        />
+                                    </div>
                                  </div>
                                )
                               })}
@@ -265,6 +301,21 @@ export default function Home() {
                       </ul>
                     </CardContent>
                   </Card>
+                </div>
+                 <div>
+                    <h2 className="text-2xl font-bold mb-4">Overall Score</h2>
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Average Candidate Score</CardTitle>
+                            <CardDescription>
+                                This is the average score calculated across all interview questions.
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent className="p-6 text-center">
+                            <span className="text-6xl font-bold text-primary">{calculateAverageScore().toFixed(1)}</span>
+                            <span className="text-2xl text-muted-foreground"> / 10</span>
+                        </CardContent>
+                    </Card>
                 </div>
               </div>
             )}
