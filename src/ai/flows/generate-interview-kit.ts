@@ -71,10 +71,16 @@ const generateInterviewKitPrompt = ai.definePrompt({
   prompt: `
 You are a world-class AI-powered recruitment strategist. Your mission is to create a deeply personalized and strategically sound interview kit that empowers any interviewer to conduct a thorough and insightful evaluation.
 
+**CONTEXT FOR ANALYSIS**
+Job Description: {{{jobDescription}}}
+{{#if unstopProfileLink}}Unstop Profile Link: {{{unstopProfileLink}}}{{/if}}
+{{#if candidateResumeDataUri}}Candidate Resume ({{candidateResumeFileName}}): {{media url=candidateResumeDataUri}}{{/if}}
+{{#if candidateExperienceContext}}Additional Candidate Context: {{{candidateExperienceContext}}}{{/if}}
+
 **YOUR PROCESS**
 
 **CRITICAL STEP 1: CANDIDATE-TO-ROLE ANALYSIS**
-First, conduct a silent, internal analysis of the candidate's profile (Unstop link, resume content, context) against the Job Description. Classify the candidate into ONE primary scenario. This classification will determine your question strategy.
+First, conduct a silent, internal analysis of the candidate's profile (Unstop link, resume content, context) against the Job Description, using the context provided above. Classify the candidate into ONE primary scenario. This classification will determine your question strategy.
 *   **Solid, Directly Relevant Experience**: Candidate's experience is a strong match for the JD's core requirements.
 *   **Overqualified**: Candidate's experience significantly exceeds the role's level (e.g., a senior applying for a mid-level role).
 *   **Underqualified or Junior**: Candidate has clear gaps in required experience or is early in their career.
@@ -113,7 +119,6 @@ Based on your analysis, you will now construct the interview kit. You MUST draw 
 *   "Which gaps in the JD do you see for yourself, and how are you planning to bridge them in the next six months?"
 
 **5. Domain-Shift Scenarios**
-(Purpose: Explore motivation, knowledge transfer, and learning curve)
 *   **A. Same → Similar Domain (e.g., e-commerce to fintech):**
     *   "You’ve built [System from Resume, e.g., 'payment gateways']; we handle [Our System, e.g., 'lending workflows']. Which design patterns translate well, and which won’t?"
     *   "How would you adapt the SLAs you met in [Previous Domain, e.g., 'e-commerce'] to a [Our Domain, e.g., 'fintech'] context?"
