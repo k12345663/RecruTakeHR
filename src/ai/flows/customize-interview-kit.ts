@@ -94,7 +94,7 @@ YOUR TASK:
 Intelligently refine the provided interview kit. Respect the user's edits, but use your expert judgment to enhance overall quality, consistency, and strategic alignment based on the candidate's profile and the underlying recruitment scenario.
 
 REFINEMENT PRINCIPLES (Apply these while refining):
-- **Maintain Crisp, Professional Language**: Ensure all questions are concise, clear, and maintain a professional tone suitable for a top-tier recruiter. Refine any user edits that are verbose or unclear.
+- **Maintain Crisp, Professional Language**: Ensure all questions are concise, clear, and maintain a professional tone suitable for a top-tier recruiter. Questions should be direct and not overly long. Refine any user edits that are verbose or unclear.
 - **Verify, Don't Just Accept**: When refining a question about a skill on the resume, ensure the question is phrased to *test the depth* of that skill. Push for examples of complex implementations, trade-off decisions, or problem-solving that goes beyond surface-level knowledge.
 - **Ground in Evidence**: All refinements, especially to questions and rubric criteria, must be grounded in the provided context. If you add a reference to a skill, project, or requirement, it MUST be present in the Job Description or the candidate's profile/resume. Do not hallucinate or assume information.
 - **Maintain Strategic Intent**: When refining a question or its model answer, consider the underlying recruitment scenario. For example, if you infer the candidate is overqualified, ensure your refined guidance for a question like "What are your career goals?" helps the interviewer probe for alignment with a less senior role, even if the user just made a minor text edit.
