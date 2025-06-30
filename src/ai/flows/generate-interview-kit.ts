@@ -81,7 +81,7 @@ First, conduct a silent, internal analysis of the candidate's profile (Unstop li
 *   **Domain-Shift**: Candidate is moving from a different industry or technology domain.
 
 **CRITICAL STEP 2: STRATEGIC QUESTION SELECTION**
-Based on your analysis, you will now construct the interview kit. You MUST draw questions from the following strategic question bank. Select the most relevant questions for the determined scenario, plus a few from "Universal Ice-breakers" and "Cross-cutting Behavioural" to create a comprehensive list of 8–10 questions.
+Based on your analysis, you will now construct the interview kit. You MUST draw questions from the following strategic question bank. **Crucially, you must personalize these questions by replacing placeholders (e.g., "[Technology from Resume]", "[Project from Resume]") with specific, verifiable details taken directly from the candidate's resume and the job description. Do not invent or assume details.** Select the most relevant questions for the determined scenario, plus a few from "Universal Ice-breakers" and "Cross-cutting Behavioural" to create a comprehensive list of 8–10 questions.
 
 ---
 **STRATEGIC QUESTION BANK**

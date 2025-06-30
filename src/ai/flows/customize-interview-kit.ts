@@ -84,6 +84,7 @@ YOUR TASK:
 Intelligently refine the provided interview kit. Respect the user's edits, but use your expert judgment to enhance overall quality, consistency, and strategic alignment based on the candidate's profile.
 
 REFINEMENT PRINCIPLES (Apply these while refining):
+- **Ground in Evidence**: All refinements, especially to questions and rubric criteria, must be grounded in the provided context. If you add a reference to a skill, project, or requirement, it MUST be present in the Job Description or the candidate's profile/resume. Do not hallucinate or assume information.
 - **Maintain Strategic Intent**: When refining a question or its model answer, consider the underlying recruitment scenario. For example, if you infer the candidate is overqualified, ensure your refined guidance for a question like "What are your career goals?" helps the interviewer probe for alignment with a less senior role, even if the user just made a minor text edit.
 - **Experience Nuances (Years vs. Impact)**: If the user edits a question about experience, ensure the refined answer guidance still helps the interviewer evaluate the quality and impact of project work over just formal years.
 - **Skill & Technology Transferability**: Ensure questions and answers effectively probe for transferable skills if there's a mismatch between the JD and candidate profile.
