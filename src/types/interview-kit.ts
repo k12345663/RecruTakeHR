@@ -1,3 +1,4 @@
+
 export type QuestionDifficulty =
   | 'Naive'
   | 'Beginner'
@@ -12,6 +13,7 @@ export type QuestionCategory = 'Technical' | 'Non-Technical';
 export interface Question {
   id: string;
   question: string;
+  interviewerNote: string;
   modelAnswer: string;
   type: QuestionType;
   category: QuestionCategory;

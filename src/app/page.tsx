@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Loader2, FileUp, Briefcase } from 'lucide-react';
+import { Loader2, FileUp, Briefcase, Info } from 'lucide-react';
 import { generateInterviewKit, GenerateInterviewKitOutput } from '@/ai/flows/generate-interview-kit';
 import { useToast } from "@/hooks/use-toast"
 import { Checkbox } from '@/components/ui/checkbox';
@@ -207,7 +207,13 @@ export default function Home() {
                                return (
                                  <div key={qIndex} className="p-4 rounded-lg bg-background border">
                                    <p className="font-semibold">{q.question}</p>
-                                   <div className="text-xs text-muted-foreground mt-2 flex items-center gap-x-2 flex-wrap">
+                                   {(q as any).interviewerNote && (
+                                        <div className="flex items-start gap-2 mt-3 text-xs italic text-muted-foreground bg-muted/50 p-2 rounded-md">
+                                            <Info className="h-4 w-4 mt-0.5 flex-shrink-0 text-primary" />
+                                            <p><span className="font-semibold text-foreground/90">Interviewer Note:</span> {(q as any).interviewerNote}</p>
+                                        </div>
+                                    )}
+                                   <div className="text-xs text-muted-foreground mt-3 flex items-center gap-x-2 flex-wrap">
                                       <span className="bg-secondary px-2 py-0.5 rounded-full">{q.type}</span>
                                       <span className="bg-secondary px-2 py-0.5 rounded-full">{q.category}</span>
                                       <span className="bg-secondary px-2 py-0.5 rounded-full">{q.difficulty}</span>
