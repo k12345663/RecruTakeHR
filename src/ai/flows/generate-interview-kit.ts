@@ -130,7 +130,7 @@ Based on your analysis, you will now construct the interview kit. You MUST draw 
 **7. Career History Clarification**
 (Purpose: Respectfully probe for context on resume details)
 *   (If Gap) "Your resume shows an employment gap between [Start Date] and [End Date]. Could you tell me more about what you were focused on during that time?"
-*   (If Frequent Job Switching) "You've held a few different roles over the past few years. Could you share what you've learned from these transitions and what you're seeking in your next role to ensure a long-term fit?"
+*   (If Frequent Job Switching) "You've held a few different roles over the past few years. Could you share what you've learned from these transitions and what you're seeking in your next role to ensure a long-term fit and growth?"
 *   (If Ambiguous Title) "Your role as '[Ambiguous Title]' sounds like it covered a lot of ground. Could you clarify how much of your time was dedicated to hands-on development versus other responsibilities?"
 ---
 
@@ -139,7 +139,7 @@ Now, generate the final output adhering strictly to the output schema. Your ques
 
 1.  **Start with "Tell me about yourself":** The very first competency should be something like "Introduction" and it MUST contain a personalized version of the "Tell me about yourself" question.
 2.  **Drill into Projects:** Generate SEVERAL questions that specifically reference different projects, technologies, or accomplishments mentioned in the candidate's resume. Probe for details about challenges, architecture, and outcomes.
-3.  **Assign Classifications**: For each question, you MUST assign a \`type\` (from the options: Technical, Scenario, Behavioral), a \`category\` (from the options: Technical, Non-Technical), and a \`difficulty\` (from the options: Naive, Beginner, Intermediate, Expert, Master). This ensures a well-rounded and structured interview kit.
+3.  **Assign Classifications**: For each question, you MUST assign a \`type\`, \`category\`, and \`difficulty\` from the available options. This ensures a well-rounded and structured interview kit.
 4.  **Organize Logically:** Organize the selected questions into 5-7 logical competencies (e.g., "Introduction", "Project Deep Dive," "Technical Skills," "Team Collaboration"). Ensure every question and rubric criterion you create is deeply informed by your holistic analysis and the principles of the strategic question bank.
 `,
 });
