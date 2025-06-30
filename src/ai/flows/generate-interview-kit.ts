@@ -91,7 +91,7 @@ First, conduct a silent, internal analysis of the candidate's profile against th
 *   **Career History Nuance**: Candidate's profile shows points needing clarification, such as significant employment gaps, frequent job changes, or ambiguous role titles.
 
 **CRITICAL STEP 2: STRATEGIC QUESTION SELECTION**
-Based on your analysis, you will now construct the interview kit. You MUST draw questions from the following strategic question bank. **Crucially, you must personalize these questions by replacing placeholders (e.g., "[Technology from Resume]", "[Project from Resume]") with specific, verifiable details taken directly from the candidate's resume and the job description. Do not invent or assume details.** Select a broad mix of the most relevant questions for the determined scenario, including several from "Universal Ice-breakers" and "Cross-cutting Behavioural", to create a comprehensive list of around 30 questions. You MUST include a healthy mix of general questions (from "Universal Ice-breakers" and "Cross-cutting Behavioural") alongside the highly specific, personalized questions to ensure a balanced interview flow.
+Based on your analysis, you will now construct the interview kit. You MUST draw questions from the following strategic question bank. **Crucially, you must personalize these questions by replacing placeholders (e.g., "[Technology from Resume]", "[Project from Resume]") with specific, verifiable details taken directly from the candidate's resume and the job description. Do not invent or assume details.** Select a broad mix of the most relevant questions for the determined scenario, including several from each of the general-purpose sections ("Universal Ice-breakers", "Probing for Learning Agility & Growth Mindset", and "Cross-cutting Behavioural"), to create a comprehensive list of around 30-40 questions.
 
 ---
 **STRATEGIC QUESTION BANK**
@@ -114,23 +114,31 @@ Based on your analysis, you will now construct the interview kit. You MUST draw 
 *   "How do you ensure you stay hands-on and collaborative when working with less-experienced teammates?"
 
 **4. Underqualified or Junior Candidates**
-(Purpose: Gauge learning agility, fundamentals, and growth mindset)
+(Purpose: Gauge fundamentals and potential)
 *   "This role asks for [Experience from JD, e.g., '5+ years'], and your resume shows strong project leadership on [Project from Resume]. Can you detail the complexities you managed there to demonstrate your capabilities?"
 *   "Could you explain how a [Fundamental Concept from JD, e.g., 'Java CompletableFuture'] differs from a [Related Concept]? Why might you choose one over the other?"
 *   (For recent grads) "Your [Academic Project from Resume] seems very relevant. Could you describe its architecture and how you handled real-world development considerations like scalability or robustness?"
 
-**5. Domain-Shift Scenarios**
+**5. Probing for Learning Agility & Growth Mindset**
+(Purpose: Assess adaptability, resilience, and curiosity. CRITICAL for all candidates.)
+*   "Describe a time you had to learn a new technology or skill very quickly to meet a project deadline. What was your process?"
+*   "Tell me about a significant piece of critical feedback you've received. How did it change your approach to your work?"
+*   "Walk me through a situation where a project's requirements were ambiguous or changed suddenly. How did you adapt, and what was the outcome?"
+*   "Outside of your formal work, how do you stay up-to-date with new trends and technologies in [Relevant Field from JD, e.g., 'cloud infrastructure' or 'generative AI']?"
+*   "Describe a project or task that failed. What was your role in the failure, and what did you learn from it?"
+
+**6. Domain-Shift Scenarios**
 (Purpose: Test adaptability and transferability of skills)
 *   **Tech Stack Shift (e.g., OpenAI to Gemini):** "You have deep experience with [Technology from Resume, e.g., OpenAI API]. This role uses [Technology from JD, e.g., Gemini API]. How would your expertise accelerate your ramp-up, and what's your plan to master the new stack?"
 *   **Industry Shift (e.g., e-commerce to fintech):** "I noticed you're moving from [Previous Domain, e.g., e-commerce] to [Our Domain, e.g., fintech]. What sparked your interest in this shift, and how do you plan to get up to speed on industry-specific regulations?"
 *   **Role Type Shift (e.g., QA to DevOps, or a technical expert to a Sales Manager):** "What motivated your transition from [Previous Role Type] to [New Role Type], and how does your past experience give you a unique advantage in this new function?"
 
-**6. Cross-cutting Behavioural / Culture-Fit Questions**
+**7. Cross-cutting Behavioural / Culture-Fit Questions**
 (insert these regardless of scenario when you need depth)
-*   "Tell me about a time you received critical feedback. How did you react and what changed afterward?"
-*   "Describe a situation where business priorities shifted suddenly. How did you realign your work?"
+*   "Describe a time when you had a disagreement with a teammate. How did you resolve it?"
+*   "Describe a situation where business priorities shifted suddenly, forcing you to rethink your approach. How did you realign your work?"
 
-**7. Career History Clarification**
+**8. Career History Clarification**
 (Purpose: Respectfully probe for context on resume details)
 *   (If Gap) "I noticed on your resume there's an employment gap between [Start Date] and [End Date]. Could you tell me more about what you were focused on during that time?"
 *   (If Frequent Job Switching) "You've held a few different roles over the past few years. Could you share what you've learned from these transitions and what you're seeking in your next role to ensure a long-term fit and growth?"
@@ -141,7 +149,7 @@ Based on your analysis, you will now construct the interview kit. You MUST draw 
 Now, generate the final output adhering strictly to the output schema. Your questions must be **crisp, concise, and professional**, sounding like they come from an experienced recruiter. When personalizing, **subtly weave details from the resume into practical, probing questions** rather than just stating facts from the document.
 
 1.  **Start with "Tell me about yourself":** The very first competency should be something like "Introduction" and it MUST contain a personalized version of the "Tell me about yourself" question.
-2.  **Drill into Projects:** Generate SEVERAL questions that specifically reference different projects, technologies, or accomplishments mentioned in the candidate's resume. Probe for details about challenges, architecture, and outcomes.
+2.  **Drill into Projects & JD**: Generate SEVERAL questions that specifically reference different projects, technologies, or accomplishments mentioned in the candidate's resume. Probe for details about challenges, architecture, and outcomes. Also generate questions directly tied to key responsibilities or skills listed in the Job Description.
 3.  **Assign Classifications**: For each question, you MUST assign its type, category, and difficulty from the available options. This ensures a well-rounded and structured interview kit.
 4.  **Organize Logically:** Organize the selected questions into 5-7 logical competencies (e.g., "Introduction", "Project Deep Dive," "Technical Skills," "Team Collaboration"). Ensure every question and rubric criterion you create is deeply informed by your holistic analysis and the principles of the strategic question bank.
 `,
