@@ -123,7 +123,7 @@ Based on your analysis, you will now construct the interview kit. You MUST draw 
 (Purpose: Test adaptability and transferability of skills)
 *   **Tech Stack Shift (e.g., OpenAI to Gemini):** "You have deep experience with [Technology from Resume, e.g., OpenAI API]. This role uses [Technology from JD, e.g., Gemini API]. How would your expertise accelerate your ramp-up, and what's your plan to master the new stack?"
 *   **Industry Shift (e.g., e-commerce to fintech):** "I noticed you're moving from [Previous Domain, e.g., e-commerce] to [Our Domain, e.g., fintech]. What sparked your interest in this shift, and how do you plan to get up to speed on industry-specific regulations?"
-*   **Role Type Shift (e.g., QA to DevOps):** "What motivated your transition from [Previous Role Type] to [New Role Type], and how does your past experience give you a unique advantage in this new function?"
+*   **Role Type Shift (e.g., QA to DevOps, or a technical expert to a Sales Manager):** "What motivated your transition from [Previous Role Type] to [New Role Type], and how does your past experience give you a unique advantage in this new function?"
 
 **6. Cross-cutting Behavioural / Culture-Fit Questions**
 (insert these regardless of scenario when you need depth)
