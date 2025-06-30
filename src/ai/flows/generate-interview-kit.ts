@@ -87,7 +87,7 @@ First, conduct a silent, internal analysis of the candidate's profile against th
 *   **Solid, Directly Relevant Experience**: Candidate's experience is a strong match for the JD's core requirements.
 *   **Overqualified**: Candidate's experience significantly exceeds the role's level (e.g., a senior applying for a mid-level role).
 *   **Underqualified or Junior**: Candidate has clear gaps in required experience, is a recent graduate, or has experience that is strong but less than the years requested (e.g., 3 years of project leadership vs. 5+ years of PM experience requested).
-*   **Domain-Shift**: Candidate is moving from a different industry (e.g., gaming to fintech), technology domain (e.g., OpenAI to Gemini), role type (e.g., QA to DevOps), or academic background (e.g., physics PhD for a data science role).
+*   **Domain-Shift**: Candidate is moving from a different industry (e.g., gaming to fintech), technology domain (e.g., OpenAI to Gemini), role type (e.g., QA to DevOps, or a technical expert to a Sales Manager), or academic background (e.g., physics PhD for a data science role).
 *   **Career History Nuance**: Candidate's profile shows points needing clarification, such as significant employment gaps, frequent job changes, or ambiguous role titles.
 
 **CRITICAL STEP 2: STRATEGIC QUESTION SELECTION**
@@ -148,10 +148,13 @@ Based on your analysis, you will now construct the interview kit. You MUST draw 
 **CRITICAL STEP 3: OUTPUT GENERATION**
 Now, generate the final output adhering strictly to the output schema. Your questions must be **crisp, concise, and professional**, sounding like they come from an experienced recruiter. When personalizing, **subtly weave details from the resume into practical, probing questions** rather than just stating facts from the document.
 
-1.  **Start with "Tell me about yourself":** The very first competency should be something like "Introduction" and it MUST contain a personalized version of the "Tell me about yourself" question.
-2.  **Drill into Projects & JD**: Generate SEVERAL questions that specifically reference different projects, technologies, or accomplishments mentioned in the candidate's resume. Probe for details about challenges, architecture, and outcomes. Also generate questions directly tied to key responsibilities or skills listed in the Job Description.
-3.  **Assign Classifications**: For each question, you MUST assign its type, category, and difficulty from the available options. This ensures a well-rounded and structured interview kit.
-4.  **Organize Logically:** Organize the selected questions into 5-7 logical competencies (e.g., "Introduction", "Project Deep Dive," "Technical Skills," "Team Collaboration"). Ensure every question and rubric criterion you create is deeply informed by your holistic analysis and the principles of the strategic question bank.
+1.  **Assign Classifications**: For each question, you MUST assign its type, category, and difficulty from the available options. This ensures a well-rounded and structured interview kit.
+2.  **Organize Logically:** You MUST structure the interview by organizing the selected questions into 5-7 logical competencies. The flow of competencies should be natural and progressive, starting broad and then diving deep. Follow this structure:
+    *   **Introduction & Motivation:** The first competency. It MUST start with a personalized "Tell me about yourself" question, followed by questions about their interest in the role and company.
+    *   **Project Deep Dives:** Dedicate one or two competencies to the most significant projects from the candidate's resume. Ask detailed, probing questions about their specific contributions, challenges faced, and outcomes achieved.
+    *   **Technical Skills & JD Alignment:** Group questions that test specific technical skills and tools required by the Job Description and evidenced on the resume.
+    *   **Behavioral & Growth Mindset:** Group questions from the "Learning Agility" and "Cross-cutting Behavioural" sections to assess teamwork, problem-solving, and adaptability.
+    *   Ensure every question and rubric criterion you create is deeply informed by your holistic analysis and the principles of the strategic question bank.
 `,
 });
 
