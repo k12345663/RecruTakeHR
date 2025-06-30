@@ -1,6 +1,6 @@
 import Link from "next/link"
+import Image from "next/image"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { BrainCircuit } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 export default function LoginPage() {
@@ -9,7 +9,7 @@ export default function LoginPage() {
       <Card className="mx-auto max-w-sm w-full">
         <CardHeader className="text-center">
             <Link href="/" className="inline-block mb-4" prefetch={false}>
-                <BrainCircuit className="h-8 w-8 text-primary" />
+                <Image src="/logo.png" alt="RecruTake Logo" width={32} height={40} className="mx-auto" />
             </Link>
           <CardTitle className="text-2xl">Login Not Required</CardTitle>
           <CardDescription>

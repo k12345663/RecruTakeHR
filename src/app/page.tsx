@@ -1,6 +1,7 @@
 
 'use client';
 
+import Image from 'next/image';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -8,7 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { BrainCircuit, Loader2, FileUp } from 'lucide-react';
+import { Loader2, FileUp } from 'lucide-react';
 import { generateInterviewKit, GenerateInterviewKitOutput } from '@/ai/flows/generate-interview-kit';
 import { useToast } from "@/hooks/use-toast"
 import { Checkbox } from '@/components/ui/checkbox';
@@ -82,7 +83,7 @@ export default function Home() {
     <div className="flex flex-col min-h-screen bg-background text-foreground">
       <header className="container mx-auto px-4 lg:px-6 h-16 flex items-center justify-between border-b">
         <div className="flex items-center gap-2">
-          <BrainCircuit className="h-6 w-6 text-primary" />
+          <Image src="/logo.png" alt="RecruTake Logo" width={25} height={32} />
           <span className="text-lg font-semibold">RecruTake</span>
         </div>
         <ThemeToggle />
@@ -168,7 +169,7 @@ export default function Home() {
             )}
             {!isLoading && !interviewKit && (
                 <div className="flex flex-col items-center justify-center h-full rounded-lg border border-dashed p-8 text-center bg-card">
-                    <BrainCircuit className="h-16 w-16 text-muted-foreground/50" />
+                    <Image src="/logo.png" alt="RecruTake Logo" width={50} height={64} className="opacity-50" />
                     <h3 className="mt-4 text-xl font-semibold">Your Interview Kit Will Appear Here</h3>
                     <p className="mt-2 text-sm text-muted-foreground">
                         Fill out the form on the left to generate questions, a scoring rubric, and more.
