@@ -7,7 +7,6 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Loader2, FileUp, Briefcase } from 'lucide-react';
 import { generateInterviewKit, GenerateInterviewKitOutput } from '@/ai/flows/generate-interview-kit';
 import { useToast } from "@/hooks/use-toast"
@@ -179,17 +178,17 @@ export default function Home() {
               <div className="space-y-6">
                 <div>
                   <h2 className="text-2xl font-bold mb-4">Interview Competencies</h2>
-                  <Accordion type="single" collapsible className="w-full space-y-2">
+                  <div className="space-y-4">
                     {interviewKit.competencies.map((comp, index) => (
-                      <AccordionItem key={index} value={`item-${index}`} className="bg-card rounded-lg border px-4">
-                        <AccordionTrigger>
-                          <div className='flex justify-between w-full items-center'>
-                            <span className="font-semibold text-lg">{comp.name}</span>
-                            <span className="text-sm bg-muted text-muted-foreground px-2 py-1 rounded-md">Importance: {comp.importance}</span>
-                          </div>
-                        </AccordionTrigger>
-                        <AccordionContent>
-                           <div className="space-y-4 pt-4">
+                      <Card key={index} className="overflow-hidden">
+                        <CardHeader className="bg-muted/50">
+                            <div className='flex justify-between w-full items-center'>
+                                <CardTitle className="text-xl">{comp.name}</CardTitle>
+                                <span className="text-sm bg-background text-muted-foreground px-2 py-1 rounded-md border">Importance: {comp.importance}</span>
+                            </div>
+                        </CardHeader>
+                        <CardContent className="p-4 md:p-6">
+                           <div className="space-y-4">
                              {comp.questions.map((q, qIndex) => {
                                const answerLines = q.answer.split('\n').filter(line => line.trim());
                                const noteLineIndex = answerLines.findIndex(line => line.trim().startsWith("Note:"));
@@ -231,10 +230,10 @@ export default function Home() {
                                )
                               })}
                            </div>
-                        </AccordionContent>
-                      </AccordionItem>
+                        </CardContent>
+                      </Card>
                     ))}
-                  </Accordion>
+                  </div>
                 </div>
                 <div>
                   <h2 className="text-2xl font-bold mb-4">Scoring Rubric</h2>
