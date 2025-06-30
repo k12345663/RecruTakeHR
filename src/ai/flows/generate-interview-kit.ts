@@ -33,7 +33,7 @@ const GenerateInterviewKitInputSchema = z.object({
 export type GenerateInterviewKitInput = z.infer<typeof GenerateInterviewKitInputSchema>;
 
 const QuestionAnswerPairSchema = z.object({
-  question: z.string().describe('The interview question. Should be insightful and highly specific, directly derived from or probing into experiences, skills, projects (including their tech stack, goals, accomplishments, challenges), and claims made in the Candidate\'s Unstop Profile and/or the content of the provided Resume File, the Job Description, as well as any Candidate Experience Context.'),
+  question: z.string().describe("The interview question. It must be designed to validate and probe the depth of skills and experiences claimed on the resume. Instead of just asking if they know a technology, ask them to demonstrate their expertise with specific examples of challenges, architectural decisions, or complex problems they solved. The question must be insightful and highly specific, directly derived from projects or skills mentioned in the Candidate's Unstop Profile, Resume File, and the Job Description."),
   answer: z.string().describe("A model answer from the INTERVIEWER'S PERSPECTIVE, presented as 3-4 concise bullet points. These bullet points for the recruiter must be very brief and crisp, ideally just a few key words or a very short phrase, serving as a quick checklist of essential elements the candidate should touch upon. Each bullet point MUST outline KEY POINTS A CANDIDATE SHOULD COVER for a strong answer, making it exceptionally easy for a non-technical recruiter to judge. While generally informed by the overall context (Job Description, candidate profile including Unstop link, resume file content [AI to analyze if provided], projects, tech stack, goals, accomplishments, challenges, educational background, academic achievements, and past work experiences), for many general questions, the key points should strongly emphasize fundamental concepts or general best practices for answering, rather than requiring every point to be explicitly tied to a specific line in the Job Description. The goal is to provide a solid baseline for evaluation. Answers must be basic, clear, and easy for a non-technical recruiter to evaluate. EXPLICITLY reference key terms, skills, projects, or experiences from the Job Description AND/OR the Candidate's Unstop Profile/Resume File Content when crucial for context. Furthermore, each bullet point MUST also include a textual suggestion of its indicative weight or contribution (e.g., 'approx. 2-3 points', 'around 4 points') towards the question's total 10-point score, using whole numbers or small, clear ranges of whole numbers. This textual guidance is to help the panelist understand the relative importance of each point when they assign their overall 1-10 score for the question using the slider. The collective indicative contributions for all bullet points should paint a clear picture of what constitutes a strong, comprehensive answer that would merit a high score, conceptually aligning towards the 10-point maximum if all aspects are well addressed. Include guidance on evaluating real-life examples and relevant information shared by the candidate not present on the resume using a note like: 'Note: If the candidate provides relevant real-life examples or discusses experiences/skills not detailed on their resume/profile but clearly relevant to the role, this can indicate greater depth, initiative, or broader experience. The interviewer should assess the relevance and substance of such unstated information against the job requirements.' For the 'Tell me about yourself' question: the model answer MUST be a guide for the INTERVIEWER. It should outline key points from the candidate's specific background (such as their name, key qualifications, relevant educational background, academic achievements, significant projects from Unstop/resume, and notable work history) that would constitute a strong, relevant, and well-structured introduction. This model answer must be written from the interviewer's perspective to help a non-technical recruiter assess relevance and completeness against the candidate's documented profile, rather than being a script for the candidate."),
   type: z.enum(['Technical', 'Scenario', 'Behavioral']).describe('The type of question. Technical for skills/tools, Scenario for problem-solving, Behavioral for past actions (STAR method).'),
   category: z.enum(['Technical', 'Non-Technical']).describe("The category of the question. 'Technical' for questions assessing specific hard skills or tool knowledge. 'Non-Technical' for questions assessing problem-solving, behavioral traits, scenarios, or soft skills. Infer this primarily from the question type and content."),
@@ -69,7 +69,7 @@ const generateInterviewKitPrompt = ai.definePrompt({
   input: {schema: GenerateInterviewKitInputSchema},
   output: {schema: GenerateInterviewKitOutputSchema},
   prompt: `
-You are a world-class AI-powered recruitment strategist. Your mission is to create a deeply personalized and strategically sound interview kit that empowers any interviewer to conduct a thorough and insightful evaluation.
+You are a world-class AI-powered recruitment strategist. Your mission is to create a deeply personalized and strategically sound interview kit that empowers any interviewer to conduct a thorough and insightful evaluation. Your core directive is to move beyond face-value claims on a resume and generate questions that require the candidate to prove their expertise through concrete evidence and detailed examples.
 
 **CONTEXT FOR ANALYSIS (YOU MUST SYNTHESIZE ALL OF THE FOLLOWING SOURCES):**
 *   **Job Description**: {{{jobDescription}}}
@@ -100,10 +100,10 @@ Based on your analysis, you will now construct the interview kit. You MUST draw 
 *   "What in your last project excited you the most, and why?"
 
 **2. Candidate has Solid, Directly Relevant Experience**
-(Purpose: Confirm depth, scope, and impact)
-*   "On your project, [Project from Resume], you mentioned using [Technology from Resume]. Can you walk me through the most challenging part of that implementation?"
-*   "What measurable outcome (e.g., latency reduction, revenue increase) did your work on [Project from Resume] deliver to the business?"
-*   "How did you influence architecture or technical decisions in your squad? Can you cite a trade-off you championed?"
+(Purpose: Confirm depth, scope, and impact. These questions must verify expertise, not just confirm it.)
+*   "On your project, [Project from Resume], you mentioned using [Technology from Resume]. Describe a specific problem you solved with it that a beginner would not have been able to. What were the alternatives you considered and why was your solution the best one?"
+*   "What measurable outcome (e.g., latency reduction, revenue increase) did your work on [Project from Resume] deliver to the business? How do you know your specific contribution led to that outcome?"
+*   "Your resume lists expertise in [Another Technology from Resume]. How did you influence architecture or technical decisions related to it in your team? Can you cite a specific trade-off you championed?"
 
 **3. Overqualified Candidates**
 (Purpose: Understand motivation and assess flexibility)
@@ -123,7 +123,7 @@ Based on your analysis, you will now construct the interview kit. You MUST draw 
 *   **Role Type Shift (e.g., QA to DevOps):** "What motivated your transition from [Previous Role Type] to [New Role Type], and how does your past experience give you a unique advantage in this new function?"
 
 **6. Cross-cutting Behavioural / Culture-Fit Questions**
-(Purpose: Insert these regardless of scenario to add depth)
+(insert these regardless of scenario when you need depth)
 *   "Tell me about a time you received critical feedback. How did you react and what changed afterward?"
 *   "Describe a situation where business priorities shifted suddenly. How did you realign your work?"
 
