@@ -1,9 +1,7 @@
 import Link from "next/link"
-import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { BrainCircuit } from "lucide-react"
+import { Button } from "@/components/ui/button"
 
 export default function SignupPage() {
   return (
@@ -13,49 +11,17 @@ export default function SignupPage() {
             <Link href="/" className="inline-block mb-4" prefetch={false}>
                 <BrainCircuit className="h-8 w-8 text-primary" />
             </Link>
-          <CardTitle className="text-2xl">Sign Up</CardTitle>
+          <CardTitle className="text-2xl">Sign Up Not Required</CardTitle>
           <CardDescription>
-            Enter your information to create an account
+             This application does not require an account. You can start using it right away.
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="grid gap-2">
-                <Label htmlFor="first-name">First name</Label>
-                <Input id="first-name" placeholder="Max" required />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="last-name">Last name</Label>
-                <Input id="last-name" placeholder="Robinson" required />
-              </div>
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="m@example.com"
-                required
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="password">Password</Label>
-              <Input id="password" type="password" />
-            </div>
-            <Button type="submit" className="w-full">
-              Create an account
+             <Button asChild className="w-full">
+                <Link href="/">
+                    Go to the app
+                </Link>
             </Button>
-            <Button variant="outline" className="w-full">
-              Sign up with Google
-            </Button>
-          </div>
-          <div className="mt-4 text-center text-sm">
-            Already have an account?{" "}
-            <Link href="/login" className="underline" prefetch={false}>
-              Login
-            </Link>
-          </div>
         </CardContent>
       </Card>
     </div>
