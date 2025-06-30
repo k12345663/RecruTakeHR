@@ -81,7 +81,7 @@ export default function Home() {
     <div className="flex flex-col min-h-screen bg-background text-foreground">
       <header className="container mx-auto px-4 lg:px-6 h-16 flex items-center justify-between border-b">
         <div className="flex items-center gap-2">
-          <Briefcase className="h-6 w-6" />
+          <Briefcase className="h-6 w-6 text-primary" />
           <span className="text-lg font-semibold">RecruTake</span>
         </div>
         <ThemeToggle />
@@ -200,6 +200,7 @@ export default function Home() {
                                    <p className="font-semibold">{q.question}</p>
                                    <div className="text-xs text-muted-foreground mt-2 flex items-center gap-x-2 flex-wrap">
                                       <span className="bg-secondary px-2 py-0.5 rounded-full">{q.type}</span>
+                                      <span className="bg-secondary px-2 py-0.5 rounded-full">{q.category}</span>
                                       <span className="bg-secondary px-2 py-0.5 rounded-full">{q.difficulty}</span>
                                       <span className="bg-secondary px-2 py-0.5 rounded-full">{q.estimatedTimeMinutes} mins</span>
                                    </div>

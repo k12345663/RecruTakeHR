@@ -9,8 +9,6 @@ export type QuestionType = 'Technical' | 'Scenario' | 'Behavioral';
 
 export type QuestionCategory = 'Technical' | 'Non-Technical';
 
-export type Importance = 'High' | 'Medium' | 'Low';
-
 export interface Question {
   id: string;
   question: string;
@@ -33,3 +31,5 @@ export interface RubricCriterion {
   name: string;
   weight: number;
 }
+
+export type Importance = 'High' | 'Medium' | 'Low';

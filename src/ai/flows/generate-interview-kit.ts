@@ -139,7 +139,8 @@ Now, generate the final output adhering strictly to the output schema. Your ques
 
 1.  **Start with "Tell me about yourself":** The very first competency should be something like "Introduction" and it MUST contain a personalized version of the "Tell me about yourself" question.
 2.  **Drill into Projects:** Generate SEVERAL questions that specifically reference different projects, technologies, or accomplishments mentioned in the candidate's resume. Probe for details about challenges, architecture, and outcomes.
-3.  **Organize Logically:** Organize the selected questions into 5-7 logical competencies (e.g., "Introduction", "Project Deep Dive," "Technical Skills," "Team Collaboration"). Ensure every question and rubric criterion you create is deeply informed by your holistic analysis and the principles of the strategic question bank.
+3.  **Assign Classifications**: For each question, you MUST assign a \`type\` (from the options: Technical, Scenario, Behavioral), a \`category\` (from the options: Technical, Non-Technical), and a \`difficulty\` (from the options: Naive, Beginner, Intermediate, Expert, Master). This ensures a well-rounded and structured interview kit.
+4.  **Organize Logically:** Organize the selected questions into 5-7 logical competencies (e.g., "Introduction", "Project Deep Dive," "Technical Skills," "Team Collaboration"). Ensure every question and rubric criterion you create is deeply informed by your holistic analysis and the principles of the strategic question bank.
 `,
 });
 
@@ -164,7 +165,7 @@ const generateInterviewKitFlow = ai.defineFlow(
           question: q.question || "Missing question text",
           answer: q.answer || "Missing model answer. (Guidance: For the interviewer, list 3-4 brief, crisp bullet points of key elements a strong candidate should cover, with indicative marks for each, e.g., 'approx. 2-3 points'. Note how to evaluate off-resume info.)",
           type: q.type || "Behavioral",
-          category: q.category || (q.type === 'Technical' ? 'Non-Technical' : 'Non-Technical'),
+          category: q.category || (q.type === 'Technical' ? 'Technical' : 'Non-Technical'),
           difficulty: q.difficulty || "Intermediate",
           estimatedTimeMinutes: q.estimatedTimeMinutes || (difficultyTimeMap[q.difficulty || "Intermediate"]),
         })),
