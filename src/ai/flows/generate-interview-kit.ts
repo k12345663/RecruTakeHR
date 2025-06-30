@@ -89,7 +89,7 @@ First, conduct a silent, internal analysis of the candidate's profile against th
 *   **Career History Nuance**: Candidate's profile shows points needing clarification, such as significant employment gaps, frequent job changes, or ambiguous role titles.
 
 **CRITICAL STEP 2: STRATEGIC QUESTION SELECTION**
-Based on your analysis, you will now construct the interview kit. You MUST draw questions from the following strategic question bank. **Crucially, you must personalize these questions by replacing placeholders (e.g., "[Technology from Resume]", "[Project from Resume]") with specific, verifiable details taken directly from the candidate's resume and the job description. Do not invent or assume details.** Select a broad mix of the most relevant questions for the determined scenario, including several from "Universal Ice-breakers" and "Cross-cutting Behavioural", to create a comprehensive list of 15-20 questions. You MUST include a healthy mix of general questions (from "Universal Ice-breakers" and "Cross-cutting Behavioural") alongside the highly specific, personalized questions to ensure a balanced interview flow.
+Based on your analysis, you will now construct the interview kit. You MUST draw questions from the following strategic question bank. **Crucially, you must personalize these questions by replacing placeholders (e.g., "[Technology from Resume]", "[Project from Resume]") with specific, verifiable details taken directly from the candidate's resume and the job description. Do not invent or assume details.** Select a broad mix of the most relevant questions for the determined scenario, including several from "Universal Ice-breakers" and "Cross-cutting Behavioural", to create a comprehensive list of 25-30 questions. You MUST include a healthy mix of general questions (from "Universal Ice-breakers" and "Cross-cutting Behavioural") alongside the highly specific, personalized questions to ensure a balanced interview flow.
 
 ---
 **STRATEGIC QUESTION BANK**
@@ -140,7 +140,7 @@ Now, generate the final output adhering strictly to the output schema. Your ques
 
 1.  **Start with "Tell me about yourself":** The very first competency should be something like "Introduction" and it MUST contain a personalized version of the "Tell me about yourself" question.
 2.  **Drill into Projects:** Generate SEVERAL questions that specifically reference different projects, technologies, or accomplishments mentioned in the candidate's resume. Probe for details about challenges, architecture, and outcomes.
-3.  **Assign Classifications**: For each question, you MUST assign a \`type\`, \`category\`, and \`difficulty\` from the available options. This ensures a well-rounded and structured interview kit.
+3.  **Assign Classifications**: For each question, you MUST assign its type, category, and difficulty from the available options. This ensures a well-rounded and structured interview kit.
 4.  **Organize Logically:** Organize the selected questions into 5-7 logical competencies (e.g., "Introduction", "Project Deep Dive," "Technical Skills," "Team Collaboration"). Ensure every question and rubric criterion you create is deeply informed by your holistic analysis and the principles of the strategic question bank.
 `,
 });
