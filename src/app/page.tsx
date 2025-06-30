@@ -1,13 +1,13 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Loader2, FileUp, Briefcase, Info } from 'lucide-react';
+import { Loader2, FileUp, Briefcase, Info, RotateCcw } from 'lucide-react';
 import { generateInterviewKit, GenerateInterviewKitOutput } from '@/ai/flows/generate-interview-kit';
 import { useToast } from "@/hooks/use-toast"
 import { Checkbox } from '@/components/ui/checkbox';
@@ -22,6 +22,7 @@ export default function Home() {
   const [interviewKit, setInterviewKit] = useState<GenerateInterviewKitOutput | null>(null);
   const [scores, setScores] = useState<Record<string, number>>({});
   const { toast } = useToast();
+  const resumeInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
@@ -105,6 +106,18 @@ export default function Home() {
     return average;
   };
 
+  const handleRestart = () => {
+    setJobDescription('');
+    setUnstopProfileLink('');
+    setResumeFile(null);
+    setInterviewKit(null);
+    setScores({});
+    if (resumeInputRef.current) {
+      resumeInputRef.current.value = "";
+    }
+  };
+
+
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground">
       <header className="container mx-auto px-4 lg:px-6 h-16 flex items-center justify-between border-b">
@@ -167,6 +180,7 @@ export default function Home() {
                             accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                             onChange={handleFileChange}
                             className="hidden"
+                            ref={resumeInputRef}
                         />
                     </div>
                   </div>
@@ -206,7 +220,13 @@ export default function Home() {
             {interviewKit && (
               <div className="space-y-6">
                 <div>
-                  <h2 className="text-2xl font-bold mb-4">Interview Competencies</h2>
+                    <div className="flex justify-between items-center flex-wrap gap-4 mb-4">
+                        <h2 className="text-2xl font-bold">Interview Competencies</h2>
+                        <Button variant="outline" onClick={handleRestart}>
+                            <RotateCcw className="mr-2 h-4 w-4" />
+                            Generate New Kit
+                        </Button>
+                    </div>
                   <div className="space-y-4">
                     {interviewKit.competencies.map((comp, index) => (
                       <Card key={index} className="overflow-hidden">
