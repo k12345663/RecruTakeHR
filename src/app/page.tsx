@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -10,6 +11,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { BrainCircuit, Loader2, FileUp } from 'lucide-react';
 import { generateInterviewKit, GenerateInterviewKitOutput } from '@/ai/flows/generate-interview-kit';
 import { useToast } from "@/hooks/use-toast"
+import { Checkbox } from '@/components/ui/checkbox';
 
 export default function Home() {
   const [jobDescription, setJobDescription] = useState('');
@@ -186,20 +188,46 @@ export default function Home() {
                         </AccordionTrigger>
                         <AccordionContent>
                            <div className="space-y-4 pt-4">
-                             {comp.questions.map((q, qIndex) => (
-                               <div key={qIndex} className="p-4 rounded-lg bg-background border">
-                                 <p className="font-semibold">{q.question}</p>
-                                 <div className="text-xs text-muted-foreground mt-2 flex items-center gap-x-2 flex-wrap">
-                                    <span className="bg-secondary px-2 py-0.5 rounded-full">{q.type}</span>
-                                    <span className="bg-secondary px-2 py-0.5 rounded-full">{q.difficulty}</span>
-                                    <span className="bg-secondary px-2 py-0.5 rounded-full">{q.estimatedTimeMinutes} mins</span>
+                             {comp.questions.map((q, qIndex) => {
+                               const answerLines = q.answer.split('\n').filter(line => line.trim());
+                               const noteLineIndex = answerLines.findIndex(line => line.trim().startsWith("Note:"));
+                               const bulletPoints = noteLineIndex > -1 ? answerLines.slice(0, noteLineIndex) : answerLines;
+                               const note = noteLineIndex > -1 ? answerLines.slice(noteLineIndex).join('\n') : null;
+
+                               return (
+                                 <div key={qIndex} className="p-4 rounded-lg bg-background border">
+                                   <p className="font-semibold">{q.question}</p>
+                                   <div className="text-xs text-muted-foreground mt-2 flex items-center gap-x-2 flex-wrap">
+                                      <span className="bg-secondary px-2 py-0.5 rounded-full">{q.type}</span>
+                                      <span className="bg-secondary px-2 py-0.5 rounded-full">{q.difficulty}</span>
+                                      <span className="bg-secondary px-2 py-0.5 rounded-full">{q.estimatedTimeMinutes} mins</span>
+                                   </div>
+                                   <div className="mt-4 text-sm">
+                                     <p className="font-medium mb-2 text-base">Model Answer Guide:</p>
+                                      <div className="space-y-2.5">
+                                        {bulletPoints.map((point, pointIndex) => (
+                                          <div key={pointIndex} className="flex items-start gap-3">
+                                            <Checkbox
+                                              id={`q-${index}-${qIndex}-p-${pointIndex}`}
+                                              aria-label="Mark as covered"
+                                              className="mt-1 flex-shrink-0"
+                                            />
+                                            <label
+                                              htmlFor={`q-${index}-${qIndex}-p-${pointIndex}`}
+                                              className="text-sm text-muted-foreground leading-snug"
+                                            >
+                                              {point.replace(/^[-*]\s*/, '')}
+                                            </label>
+                                          </div>
+                                        ))}
+                                      </div>
+                                      {note && (
+                                        <p className="mt-4 text-xs italic text-muted-foreground/90 bg-muted/50 p-2 rounded-md border">{note}</p>
+                                      )}
+                                   </div>
                                  </div>
-                                 <div className="mt-4 text-sm">
-                                   <p className="font-medium mb-2 text-base">Model Answer Guide:</p>
-                                   <div className="prose prose-sm dark:prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: q.answer.replace(/\n/g, '<br />') }} />
-                                 </div>
-                               </div>
-                             ))}
+                               )
+                              })}
                            </div>
                         </AccordionContent>
                       </AccordionItem>
