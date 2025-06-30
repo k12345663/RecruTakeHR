@@ -80,11 +80,12 @@ Job Description: {{{jobDescription}}}
 **YOUR PROCESS**
 
 **CRITICAL STEP 1: CANDIDATE-TO-ROLE ANALYSIS**
-First, conduct a silent, internal analysis of the candidate's profile (Unstop link, resume content, context) against the Job Description, using the context provided above. Classify the candidate into ONE primary scenario. This classification will determine your question strategy.
+First, conduct a silent, internal analysis of the candidate's profile (Unstop link, resume content, context) against the Job Description. Synthesize these sources to identify the primary interview scenario. This classification will determine your question strategy.
 *   **Solid, Directly Relevant Experience**: Candidate's experience is a strong match for the JD's core requirements.
 *   **Overqualified**: Candidate's experience significantly exceeds the role's level (e.g., a senior applying for a mid-level role).
-*   **Underqualified or Junior**: Candidate has clear gaps in required experience or is early in their career.
-*   **Domain-Shift**: Candidate is moving from a different industry or technology domain.
+*   **Underqualified or Junior**: Candidate has clear gaps in required experience, is a recent graduate, or has experience that is strong but less than the years requested (e.g., 3 years of project leadership vs. 5+ years of PM experience requested).
+*   **Domain-Shift**: Candidate is moving from a different industry (e.g., gaming to fintech), technology domain (e.g., OpenAI to Gemini), or role type (e.g., QA to DevOps).
+*   **Career History Nuance**: Candidate's profile shows points needing clarification, such as significant employment gaps, frequent job changes, or ambiguous role titles.
 
 **CRITICAL STEP 2: STRATEGIC QUESTION SELECTION**
 Based on your analysis, you will now construct the interview kit. You MUST draw questions from the following strategic question bank. **Crucially, you must personalize these questions by replacing placeholders (e.g., "[Technology from Resume]", "[Project from Resume]") with specific, verifiable details taken directly from the candidate's resume and the job description. Do not invent or assume details.** Select the most relevant questions for the determined scenario, plus a few from "Universal Ice-breakers" and "Cross-cutting Behavioural" to create a comprehensive list of 8–10 questions.
@@ -97,41 +98,40 @@ Based on your analysis, you will now construct the interview kit. You MUST draw 
 *   "Tell me a bit about yourself and what drew you to this role in particular."
 *   "Walk me through your professional journey so far—what are the pivots or milestones you’re proudest of?"
 *   "What in your last project excited you the most, and why?"
-*   "Which accomplishment in the past 12 months best showcases the value you bring?"
-*   "Looking at our job description, which two responsibilities resonate most with your strengths?"
 
 **2. Candidate has Solid, Directly Relevant Experience**
 (Purpose: Confirm depth, scope, and impact)
-*   "You’ve spent X years on [Technology from Resume, e.g., 'Java 17 and Spring Boot']—can you walk me through the most challenging service you owned end-to-end?"
-*   "What measurable outcome (latency ↓, revenue ↑, etc.) did your [Project from Resume, e.g., 'last microservice project'] deliver?"
-*   "How did you influence architecture decisions in your squad? Can you cite a trade-off you championed?"
+*   "On your project, [Project from Resume], you mentioned using [Technology from Resume]. Can you walk me through the most challenging part of that implementation?"
+*   "What measurable outcome (e.g., latency reduction, revenue increase) did your work on [Project from Resume] deliver to the business?"
+*   "How did you influence architecture or technical decisions in your squad? Can you cite a trade-off you championed?"
 
 **3. Overqualified Candidates**
 (Purpose: Understand motivation and assess flexibility)
 *   "You clearly have senior/lead experience—what appeals to you about this mid-level individual-contributor role?"
 *   "How do you ensure you stay hands-on and collaborative when working with less-experienced teammates?"
-*   "If major design calls are made without you, how would you handle that dynamic?"
 
 **4. Underqualified or Junior Candidates**
 (Purpose: Gauge learning agility, fundamentals, and growth mindset)
-*   "Describe a time you had to learn a technology from scratch under tight deadlines—what was your ramp-up plan?"
-*   "Could you explain how a [Fundamental Concept from JD, e.g., 'Java CompletableFuture'] differs from a [Related Concept, e.g., 'plain thread']? Why might you choose one over the other?"
-*   "Which gaps in the JD do you see for yourself, and how are you planning to bridge them in the next six months?"
+*   "This role asks for [Experience from JD, e.g., '5+ years'], and your resume shows strong project leadership on [Project from Resume]. Can you detail the complexities you managed there to demonstrate your capabilities?"
+*   "Could you explain how a [Fundamental Concept from JD, e.g., 'Java CompletableFuture'] differs from a [Related Concept]? Why might you choose one over the other?"
+*   (For recent grads) "Your [Academic Project from Resume] seems very relevant. Could you describe its architecture and how you handled real-world development considerations like scalability or robustness?"
 
 **5. Domain-Shift Scenarios**
-*   **A. Same → Similar Domain (e.g., e-commerce to fintech):**
-    *   "You’ve built [System from Resume, e.g., 'payment gateways']; we handle [Our System, e.g., 'lending workflows']. Which design patterns translate well, and which won’t?"
-    *   "How would you adapt the SLAs you met in [Previous Domain, e.g., 'e-commerce'] to a [Our Domain, e.g., 'fintech'] context?"
-*   **B. One Domain → Totally Different Domain (e.g., aerospace to consumer SaaS):**
-    *   "What sparked your decision to leave [Previous Domain, e.g., 'aerospace software'] for [Our Domain, e.g., 'consumer SaaS']?"
-    *   "Which engineering principles from [Previous Context, e.g., 'safety-critical systems'] can elevate our [Our Context, e.g., 'fast-release environment']?"
-    *   "How do you plan to close the domain-knowledge gap in your first 90 days?"
+(Purpose: Test adaptability and transferability of skills)
+*   **Tech Stack Shift (e.g., OpenAI to Gemini):** "You have deep experience with [Technology from Resume, e.g., OpenAI API]. This role uses [Technology from JD, e.g., Gemini API]. How would your expertise accelerate your ramp-up, and what's your plan to master the new stack?"
+*   **Industry Shift (e.g., e-commerce to fintech):** "What sparked your interest in moving from [Previous Domain, e.g., e-commerce] to [Our Domain, e.g., fintech], and how do you plan to get up to speed on industry-specific regulations?"
+*   **Role Type Shift (e.g., QA to DevOps):** "What motivated your transition from [Previous Role Type] to [New Role Type], and how does your past experience give you a unique advantage in this new function?"
 
 **6. Cross-cutting Behavioural / Culture-Fit Questions**
 (Purpose: Insert these regardless of scenario to add depth)
-*   "Tell me about a time you received critical feedback on your code. How did you react and what changed afterward?"
+*   "Tell me about a time you received critical feedback. How did you react and what changed afterward?"
 *   "Describe a situation where business priorities shifted suddenly. How did you realign your work?"
-*   "When have you disagreed with a product manager’s requirement? How was it resolved?"
+
+**7. Career History Clarification**
+(Purpose: Respectfully probe for context on resume details)
+*   (If Gap) "Your resume shows an employment gap between [Start Date] and [End Date]. Could you tell me more about what you were focused on during that time?"
+*   (If Frequent Job Switching) "You've held a few different roles over the past few years. Could you share what you've learned from these transitions and what you're seeking in your next role to ensure a long-term fit?"
+*   (If Ambiguous Title) "Your role as '[Ambiguous Title]' sounds like it covered a lot of ground. Could you clarify how much of your time was dedicated to hands-on development versus other responsibilities?"
 ---
 
 **CRITICAL STEP 3: OUTPUT GENERATION**
