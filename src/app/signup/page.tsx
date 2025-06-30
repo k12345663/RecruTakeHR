@@ -2,6 +2,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { logoDataUri } from "@/lib/logo"
 
 export default function SignupPage() {
   return (
@@ -9,7 +10,7 @@ export default function SignupPage() {
       <Card className="mx-auto max-w-sm w-full">
         <CardHeader className="text-center">
             <Link href="/" className="inline-block mb-4" prefetch={false}>
-                <Image src="/logo.png" alt="RecruTake Logo" width={32} height={40} className="mx-auto" />
+                <Image src={logoDataUri} alt="RecruTake Logo" width={32} height={40} className="mx-auto" />
             </Link>
           <CardTitle className="text-2xl">Sign Up Not Required</CardTitle>
           <CardDescription>

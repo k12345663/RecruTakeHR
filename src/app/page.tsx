@@ -14,6 +14,7 @@ import { generateInterviewKit, GenerateInterviewKitOutput } from '@/ai/flows/gen
 import { useToast } from "@/hooks/use-toast"
 import { Checkbox } from '@/components/ui/checkbox';
 import { ThemeToggle } from '@/components/theme-toggle';
+import { logoDataUri } from '@/lib/logo';
 
 export default function Home() {
   const [jobDescription, setJobDescription] = useState('');
@@ -83,7 +84,7 @@ export default function Home() {
     <div className="flex flex-col min-h-screen bg-background text-foreground">
       <header className="container mx-auto px-4 lg:px-6 h-16 flex items-center justify-between border-b">
         <div className="flex items-center gap-2">
-          <Image src="/logo.png" alt="RecruTake Logo" width={25} height={32} />
+          <Image src={logoDataUri} alt="RecruTake Logo" width={25} height={32} />
           <span className="text-lg font-semibold">RecruTake</span>
         </div>
         <ThemeToggle />
@@ -169,7 +170,7 @@ export default function Home() {
             )}
             {!isLoading && !interviewKit && (
                 <div className="flex flex-col items-center justify-center h-full rounded-lg border border-dashed p-8 text-center bg-card">
-                    <Image src="/logo.png" alt="RecruTake Logo" width={50} height={64} className="opacity-50" />
+                    <Image src={logoDataUri} alt="RecruTake Logo" width={50} height={64} className="opacity-50" />
                     <h3 className="mt-4 text-xl font-semibold">Your Interview Kit Will Appear Here</h3>
                     <p className="mt-2 text-sm text-muted-foreground">
                         Fill out the form on the left to generate questions, a scoring rubric, and more.
