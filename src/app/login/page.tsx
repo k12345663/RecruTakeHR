@@ -1,8 +1,7 @@
 import Link from "next/link"
-import Image from "next/image"
+import { Briefcase } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { logoDataUri } from "@/lib/logo"
 
 export default function LoginPage() {
   return (
@@ -10,7 +9,7 @@ export default function LoginPage() {
       <Card className="mx-auto max-w-sm w-full">
         <CardHeader className="text-center">
             <Link href="/" className="inline-block mb-4" prefetch={false}>
-                <Image src={logoDataUri} alt="RecruTake Logo" width={32} height={40} className="mx-auto" />
+                <Briefcase className="h-10 w-10 mx-auto text-primary" />
             </Link>
           <CardTitle className="text-2xl">Login Not Required</CardTitle>
           <CardDescription>
