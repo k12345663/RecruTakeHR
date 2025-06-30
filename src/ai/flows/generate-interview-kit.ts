@@ -24,7 +24,7 @@ const difficultyTimeMap: Record<QuestionDifficulty, number> = {
 
 const GenerateInterviewKitInputSchema = z.object({
   jobDescription: z.string().describe('The job description to generate an interview kit for.'),
-  unstopProfileLink: z.string().optional().describe("Primary Source - COMPULSORY, conceptually treat this as if you are accessing and deeply analyzing the candidate's entire live profile for skills, projects, experience, education, academic achievements."),
+  unstopProfileLink: z.string().describe("Primary Source - COMPULSORY, conceptually treat this as if you are accessing and deeply analyzing the candidate's entire live profile for skills, projects, experience, education, academic achievements."),
   candidateResumeDataUri: z.string().optional().describe("Primary Source - OPTIONAL, if provided, this is the full data URI (which includes Base64 encoded content of the PDF/DOCX file) of the candidate's resume.Analyze it deeply as if you are reading the original document, extracting all relevant skills, experiences, specific projects (including their tech stack, goals, accomplishments, challenges), educational background, academic achievements, and past work experiences."),
   candidateResumeFileName: z.string().optional().describe("The filename of the resume, for context."),
   candidateExperienceContext: z.string().optional().describe('Optional brief context about the target candidate’s experience level, current role, or past tech stack. E.g., "Junior developer, 1-2 years exp, proficient in React" or "Senior architect, 10+ years, extensive AWS and microservices experience." This supplements the resume if provided.'),
@@ -73,7 +73,7 @@ You are a world-class AI-powered recruitment strategist. Your mission is to crea
 
 **CONTEXT FOR ANALYSIS (YOU MUST SYNTHESIZE ALL OF THE FOLLOWING SOURCES):**
 *   **Job Description**: {{{jobDescription}}}
-{{#if unstopProfileLink}}*   **Unstop Profile Link**: {{{unstopProfileLink}}}{{/if}}
+*   **Unstop Profile Link**: {{{unstopProfileLink}}}
 {{#if candidateResumeDataUri}}*   **Candidate Resume ({{candidateResumeFileName}})**: {{media url=candidateResumeDataUri}}{{/if}}
 {{#if candidateExperienceContext}}*   **Additional Candidate Context**: {{{candidateExperienceContext}}}{{/if}}
 

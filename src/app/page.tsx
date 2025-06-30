@@ -46,6 +46,14 @@ export default function Home() {
         })
         return;
     }
+    if (!unstopProfileLink) {
+        toast({
+            title: "Unstop Profile Link Required",
+            description: "Please provide the candidate's Unstop profile link.",
+            variant: "destructive",
+        })
+        return;
+    }
     setIsLoading(true);
     setInterviewKit(null);
 
@@ -60,7 +68,7 @@ export default function Home() {
 
         const kit = await generateInterviewKit({ 
             jobDescription, 
-            unstopProfileLink: unstopProfileLink || undefined,
+            unstopProfileLink,
             candidateResumeDataUri: resumeDataUri,
             candidateResumeFileName: resumeFileName,
         });
@@ -111,12 +119,13 @@ export default function Home() {
                     />
                   </div>
                    <div className="space-y-2">
-                    <Label htmlFor="unstop-profile">Unstop Profile Link (Optional)</Label>
+                    <Label htmlFor="unstop-profile">Unstop Profile Link</Label>
                     <Input
                       id="unstop-profile"
                       placeholder="https://unstop.com/p/username"
                       value={unstopProfileLink}
                       onChange={(e) => setUnstopProfileLink(e.target.value)}
+                      required
                     />
                   </div>
                   <div className="space-y-2">

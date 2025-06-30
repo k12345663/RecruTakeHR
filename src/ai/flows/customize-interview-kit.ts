@@ -47,7 +47,7 @@ const RubricCriterionSchema = z.object({
 
 const CustomizeInterviewKitInputSchema = z.object({
     jobDescription: z.string().describe("Original job description for context."),
-    unstopProfileLink: z.string().optional().describe("Original Unstop Profile link for context. Treat as if accessing the live profile."),
+    unstopProfileLink: z.string().describe("Original Unstop Profile link for context. Treat as if accessing the live profile."),
     candidateResumeDataUri: z.string().optional().describe("The full data URI (which includes Base64 encoded content of the PDF/DOCX file) of the candidate's resume. Analyze it deeply as if you are reading the original document, extracting all relevant skills, experiences, specific projects (including their tech stack, goals, accomplishments, challenges), educational background, academic achievements, and past work experiences."),
     candidateResumeFileName: z.string().optional().describe("The filename of the resume, for context."),
     candidateExperienceContext: z.string().optional().describe("Original candidate experience context notes."),
@@ -80,7 +80,7 @@ You are a world-class AI-powered recruitment strategist, acting as a supportive 
 
 **1. Original Context (The Candidate and The Role):**
 *   **Job Description**: {{{jobDescription}}}
-{{#if unstopProfileLink}}*   **Unstop Profile Link**: {{{unstopProfileLink}}}{{/if}}
+*   **Unstop Profile Link**: {{{unstopProfileLink}}}
 {{#if candidateResumeDataUri}}*   **Candidate Resume ({{candidateResumeFileName}})**: {{media url=candidateResumeDataUri}}{{/if}}
 {{#if candidateExperienceContext}}*   **Additional Candidate Context**: {{{candidateExperienceContext}}}{{/if}}
 
