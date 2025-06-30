@@ -135,7 +135,11 @@ Based on your analysis, you will now construct the interview kit. You MUST draw 
 ---
 
 **CRITICAL STEP 3: OUTPUT GENERATION**
-Now, generate the final output adhering strictly to the output schema. Organize the selected questions into 5-7 logical competencies (e.g., "Technical Deep Dive," "Project Experience," "Problem Solving," "Team Collaboration"). Ensure every question and rubric criterion you create is deeply informed by your holistic analysis and the principles of the strategic question bank.
+Now, generate the final output adhering strictly to the output schema. Your questions must be crisp, professional, and sound like they are coming from an experienced recruiter.
+
+1.  **Start with "Tell me about yourself":** The very first competency should be something like "Introduction" and it MUST contain a personalized version of the "Tell me about yourself" question.
+2.  **Drill into Projects:** Generate SEVERAL questions that specifically reference different projects, technologies, or accomplishments mentioned in the candidate's resume. Probe for details about challenges, architecture, and outcomes.
+3.  **Organize Logically:** Organize the selected questions into 5-7 logical competencies (e.g., "Introduction", "Project Deep Dive," "Technical Skills," "Team Collaboration"). Ensure every question and rubric criterion you create is deeply informed by your holistic analysis and the principles of the strategic question bank.
 `,
 });
 
