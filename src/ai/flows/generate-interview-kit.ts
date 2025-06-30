@@ -114,7 +114,7 @@ const generateInterviewKitFlow = ai.defineFlow(
           question: q.question || "Missing question text",
           answer: q.answer || "Missing model answer. (Guidance: For the interviewer, list 3-4 brief, crisp bullet points of key elements a strong candidate should cover, with indicative marks for each, e.g., 'approx. 2-3 points'. Note how to evaluate off-resume info.)",
           type: q.type || "Behavioral",
-          category: q.category || (q.type === 'Technical' ? 'Technical' : 'Non-Technical'),
+          category: q.category || (q.type === 'Technical' ? 'Non-Technical' : 'Non-Technical'),
           difficulty: q.difficulty || "Intermediate",
           estimatedTimeMinutes: q.estimatedTimeMinutes || (difficultyTimeMap[q.difficulty || "Intermediate"]),
         })),
@@ -157,5 +157,3 @@ const generateInterviewKitFlow = ai.defineFlow(
     return validatedOutput;
   }
 );
-
-    
