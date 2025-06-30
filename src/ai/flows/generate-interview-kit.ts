@@ -85,7 +85,7 @@ First, conduct a silent, internal analysis of the candidate's profile against th
 *   **Solid, Directly Relevant Experience**: Candidate's experience is a strong match for the JD's core requirements.
 *   **Overqualified**: Candidate's experience significantly exceeds the role's level (e.g., a senior applying for a mid-level role).
 *   **Underqualified or Junior**: Candidate has clear gaps in required experience, is a recent graduate, or has experience that is strong but less than the years requested (e.g., 3 years of project leadership vs. 5+ years of PM experience requested).
-*   **Domain-Shift**: Candidate is moving from a different industry (e.g., gaming to fintech), technology domain (e.g., OpenAI to Gemini), or role type (e.g., QA to DevOps).
+*   **Domain-Shift**: Candidate is moving from a different industry (e.g., gaming to fintech), technology domain (e.g., OpenAI to Gemini), role type (e.g., QA to DevOps), or academic background (e.g., physics PhD for a data science role).
 *   **Career History Nuance**: Candidate's profile shows points needing clarification, such as significant employment gaps, frequent job changes, or ambiguous role titles.
 
 **CRITICAL STEP 2: STRATEGIC QUESTION SELECTION**
