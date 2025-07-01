@@ -45,6 +45,7 @@ const QuestionAnswerPairSchema = z.object({
 });
 
 const CompetencySchema = z.object({
+  id: z.string().optional().describe("A unique identifier for the competency. This is for internal use and will be added automatically. Do not generate this field."),
   name: z.string().describe('The name of the competency, derived from the job description.'),
   importance: z.enum(['High', 'Medium', 'Low']).describe('The importance of this competency for the role, based on the job description.'),
   questions: z.array(QuestionAnswerPairSchema).describe("The questions for this competency. These must be a mix of Technical, Scenario, and Behavioral questions that are deeply tailored to BOTH the job description and the candidate's resume. Questions should actively probe claims and details found in the candidate's resume, including specific projects (their tech stack, goals, accomplishments, challenges) and connect them to the role's requirements."),
@@ -180,6 +181,7 @@ const generateInterviewKitFlow = ai.defineFlow(
      // Basic validation and default-filling for robustness
     const validatedOutput: GenerateInterviewKitOutput = {
       competencies: (output.competencies || []).map(comp => ({
+        id: randomUUID(),
         name: comp.name || "Unnamed Competency",
         importance: comp.importance || "Medium",
         questions: (comp.questions || []).map(q => ({
