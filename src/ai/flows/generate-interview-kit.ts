@@ -93,7 +93,7 @@ First, conduct a silent, internal analysis of the candidate's profile against th
 *   **Career History Nuance**: Candidate's profile shows points needing clarification, such as significant employment gaps, frequent job changes, or ambiguous role titles.
 
 **CRITICAL STEP 2: STRATEGIC QUESTION SELECTION**
-Based on your analysis, you will now construct the interview kit. You MUST draw questions from the following strategic question bank. **Crucially, you must personalize these questions by replacing placeholders (e.g., "[Technology from Resume]", "[Project from Resume]") with specific, verifiable details taken directly from the candidate's resume. Use the job description for context on what to probe for, but DO NOT mention it in the questions.** Select a broad mix of the most relevant questions for the determined scenario. Your goal is to create a highly focused and strategic interview kit with approximately 20 questions. Each question must be critical, logical, and deeply domain-specific, designed to challenge the candidate's core problem-solving abilities and force them to articulate the reasoning behind their decisions.
+Based on your analysis, you will now construct the interview kit. You MUST draw questions from the following strategic question bank. **Crucially, you must personalize these questions by replacing placeholders (e.g., "[Technology from Resume]", "[Project from Resume]") with specific, verifiable details taken directly from the candidate's resume. Use the job description for context on what to probe for, but DO NOT mention it in the questions.** Select a broad mix of the most relevant questions for the determined scenario. Your goal is to create a highly focused and strategic interview kit with approximately 20 questions. Ensure that the majority of the questions are technical in nature, drawing heavily from the 'DEEPLY TECHNICAL PROBES' and 'Domain & Industry Knowledge' categories. Each question must be critical, logical, and deeply domain-specific, designed to challenge the candidate's core problem-solving abilities and force them to articulate the reasoning behind their decisions.
 
 ---
 **STRATEGIC QUESTION BANK**
@@ -104,11 +104,15 @@ Based on your analysis, you will now construct the interview kit. You MUST draw 
 *   "Walk me through your professional journey so far—what are the pivots or milestones you’re proudest of?"
 *   "What in your last project excited you the most, and why?"
 
-**2. Candidate has Solid, Directly Relevant Experience**
-(Purpose: Confirm depth, scope, and impact. These questions must verify expertise, not just confirm it.)
+**2. Candidate has Solid, Directly Relevant Experience (DEEPLY TECHNICAL PROBES)**
+(Purpose: Confirm depth, scope, and impact. These questions MUST be highly technical and verify expertise, not just confirm it.)
 *   "On your project, [Project from Resume], you mentioned using [Technology from Resume]. Describe a specific problem you solved with it that a beginner would not have been able to. What were the alternatives you considered and why was your solution the best one?"
 *   "What measurable outcome (e.g., latency reduction, revenue increase) did your work on [Project from Resume] deliver to the business? How do you know your specific contribution led to that outcome?"
 *   "Your resume lists expertise in [Another Technology from Resume]. How did you influence architecture or technical decisions related to it in your team? Can you cite a specific trade-off you championed?"
+*   "Walk me through the design and implementation of the [Feature from Project on Resume] you built. What were the key data structures, design patterns, or algorithms involved, and why did you choose them?"
+*   "Your resume mentions experience with [Specific Database/System, e.g., 'PostgreSQL optimization' or 'Kafka stream processing']. Can you explain how you would debug a performance issue in that system? What specific tools or commands would you use?"
+*   "Considering [Project from Resume], if you had to re-architect it today for a 10x increase in user traffic, what would be your primary concerns and what specific changes would you propose to the [Infrastructure/Backend/Database]?"
+*   "You listed [API Technology, e.g., 'GraphQL'] on your resume. Describe how you've handled API versioning, security (e.g., authentication, authorization), and documentation in a past project."
 
 **3. Overqualified Candidates**
 (Purpose: Understand motivation and assess flexibility)
@@ -157,10 +161,10 @@ Based on your analysis, you will now construct the interview kit. You MUST draw 
 Now, generate the final output adhering strictly to the output schema. Your questions must be **crisp, concise, and professional**, sounding like they come from an experienced recruiter. When personalizing, **subtly weave details from the resume into practical, probing questions** rather than just stating facts from the document.
 
 1.  **Assign Classifications**: For each question, you MUST assign its type, category, and difficulty from the available options. This ensures a well-rounded and structured interview kit.
-2.  **Organize Logically:** You MUST structure the interview by organizing the selected questions into 5-7 logical competencies. The flow of competencies should be natural and progressive, starting broad and then diving deep. Follow this structure:
+2.  **Organize Logically:** You MUST structure the interview by organizing the selected questions into 5-7 logical competencies. The flow should be natural and progressive, starting broad and then diving deep into technical specifics. A significant portion of the competencies MUST be technical. Follow this structure:
     *   **Introduction & Motivation:** The first competency. It MUST start with a personalized "Tell me about yourself" question, followed by questions about their interest in the role and company.
-    *   **Project Deep Dives:** Dedicate one or two competencies to the most significant projects from the candidate's resume. Ask detailed, probing questions about their specific contributions, challenges faced, and outcomes achieved.
-    *   **Technical Skills & JD Alignment:** Group questions that test specific technical skills and tools required by the Job Description and evidenced on the resume.
+    *   **Technical Project Deep Dives:** Dedicate at least one or two competencies to the most significant projects from the candidate's resume. These competencies should contain your most rigorous technical questions, probing deep into architecture, design choices, specific challenges, and measurable outcomes.
+    *   **Core Technical Skills:** Have another competency dedicated to testing fundamental technical skills, algorithms, data structures, and tools required by the Job Description but perhaps not explicitly covered in a project.
     *   **Behavioral & Growth Mindset:** Group questions from the "Learning Agility" and "Cross-cutting Behavioural" sections to assess teamwork, problem-solving, and adaptability.
     *   Ensure every question and rubric criterion you create is deeply informed by your holistic analysis and the principles of the strategic question bank.
 `,
