@@ -239,8 +239,8 @@ export default function Home() {
                         <CardContent className="p-4 md:p-6">
                            <div className="space-y-4">
                              {comp.questions.map((q, qIndex) => {
-                               const answerLines = q.answer.split('\n').filter(line => line.trim());
-                               const noteLineIndex = answerLines.findIndex(line => line.trim().startsWith("Note:"));
+                               const answerLines = (q as any).modelAnswer.split('\n').filter((line: string) => line.trim());
+                               const noteLineIndex = answerLines.findIndex((line: string) => line.trim().startsWith("Note:"));
                                const bulletPoints = noteLineIndex > -1 ? answerLines.slice(0, noteLineIndex) : answerLines;
                                const note = noteLineIndex > -1 ? answerLines.slice(noteLineIndex).join('\n') : null;
 
@@ -262,7 +262,7 @@ export default function Home() {
                                    <div className="mt-4 text-sm">
                                      <p className="font-medium mb-2 text-base">Model Answer Guide:</p>
                                       <div className="space-y-2.5">
-                                        {bulletPoints.map((point, pointIndex) => (
+                                        {bulletPoints.map((point: string, pointIndex: number) => (
                                           <div key={pointIndex} className="flex items-start gap-3">
                                             <Checkbox
                                               id={`q-${index}-${qIndex}-p-${pointIndex}`}

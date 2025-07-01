@@ -24,7 +24,7 @@ const GenerateInitialQuestionsOutputSchema = z.object({
   questions: z.array(
     z.object({
       question: z.string().describe('The interview question.'),
-      answer: z.string().describe('A model answer for the question.'),
+      modelAnswer: z.string().describe('A model answer for the question.'),
     })
   ).describe('A list of interview questions and model answers.'),
 });
