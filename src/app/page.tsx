@@ -312,9 +312,9 @@ export default function Home() {
                   <Card>
                     <CardContent className="p-6">
                       <ul className="space-y-4">
-                        {interviewKit.scoringRubric.map((criterion, index) => (
-                          <li key={index} className="flex justify-between items-start gap-4 p-3 rounded-lg bg-background border">
-                            <span className="flex-1 text-sm">{criterion.criterion}</span>
+                        {interviewKit.scoringRubric.map((criterion) => (
+                          <li key={criterion.id!} className="flex justify-between items-start gap-4 p-3 rounded-lg bg-background border">
+                            <span className="flex-1 text-sm">{criterion.name}</span>
                             <span className="ml-4 font-bold text-primary whitespace-nowrap">{(criterion.weight * 100).toFixed(0)}%</span>
                           </li>
                         ))}
