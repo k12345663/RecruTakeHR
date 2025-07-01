@@ -91,7 +91,7 @@ First, conduct a silent, internal analysis of the candidate's profile against th
 *   **Career History Nuance**: Candidate's profile shows points needing clarification, such as significant employment gaps, frequent job changes, or ambiguous role titles.
 
 **CRITICAL STEP 2: STRATEGIC QUESTION SELECTION**
-Based on your analysis, you will now construct the interview kit. You MUST draw questions from the following strategic question bank. **Crucially, you must personalize these questions by replacing placeholders (e.g., "[Technology from Resume]", "[Project from Resume]") with specific, verifiable details taken directly from the candidate's resume. Use the job description for context on what to probe for, but DO NOT mention it in the questions.** Select a broad mix of the most relevant questions for the determined scenario, including several from each of the general-purpose sections ("Universal Ice-breakers", "Probing for Learning Agility & Growth Mindset", and "Cross-cutting Behavioural"), to create a comprehensive list of around 40-50 questions.
+Based on your analysis, you will now construct the interview kit. You MUST draw questions from the following strategic question bank. **Crucially, you must personalize these questions by replacing placeholders (e.g., "[Technology from Resume]", "[Project from Resume]") with specific, verifiable details taken directly from the candidate's resume. Use the job description for context on what to probe for, but DO NOT mention it in the questions.** Select a broad mix of the most relevant questions for the determined scenario, including several from each of the general-purpose sections ("Universal Ice-breakers", "Probing for Learning Agility & Growth Mindset", "Cross-cutting Behavioural", and "Domain & Industry Knowledge"), to create a comprehensive list of around 50-60 questions.
 
 ---
 **STRATEGIC QUESTION BANK**
@@ -132,12 +132,19 @@ Based on your analysis, you will now construct the interview kit. You MUST draw 
 *   **Industry Shift (e.g., e-commerce to fintech):** "I noticed you're moving from [Previous Domain, e.g., e-commerce] to [Our Domain, e.g., fintech]. What sparked your interest in this shift, and how do you plan to get up to speed on industry-specific regulations?"
 *   **Role Type Shift (e.g., QA to DevOps, or a technical expert to a Sales Manager):** "What motivated your transition from [Previous Role Type] to [New Role Type], and how does your past experience give you a unique advantage in this new function?"
 
-**7. Cross-cutting Behavioural / Culture-Fit Questions**
+**7. Domain & Industry Knowledge**
+(Purpose: Gauge understanding of the industry landscape and specific challenges)
+*   "What are some of the biggest technical challenges or trends you see in the [Industry from JD, e.g., 'fintech' or 'healthcare tech'] space right now?"
+*   "From your perspective, what differentiates our company from other players in the [Industry from JD] space?"
+*   "How do you think about balancing innovation with regulatory compliance in an industry like [Industry from JD]?"
+*   (If applicable) "Can you discuss your understanding of [Specific Standard or Regulation from JD, e.g., 'HIPAA' or 'PCI-DSS'] and its implications for software development?"
+
+**8. Cross-cutting Behavioural / Culture-Fit Questions**
 (insert these regardless of scenario when you need depth)
 *   "Describe a time when you had a disagreement with a teammate. How did you resolve it?"
 *   "Describe a situation where business priorities shifted suddenly, forcing you to rethink your approach. How did you realign your work?"
 
-**8. Career History Clarification**
+**9. Career History Clarification**
 (Purpose: Respectfully probe for context on resume details)
 *   (If Gap) "I noticed on your resume there's an employment gap between [Start Date] and [End Date]. Could you tell me more about what you were focused on during that time?"
 *   (If Frequent Job Switching) "You've held a few different roles over the past few years. Could you share what you've learned from these transitions and what you're seeking in your next role to ensure a long-term fit and growth?"
