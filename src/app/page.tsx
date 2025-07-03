@@ -10,9 +10,9 @@ import { Label } from '@/components/ui/label';
 import { Loader2, FileUp, Briefcase, Info, RotateCcw } from 'lucide-react';
 import { generateInterviewKit, GenerateInterviewKitOutput } from '@/ai/flows/generate-interview-kit';
 import { useToast } from "@/hooks/use-toast"
-import { Checkbox } from '@/components/ui/checkbox';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { Slider } from '@/components/ui/slider';
+import { Textarea as NotesTextarea } from '@/components/ui/textarea'; // Renamed to avoid conflict
 
 export default function Home() {
   const [jobDescription, setJobDescription] = useState('');
@@ -21,6 +21,7 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [interviewKit, setInterviewKit] = useState<GenerateInterviewKitOutput | null>(null);
   const [scores, setScores] = useState<Record<string, number>>({});
+  const [notes, setNotes] = useState<Record<string, string>>({});
   const { toast } = useToast();
   const resumeInputRef = useRef<HTMLInputElement>(null);
 
@@ -60,6 +61,7 @@ export default function Home() {
     setIsLoading(true);
     setInterviewKit(null);
     setScores({});
+    setNotes({});
 
     try {
         let resumeDataUri: string | undefined;
@@ -97,12 +99,23 @@ export default function Home() {
     }));
   };
 
+  const handleNotesChange = (questionId: string, value: string) => {
+    setNotes(prevNotes => ({
+        ...prevNotes,
+        [questionId]: value,
+    }));
+  };
+
   const calculateAverageScore = () => {
     if (!interviewKit) return 0;
     const allQuestions = interviewKit.competencies.flatMap(c => c.questions);
-    if (allQuestions.length === 0) return 0;
+    if (Object.keys(scores).length === 0) return 0;
+    
+    const scoredQuestionsCount = allQuestions.filter(q => scores[q.id!] !== undefined).length;
+    if (scoredQuestionsCount === 0) return 0;
+
     const totalScore = allQuestions.reduce((acc, q) => acc + (scores[q.id!] || 0), 0);
-    const average = totalScore / allQuestions.length;
+    const average = totalScore / scoredQuestionsCount;
     return average;
   };
 
@@ -112,6 +125,7 @@ export default function Home() {
     setResumeFile(null);
     setInterviewKit(null);
     setScores({});
+    setNotes({});
     if (resumeInputRef.current) {
       resumeInputRef.current.value = "";
     }
@@ -229,7 +243,7 @@ export default function Home() {
                     </div>
                   <div className="space-y-4">
                     {interviewKit.competencies.map((comp, index) => (
-                      <Card key={index} className="overflow-hidden">
+                      <Card key={comp.id || index} className="overflow-hidden">
                         <CardHeader className="bg-muted/50">
                             <div className='flex justify-between w-full items-center'>
                                 <CardTitle className="text-xl">{comp.name}</CardTitle>
@@ -238,45 +252,60 @@ export default function Home() {
                         </CardHeader>
                         <CardContent className="p-4 md:p-6">
                            <div className="space-y-4">
-                             {comp.questions.map((q, qIndex) => {
+                             {comp.questions.map((q) => {
                                return (
-                                 <div key={q.id} className="p-4 rounded-lg bg-background border">
+                                 <div key={q.id} className="p-4 rounded-lg bg-background border space-y-4">
                                    <p className="font-semibold">{q.question}</p>
-                                   {(q as any).interviewerNote && (
-                                        <div className="flex items-start gap-2 mt-3 text-xs italic text-muted-foreground bg-muted/50 p-2 rounded-md">
+                                   
+                                   {q.interviewerNote && (
+                                        <div className="flex items-start gap-2 text-xs italic text-muted-foreground bg-muted/50 p-2 rounded-md">
                                             <Info className="h-4 w-4 mt-0.5 flex-shrink-0 text-primary" />
-                                            <p><span className="font-semibold text-foreground/90">Interviewer Note:</span> {(q as any).interviewerNote}</p>
+                                            <p><span className="font-semibold text-foreground/90">Interviewer Note:</span> {q.interviewerNote}</p>
                                         </div>
                                     )}
-                                   <div className="text-xs text-muted-foreground mt-3 flex items-center gap-x-2 flex-wrap">
+
+                                   <div className="text-xs text-muted-foreground flex items-center gap-x-2 flex-wrap">
                                       <span className="bg-secondary px-2 py-0.5 rounded-full">{q.type}</span>
                                       <span className="bg-secondary px-2 py-0.5 rounded-full">{q.category}</span>
                                       <span className="bg-secondary px-2 py-0.5 rounded-full">{q.difficulty}</span>
                                       <span className="bg-secondary px-2 py-0.5 rounded-full">{q.estimatedTimeMinutes} mins</span>
                                    </div>
-                                   <div className="mt-4 text-sm">
+                                   
+                                   <div>
                                      <p className="font-medium mb-2 text-base">Model Answer Guide:</p>
                                       <div
-                                          className="prose prose-sm dark:prose-invert max-w-none text-muted-foreground leading-relaxed prose-headings:text-foreground prose-p:my-2 prose-ul:my-2 prose-li:my-1 prose-headings:font-semibold prose-strong:text-foreground whitespace-pre-wrap"
-                                      >
-                                        {(q as any).modelAnswer}
-                                      </div>
+                                        className="prose prose-sm dark:prose-invert max-w-none text-muted-foreground leading-relaxed prose-headings:text-foreground prose-p:my-2 prose-ul:my-2 prose-li:my-1 prose-headings:font-semibold prose-strong:text-foreground whitespace-pre-wrap"
+                                        dangerouslySetInnerHTML={{ __html: q.modelAnswer.replace(/\n/g, '<br />') }}
+                                      />
                                    </div>
-                                    <div className="mt-4 pt-4 border-t">
-                                        <div className="flex justify-between items-center mb-2">
-                                            <Label htmlFor={`score-slider-${q.id}`} className="text-base font-medium">Score Answer</Label>
-                                            <div className="flex items-baseline gap-1">
-                                                <span className="font-bold text-2xl text-primary">{scores[q.id!] || 0}</span>
-                                                <span className="text-sm text-muted-foreground">/ 10</span>
+
+                                    <div className="pt-4 border-t space-y-4">
+                                        <div>
+                                            <div className="flex justify-between items-center mb-2">
+                                                <Label htmlFor={`score-slider-${q.id}`} className="text-base font-medium">Score Answer</Label>
+                                                <div className="flex items-baseline gap-1">
+                                                    <span className="font-bold text-2xl text-primary">{scores[q.id!] || 0}</span>
+                                                    <span className="text-sm text-muted-foreground">/ 10</span>
+                                                </div>
                                             </div>
+                                            <Slider
+                                                id={`score-slider-${q.id}`}
+                                                value={[scores[q.id!] || 0]}
+                                                max={10}
+                                                step={1}
+                                                onValueChange={(value) => handleScoreChange(q.id!, value)}
+                                            />
                                         </div>
-                                        <Slider
-                                            id={`score-slider-${q.id}`}
-                                            value={[scores[q.id!] || 0]}
-                                            max={10}
-                                            step={1}
-                                            onValueChange={(value) => handleScoreChange(q.id!, value)}
-                                        />
+                                        <div>
+                                          <Label htmlFor={`notes-${q.id}`} className="text-base font-medium">Panelist Notes</Label>
+                                           <NotesTextarea 
+                                              id={`notes-${q.id}`}
+                                              placeholder="Enter your notes here..."
+                                              value={notes[q.id!] || ''}
+                                              onChange={(e) => handleNotesChange(q.id!, e.target.value)}
+                                              className="mt-2"
+                                           />
+                                        </div>
                                     </div>
                                  </div>
                                )
@@ -308,7 +337,7 @@ export default function Home() {
                         <CardHeader>
                             <CardTitle>Average Candidate Score</CardTitle>
                             <CardDescription>
-                                This is the average score calculated across all interview questions.
+                                This is the average score calculated across all questions that have been scored.
                             </CardDescription>
                         </CardHeader>
                         <CardContent className="p-6 text-center">
