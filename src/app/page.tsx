@@ -13,6 +13,7 @@ import { useToast } from "@/hooks/use-toast"
 import { ThemeToggle } from '@/components/theme-toggle';
 import { Slider } from '@/components/ui/slider';
 import { Textarea as NotesTextarea } from '@/components/ui/textarea'; // Renamed to avoid conflict
+import { Checkbox } from '@/components/ui/checkbox';
 
 export default function Home() {
   const [jobDescription, setJobDescription] = useState('');
@@ -273,10 +274,16 @@ export default function Home() {
                                    
                                    <div>
                                      <p className="font-medium mb-2 text-base">Model Answer Guide:</p>
-                                      <div
-                                        className="prose prose-sm dark:prose-invert max-w-none text-muted-foreground leading-relaxed prose-headings:text-foreground prose-p:my-2 prose-ul:my-2 prose-li:my-1 prose-headings:font-semibold prose-strong:text-foreground whitespace-pre-wrap"
-                                        dangerouslySetInnerHTML={{ __html: q.modelAnswer.replace(/\n/g, '<br />') }}
-                                      />
+                                     <div className="space-y-3">
+                                        {q.modelAnswer.split('\n').filter(line => line.trim() !== '').map((point, i) => (
+                                            <div key={`${q.id}-point-${i}`} className="flex items-start gap-3">
+                                                <Checkbox id={`${q.id}-point-${i}`} className="mt-1 flex-shrink-0" />
+                                                <Label htmlFor={`${q.id}-point-${i}`} className="text-sm font-normal text-muted-foreground leading-snug cursor-pointer">
+                                                {point}
+                                                </Label>
+                                            </div>
+                                        ))}
+                                      </div>
                                    </div>
 
                                     <div className="pt-4 border-t space-y-4">
