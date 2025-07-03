@@ -239,11 +239,6 @@ export default function Home() {
                         <CardContent className="p-4 md:p-6">
                            <div className="space-y-4">
                              {comp.questions.map((q, qIndex) => {
-                               const answerLines = (q as any).modelAnswer.split('\n').filter((line: string) => line.trim());
-                               const noteLineIndex = answerLines.findIndex((line: string) => line.trim().startsWith("Note:"));
-                               const bulletPoints = noteLineIndex > -1 ? answerLines.slice(0, noteLineIndex) : answerLines;
-                               const note = noteLineIndex > -1 ? answerLines.slice(noteLineIndex).join('\n') : null;
-
                                return (
                                  <div key={q.id} className="p-4 rounded-lg bg-background border">
                                    <p className="font-semibold">{q.question}</p>
@@ -261,26 +256,11 @@ export default function Home() {
                                    </div>
                                    <div className="mt-4 text-sm">
                                      <p className="font-medium mb-2 text-base">Model Answer Guide:</p>
-                                      <div className="space-y-2.5">
-                                        {bulletPoints.map((point: string, pointIndex: number) => (
-                                          <div key={pointIndex} className="flex items-start gap-3">
-                                            <Checkbox
-                                              id={`q-${index}-${qIndex}-p-${pointIndex}`}
-                                              aria-label="Mark as covered"
-                                              className="mt-1 flex-shrink-0"
-                                            />
-                                            <label
-                                              htmlFor={`q-${index}-${qIndex}-p-${pointIndex}`}
-                                              className="text-sm text-muted-foreground leading-snug"
-                                            >
-                                              {point.replace(/^[-*]\s*/, '')}
-                                            </label>
-                                          </div>
-                                        ))}
+                                      <div
+                                          className="prose prose-sm dark:prose-invert max-w-none text-muted-foreground leading-relaxed prose-headings:text-foreground prose-p:my-2 prose-ul:my-2 prose-li:my-1 prose-headings:font-semibold prose-strong:text-foreground whitespace-pre-wrap"
+                                      >
+                                        {(q as any).modelAnswer}
                                       </div>
-                                      {note && (
-                                        <p className="mt-4 text-xs italic text-muted-foreground/90 bg-muted/50 p-2 rounded-md border">{note}</p>
-                                      )}
                                    </div>
                                     <div className="mt-4 pt-4 border-t">
                                         <div className="flex justify-between items-center mb-2">
