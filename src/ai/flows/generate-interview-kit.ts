@@ -90,7 +90,7 @@ Based on your deep analysis of the Job Description, the candidate's Resume, and 
 
 1.  **Technical Depth**: Questions must be specific and probe for deep understanding, not surface-level knowledge. If the Job Description mentions core computer science fundamentals (e.g., data structures, algorithms, system design, databases), you MUST generate questions that test these fundamentals in a practical, scenario-based context.
 
-2.  **Strategic Interviewer Notes**: For EVERY question, you MUST generate a concise \`interviewerNote\`. This note's purpose is to guide the interviewer on what to listen for, steering the evaluation towards practical application, business impact, and real-world problem-solving skills rather than just theoretical knowledge. It explains the 'why' behind the question.
+2.  **Strategic Interviewer Notes**: For EVERY question, you MUST generate a concise \`interviewerNote\`. This note's purpose is to guide the interviewer on what to listen for, steering the evaluation towards practical application, business impact, and real-world problem-solving skills rather than just theoretical knowledge. It explains the 'why' behind the question. Each note MUST conclude with the exact sentence: "If the candidate provides relevant, practical answers, mark them accordingly. If the answer is partially correct, partial marks should be allocated."
 
 3.  **Mix of Question Types**: The questions must cover a mix of:
     *   **Deep Conceptual Understanding**: e.g., "Explain how X works, why it’s important in practice, common pitfalls, how you’d apply it in production."
