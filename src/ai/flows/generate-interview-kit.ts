@@ -58,7 +58,6 @@ const ScoringCriterionSchema = z.object({
 });
 
 const GenerateInterviewKitOutputSchema = z.object({
-  candidateAnalysisNotes: z.string().optional().describe("A brief summary of any notable career gaps, technology stack shifts, or full career shifts identified from the candidate's resume. This provides context for the interviewer."),
   competencies: z.array(CompetencySchema).describe('The 5-7 core competencies for the job, including their importance and tailored questions.'),
   scoringRubric: z
     .array(ScoringCriterionSchema)
@@ -80,7 +79,7 @@ You are a world-class AI-powered recruitment strategist, acting as an expert tec
 **CONTEXT FOR ANALYSIS (YOU MUST SYNTHESIZE ALL OF THE FOLLOWING SOURCES):**
 *   **Job Description**: {{{jobDescription}}}
 *   **Unstop Profile Link**: {{{unstopProfileLink}}}
-{{#if candidateResumeDataUri}}*   **Candidate Resume ({{candidateResumeFileName}})**: {{media url=candidateResumeDataUri}} (CRITICAL: You MUST analyze the full content of this document with extreme depth. Your primary goal is to assess the candidate's fitness for the role described in the Job Description, using the specific details from the resume to **tailor and personalize** the JD-centric questions. You must also identify any notable career gaps, technology stack shifts, or full career shifts from the resume and summarize your findings in the 'candidateAnalysisNotes' field.)
+{{#if candidateResumeDataUri}}*   **Candidate Resume ({{candidateResumeFileName}})**: {{media url=candidateResumeDataUri}} (CRITICAL: You MUST analyze the full content of this document with extreme depth. Your primary goal is to assess the candidate's fitness for the role described in the Job Description, using the specific details from the resume to **tailor and personalize** the JD-centric questions. If, and only if, you identify a notable career gap, technology stack shift, or full career shift from the resume, you must generate one (and only one) respectful, non-judgmental behavioral or scenario-based question to understand the candidate's journey and motivations. Place this question within the most relevant competency (e.g., 'Communication & Collaboration' or a new, suitable non-technical competency). This is the ONLY way you should address such observations.)
 {{/if}}
 {{#if candidateExperienceContext}}*   **Additional Candidate Context**: {{{candidateExperienceContext}}}{{/if}}
 
@@ -141,7 +140,6 @@ const generateInterviewKitFlow = ai.defineFlow(
 
      // Basic validation and default-filling for robustness
     const validatedOutput: GenerateInterviewKitOutput = {
-      candidateAnalysisNotes: output.candidateAnalysisNotes,
       competencies: (output.competencies || []).map(comp => ({
         id: randomUUID(),
         name: comp.name || "Unnamed Competency",
