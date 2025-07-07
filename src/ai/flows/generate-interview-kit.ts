@@ -37,7 +37,7 @@ const QuestionAnswerPairSchema = z.object({
   id: z.string().optional().describe("A unique identifier for the question. This is for internal use and will be added automatically. Do not generate this field."),
   question: z.string().describe("A crisp, direct, and deeply technical interview question, ONE or TWO lines at most. The question MUST AVOID being generic or philosophical (e.g., avoid \"What's the difference between X and Y?\"). Instead, it should be a practical probe designed to test hands-on expertise in one of the core technical areas: Conceptual Understanding, Practical Application, Problem Solving, Optimization, Best Practices, Debugging, or Scalability/Security. The question must be insightful and highly specific, directly derived from projects, skills, or achievements mentioned in the Candidate's Unstop Profile and Resume. Do NOT include the candidate's name in the question itself."),
   interviewerNote: z.string().describe("A brief, one-sentence note FOR THE INTERVIEWER. This note MUST explain the strategic purpose of the question, guiding the interviewer on what to look for. For example, 'This tests the candidate's ability to articulate the business impact of their technical work' or 'This probes the depth of their hands-on experience with [Technology from Resume]'. This note should NOT be visible to the candidate."),
-  modelAnswer: z.string().describe("A \"Model Answer Guide\" for the interviewer, composed of MULTIPLE points (at least 3-4) to form a comprehensive checklist. Format this as a single string where each checklist point is separated by a double newline ('\\n\\n'). Each point MUST follow this format EXACTLY: A title for the evaluation point (e.g., 'Explains it is Object Oriented'), followed by a newline, and then a very detailed, multi-sentence explanation. This explanation must be a high-quality, legitimate answer to the point, written to educate a non-technical interviewer. It MUST NOT be an instruction about what the candidate should say (e.g., AVOID 'The candidate should explain...')."),
+  modelAnswer: z.string().describe("A \"Model Answer Guide\" for the interviewer, composed of MULTIPLE points (at least 3-4) to form a comprehensive checklist. Format this as a single string where each checklist point is separated by a double newline ('\\n\\n'). Each point MUST follow this format EXACTLY: A title for the evaluation point (e.g., 'Explains it is Object Oriented'), followed by a newline, then 'Sample:', a newline, and then a very detailed, multi-sentence explanation. This explanation must be a high-quality, legitimate answer to the point, written to educate a non-technical interviewer. It MUST NOT be an instruction about what the candidate should say (e.g., AVOID 'The candidate should explain...')."),
   type: z.enum(['Technical', 'Scenario', 'Behavioral']).describe('The type of question. Technical for skills/tools, Scenario for problem-solving, Behavioral for past actions (STAR method).'),
   category: z.enum(['Technical', 'Non-Technical']).describe("The category of the question. 'Technical' for questions assessing specific hard skills or tool knowledge. 'Non-Technical' for questions assessing problem-solving, behavioral traits, scenarios, or soft skills. Infer this primarily from the question type and content."),
   difficulty: z.enum(['Naive', 'Beginner', 'Intermediate', 'Expert', 'Master']).describe("The difficulty level of the question, on a 5-point scale: 'Naive', 'Beginner', 'Intermediate', 'Expert', 'Master'. Assign based on JD requirements and candidate's apparent skill level."),
@@ -107,25 +107,24 @@ Every question you generate MUST be a direct, technical probe designed to test o
 ---
 **TECHNICAL QUESTION BANK (Your primary source for questions)**
 
-**1. Conceptual Understanding Probes**
+**1. Conceptual & Practical Probes**
 *   "Your resume lists [Technology from Resume]. Can you explain how its [Core Concept, e.g., 'virtual DOM' for React, 'garbage collection' for Java] works under the hood?"
-*   "Could you explain how a [Fundamental Concept from JD, e.g., 'Java CompletableFuture'] differs from a [Related Concept]? Why might you choose one over the other in a practical scenario?"
-*   (For recent grads) "Your [Academic Project from Resume] is interesting. Can you describe its architecture and how you handled a key technical concept like [Concept, e.g., 'concurrency' or 'data normalization']?"
-
-**2. Practical Application & Problem-Solving Probes**
-*   "Walk me through the design and implementation of the [Feature from Project on Resume] you built. What were the key data structures, design patterns, or algorithms involved, and why did you choose them?"
-*   "Describe the most complex system you've designed. What were the main components, and how did they interact? Draw a simple block diagram if it helps."
+*   "Walk me through the design and implementation of the [Feature from Project on Resume] you built. What were the key data structures or algorithms, and why did you choose them?"
 *   "You used [Technology from Resume] on [Project from Resume]. Write a small code snippet to accomplish [Specific Task, e.g., 'asynchronously fetch data from two endpoints and combine the results']."
-*   "What measurable outcome (e.g., latency reduction, revenue increase) did your work on [Project from Resume] deliver to the business? How do you know your specific contribution led to that outcome?"
+*   "What is [Fundamental Concept from JD, e.g., 'Java CompletableFuture'], and what problem does it solve? Describe a scenario where you would use it."
+
+**2. Problem Solving & Debugging Probes**
+*   "You deploy a model, and its performance (e.g., AUC) drops significantly on the first day's live data. What is your step-by-step debugging process to identify the root cause?"
+*   "Describe a time you had to debug a particularly challenging bug. What was your process for identifying the root cause, and what tools did you use?"
+*   "Given a highly imbalanced dataset (e.g., 1:100 positive:negative ratio), which classification algorithm would you choose and how would you optimize for both recall and precision?"
 
 **3. Optimization, Scalability & Security Probes**
-*   "Considering [Project from Resume], if you had to re-architect it today for a 10x increase in user traffic, what would be your primary concerns and what specific changes would you propose to the [Infrastructure/Backend/Database]?"
-*   "Your resume mentions experience with [Specific Database/System, e.g., 'PostgreSQL optimization' or 'Kafka stream processing']. Can you explain how you would diagnose and resolve a performance bottleneck in that system?"
-*   "You listed [API Technology, e.g., 'GraphQL' or 'REST'] on your resume. Describe how you've handled API security, such as authentication, authorization, and rate-limiting, in a past project."
+*   "Considering [Project from Resume], if you had to re-architect it today for a 10x increase in user traffic, what specific changes would you propose to the [Infrastructure/Backend/Database]?"
+*   "Your resume mentions experience with [Specific Database/System, e.g., 'PostgreSQL optimization']. How would you diagnose and resolve a performance bottleneck in that system?"
+*   "You listed [API Technology, e.g., 'GraphQL' or 'REST'] on your resume. Describe how you would implement robust security measures like authentication, authorization, and rate-limiting."
 
-**4. Best Practices, Debugging & Testing Probes**
+**4. Best Practices & Testing Probes**
 *   "How did you approach testing for your [Project from Resume]? What was your strategy for unit, integration, and end-to-end tests?"
-*   "Describe a time you had to debug a particularly challenging bug. What was your process for identifying the root cause, and what tools did you use?"
 *   "Talk about a time you conducted a code review that led to a significant improvement in the codebase. What was the issue, and how did you communicate the feedback?"
 
 **5. Behavioral Questions (Use Sparingly)**
@@ -136,7 +135,7 @@ Every question you generate MUST be a direct, technical probe designed to test o
 **CRITICAL STEP 3: OUTPUT GENERATION**
 Generate the final output adhering strictly to the schema.
 1.  **Structure the Interview**: Organize the 20 questions into 5-7 logical competencies. The flow should be natural, starting broad and then diving deep. The vast majority of competencies MUST be technical.
-2.  **Generate Rich Model Answers**: For each question, the \`modelAnswer\` MUST be a comprehensive guide for the interviewer. It must contain at least 3-4 distinct evaluation points. Each point is a checklist item, with all points formatted into a single string separated by a double newline ('\\n\\n'). The format for EACH point MUST BE: a title for the evaluation point, followed by a newline, and then a very detailed, multi-sentence explanation of the technical concept for the recruiter to read. This explanation must be a legitimate, high-quality, generalized answer that provides deep technical context. **ABSOLUTELY DO NOT write what the candidate should do (e.g., 'The candidate should explain...'). Instead, PROVIDE THE ACTUAL TECHNICAL EXPLANATION.** For example, a perfect point would be: "Explains Object-Oriented Principles\\nJava is an object-oriented language built on four core principles: Encapsulation, which bundles data and methods within a class; Inheritance, which allows a new class to acquire properties from an existing one; Polymorphism, which enables methods to perform different actions based on the object; and Abstraction, which hides complexity by showing only essential features. These concepts make code modular and reusable."
+2.  **Generate Rich Model Answers**: For each question, the \`modelAnswer\` MUST be a comprehensive guide for the interviewer. It must contain at least 3-4 distinct evaluation points. Each point is a checklist item, with all points formatted into a single string separated by a double newline ('\\n\\n'). The format for EACH point MUST BE: a title for the evaluation point, followed by a newline, then 'Sample:', a newline, and then a very detailed, multi-sentence explanation of the technical concept for the recruiter to read. This explanation must be a legitimate, high-quality, generalized answer that provides deep technical context. **ABSOLUTELY DO NOT write what the candidate should do (e.g., 'The candidate should explain...'). Instead, PROVIDE THE ACTUAL TECHNICAL EXPLANATION.** For example, a perfect point would be: "Explains Object-Oriented Principles\\nSample:\\nJava is an object-oriented language built on four core principles: Encapsulation, which bundles data and methods within a class; Inheritance, which allows a new class to acquire properties from an existing one; Polymorphism, which enables methods to perform different actions based on the object; and Abstraction, which hides complexity by showing only essential features. These concepts make code modular and reusable."
 3.  **Assign Classifications**: For each question, assign its type, category, and difficulty.
 `,
 });
