@@ -276,8 +276,9 @@ export default function Home() {
                                      <p className="font-medium mb-2 text-base">Model Answer Guide:</p>
                                       <div className="space-y-4">
                                         {q.modelAnswer.split('\n\n').filter(point => point.trim() !== '').map((point, i) => {
-                                            const [title, ...explanationLines] = point.split('\n');
-                                            const explanation = explanationLines.join('\n').trim();
+                                            const lines = point.split('\n');
+                                            const title = lines[0];
+                                            const explanation = lines.slice(1).join('\n'); // Contains "Sample:- ..."
 
                                             return (
                                                 <div key={`${q.id}-point-${i}`} className="flex items-start gap-3">
