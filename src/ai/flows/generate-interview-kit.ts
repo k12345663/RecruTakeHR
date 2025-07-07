@@ -98,9 +98,9 @@ Based on your deep analysis of both the Job Description and the candidate's Resu
     *   **Real Project Scenarios**: e.g., "Describe a time you solved…", "How would you build…", "Suppose you encounter… what’s your debugging approach?"
     *   **Tradeoffs & Reasoning**: e.g., "Which algorithm would you pick for… why not the alternatives?", "How do you balance performance vs interpretability?"
 
-4.  **Contextualization**:
-    *   Most questions should be derived from the core requirements of the **Job Description**.
-    *   One or two questions at most should be **directly tailored** to the candidate's resume, referencing specific projects or skills to verify their experience.
+4.  **Contextualization and Focus**:
+    *   The vast majority of your questions (all but 2-3) MUST be derived solely from the technical requirements, skills, and responsibilities outlined in the **Job Description**. This is your primary source for question generation.
+    *   Strictly limit resume-specific questions to 2-3 at most. These questions must directly reference a project or skill from the resume to verify their experience.
     *   The style must be at a technical level, not an HR level.
 
 **MODEL ANSWER GENERATION (CRITICAL INSTRUCTION):**
