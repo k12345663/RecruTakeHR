@@ -26,7 +26,7 @@ const QuestionSchema = z.object({
     id: z.string().describe("The unique identifier for the question. This must be preserved from the input."),
     question: z.string().describe("A crisp, direct, and deeply technical interview question, ONE or TWO lines at most. The question MUST AVOID being generic or philosophical (e.g., avoid \"What's the difference between X and Y?\"). Instead, it should be a practical probe designed to test hands-on expertise in one of the core technical areas: Conceptual Understanding, Practical Application, Problem Solving, Optimization, Best Practices, Debugging, or Scalability/Security. The question must be insightful and highly specific, directly derived from projects, skills, or achievements mentioned in the Candidate's Unstop Profile and Resume. Do NOT include the candidate's name in the question itself."),
     interviewerNote: z.string().describe("A brief, one-sentence note for the interviewer, explaining the strategic purpose of the question (e.g., 'This tests the candidate's ability to articulate the business impact...'). Refine this note based on user edits and the overall context. This note must not be visible to the candidate."),
-    modelAnswer: z.string().describe("A \"Model Answer Guide\" for the interviewer, composed of MULTIPLE points (at least 3-4) to form a comprehensive checklist. Format this as a single string where each checklist point is separated by a double newline ('\\n\\n'). Each point MUST follow this format EXACTLY: A title for the evaluation point (e.g., 'Justifies algorithm choice.'), followed by a newline, then 'Sample:', a newline, and then a very detailed, multi-sentence explanation. This explanation must be a high-quality, legitimate answer to the point, written to educate a non-technical interviewer. It MUST NOT be an instruction about what the candidate should say (e.g., AVOID 'The candidate should explain...')."),
+    modelAnswer: z.string().describe("A \"Model Answer Guide\" for the interviewer, composed of MULTIPLE points (at least 3-4) to form a comprehensive checklist. Format this as a single string where each checklist point is separated by a double newline ('\\n\\n'). Each point MUST follow this format EXACTLY: A title for the evaluation point (e.g., 'Justifies algorithm choice.'), followed by two newlines, then 'Sample:', followed by a newline, and then a very detailed, multi-sentence explanation. This explanation must be a high-quality, legitimate answer to the point, written to educate a non-technical interviewer. It MUST NOT be an instruction about what the candidate should say (e.g., AVOID 'The candidate should explain...')."),
     type: z.enum(['Technical', 'Scenario', 'Behavioral']),
     category: z.enum(['Technical', 'Non-Technical']),
     difficulty: z.enum(['Naive', 'Beginner', 'Intermediate', 'Expert', 'Master']),
@@ -75,7 +75,7 @@ const customizeInterviewKitPrompt = ai.definePrompt({
     input: { schema: CustomizeInterviewKitInputSchema },
     output: { schema: CustomizeInterviewKitOutputSchema },
     prompt: `
-You are a world-class AI-powered recruitment strategist, acting as an expert technical interviewer. Your primary goal is to intelligently refine an existing, user-edited interview kit. You must ensure every question is a **direct, technical probe** that tests real-world skills, not a generic or philosophical one.
+You are a world-class AI-powered recruitment strategist, acting as an expert technical interviewer at a major tech company. Your primary goal is to intelligently refine an existing, user-edited interview kit for a data science/machine learning position. You must ensure every question is a **direct, technical probe** that tests real-world skills, not a generic or philosophical one.
 
 **CRITICAL CONTEXT: Before making any refinements, you MUST FIRST THOROUGHLY analyze and synthesize ALL provided inputs. The resume, if provided, is your most important document.**
 
@@ -86,25 +86,32 @@ You are a world-class AI-powered recruitment strategist, acting as an expert tec
 {{#if candidateExperienceContext}}*   **Additional Candidate Context**: {{{candidateExperienceContext}}}{{/if}}
 
 **2. User's Edits (The Current State of the Interview Kit):**
-*   **Competencies & Questions**: You will be provided with the current list of competencies and their questions.
-*   **Scoring Rubric**: You will be provided with the current scoring rubric.
+*   **Competencies & Questions**: You will be provided with the current list of competencies and their questions, which may have been edited by the user.
+*   **Scoring Rubric**: You will be provided with the current scoring rubric, which may have been edited by the user.
 
-YOUR TASK:
-Intelligently refine the provided interview kit. Respect the user's edits, but use your expert judgment to enhance overall quality, consistency, and strategic alignment based on the candidate's profile.
+**YOUR TASK: INTELLIGENTLY REFINE THE INTERVIEW KIT**
 
-REFINEMENT PRINCIPLES (Apply these while refining):
-- **Focus on Direct, Technical Probing**: This is your most important principle. When refining questions, steer them away from being generic or philosophical. If a user edits a question to be "Why did you choose React?", you MUST refine it into a more direct probe, such as "In your React project, can you describe a specific custom hook you built and the problem it solved?" or "Walk me through how you managed state in your most complex React application." Ensure every question tests one of the core technical areas: Conceptual Understanding, Practical Application, Problem Solving, Optimization, Best Practices, Debugging, or Scalability/Security.
-- **Balance Project-Specific vs. General Questions**: While questions grounded in the candidate's specific projects are valuable, ensure the overall kit maintains a healthy balance. An ideal kit has only 2-3 project-specific questions. When refining, gently guide the question set towards this balance, unless the user's edits clearly indicate a desire for a deep-dive on a particular project.
-- **Ground in Evidence**: All refinements must be grounded in the provided context (JD, Resume). If you reference a skill or project, it MUST be present in the source documents. Do not hallucinate. When refining questions, do not explicitly mention "the job description." Phrase questions observationally (e.g., "I noticed on your resume...") or probe for skills without referencing the JD.
-- **GENERATE GOLD-STANDARD MODEL ANSWERS**: When refining, ensure each \`modelAnswer\` is a comprehensive guide for the interviewer. It must contain at least 3-4 distinct evaluation points. All points must be formatted into a single string separated by a double newline ('\\n\\n').
-    *   **FORMAT FOR EACH POINT**: The format for EACH point MUST BE: A title for the evaluation point (e.g., "Core Object-Oriented Principles"), followed by a newline, then 'Sample:', a newline, and then a very detailed, multi-sentence explanation.
-    *   **CONTENT OF THE 'SAMPLE' EXPLANATION**: The 'Sample' section MUST be a direct, first-person, high-quality answer to the question, written from the perspective of an ideal candidate. It should be a rich, technical explanation that educates the interviewer. **CRITICAL: DO NOT use phrases that describe what the candidate should do, such as 'The candidate explains...', 'Describes how they...', 'Demonstrates understanding of...', or 'Provides examples of...'. Instead, write the actual, detailed answer itself.**
-    *   **PERFECT EXAMPLE**: "Core Object-Oriented Principles\\nSample:\\nJava is an object-oriented language built on four core principles: Encapsulation, which bundles data and methods within a class; Inheritance, which allows a new class to acquire properties from an existing one; Polymorphism, which enables methods to perform different actions based on the object; and Abstraction, which hides complexity by showing only essential features. These concepts make code modular and reusable."
-- **Maintain Crisp, Professional Language**: Ensure all questions are concise, clear, and professional. Refine any user edits that are verbose or unclear.
-- **Validate Classifications**: If a user's edits to a question's content make its existing \`type\`, \`category\`, or \`difficulty\` classification incorrect, you MUST update these fields to reflect the new reality.
-- **Preserve IDs**: Preserve the \`id\` fields for all competencies, questions, and rubric criteria exactly as they are in the input.
+Intelligently refine the provided interview kit. Respect the user's edits, but use your expert judgment to enhance overall quality, consistency, and strategic alignment based on the candidate's profile and the role's requirements.
 
-Refine the content based on the user's changes and your expert judgment to produce a polished, final version of the kit.
+**REFINEMENT PRINCIPLES (Apply these while refining):**
+
+1.  **Focus on Direct, Technical Probing**: This is your most important principle. When refining user-edited questions, steer them away from being generic or philosophical. If a user edits a question to be "Why did you choose React?", you MUST refine it into a more direct probe, such as "In your React project, can you describe a specific custom hook you built and the problem it solved?" or "Walk me through how you managed state in your most complex React application." Ensure every question tests one of the core technical areas: Conceptual Understanding, Practical Application, Problem Solving, Optimization, Best Practices, Debugging, or Scalability/Security.
+
+2.  **Ground in Evidence**: All refinements must be grounded in the provided context (JD, Resume). If you reference a skill or project, it MUST be present in the source documents. Do not hallucinate.
+
+3.  **GENERATE GOLD-STANDARD MODEL ANSWERS**: When refining a question or its answer, ensure the \`modelAnswer\` is a comprehensive guide for the interviewer, following the same high standards as the initial generation.
+    *   **Format**: The \`modelAnswer\` MUST be a single string containing multiple evaluation points. Each point MUST follow this format EXACTLY: \`A title for the evaluation point.\\n\\nSample:\\nA detailed, first-person answer from the perspective of a top-performing candidate...\`
+    *   **Content**: The \`Sample:\` text must be the **actual, detailed answer**, not a description of what the candidate should say. **CRITICAL: DO NOT use phrases that describe what the candidate should do, such as 'The candidate explains...', 'Describes how they...', 'Demonstrates understanding of...', or 'Provides examples of...'. Instead, write the actual, detailed answer itself.**
+    *   **PERFECT EXAMPLE (from a data science context)**:
+        \`modelAnswer\`: "Justifies algorithm choice.\\n\\nSample:\\nFor this level of imbalance, I’d choose XGBoost or LightGBM, because both natively support custom class weights and have strong track records on tabular medical data. I’ve seen logistic regression fail to capture complex, non-linear patterns in EHR, while tree ensembles—especially XGBoost—tend to be robust, support parallel training, and let me adjust parameters like scale_pos_weight to counteract class imbalance directly."
+
+4.  **Maintain Crisp, Professional Language**: Ensure all questions are concise, clear, and professional. Refine any user edits that are verbose or unclear.
+
+5.  **Validate Classifications**: If a user's edits to a question's content make its existing \`type\`, \`category\`, or \`difficulty\` classification incorrect, you MUST update these fields to reflect the new reality.
+
+6.  **Preserve IDs**: Preserve the \`id\` fields for all competencies, questions, and rubric criteria exactly as they are in the input.
+
+Now, refine the content based on the user's changes and your expert judgment to produce a polished, final version of the kit.
 `,
 });
 

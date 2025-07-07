@@ -14,6 +14,12 @@ import { ThemeToggle } from '@/components/theme-toggle';
 import { Slider } from '@/components/ui/slider';
 import { Textarea as NotesTextarea } from '@/components/ui/textarea'; // Renamed to avoid conflict
 import { Checkbox } from '@/components/ui/checkbox';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
 
 export default function Home() {
   const [jobDescription, setJobDescription] = useState('');
@@ -243,98 +249,103 @@ export default function Home() {
                         </Button>
                     </div>
                   <div className="space-y-4">
-                    {interviewKit.competencies.map((comp, index) => (
-                      <Card key={comp.id || index} className="overflow-hidden">
-                        <CardHeader className="bg-muted/50">
-                            <div className='flex justify-between w-full items-center'>
-                                <CardTitle className="text-xl">{comp.name}</CardTitle>
-                                <span className="text-sm bg-background text-muted-foreground px-2 py-1 rounded-md border">Importance: {comp.importance}</span>
-                            </div>
-                        </CardHeader>
-                        <CardContent className="p-4 md:p-6">
-                           <div className="space-y-4">
-                             {comp.questions.map((q) => {
-                               return (
-                                 <div key={q.id} className="p-4 rounded-lg bg-background border space-y-4">
-                                   <p className="font-semibold">{q.question}</p>
-                                   
-                                   {q.interviewerNote && (
-                                        <div className="flex items-start gap-2 text-xs italic text-muted-foreground bg-muted/50 p-2 rounded-md">
-                                            <Info className="h-4 w-4 mt-0.5 flex-shrink-0 text-primary" />
-                                            <p><span className="font-semibold text-foreground/90">Interviewer Note:</span> {q.interviewerNote}</p>
-                                        </div>
-                                    )}
-
-                                   <div className="text-xs text-muted-foreground flex items-center gap-x-2 flex-wrap">
-                                      <span className="bg-secondary px-2 py-0.5 rounded-full">{q.type}</span>
-                                      <span className="bg-secondary px-2 py-0.5 rounded-full">{q.category}</span>
-                                      <span className="bg-secondary px-2 py-0.5 rounded-full">{q.difficulty}</span>
-                                      <span className="bg-secondary px-2 py-0.5 rounded-full">{q.estimatedTimeMinutes} mins</span>
-                                   </div>
-                                   
-                                   <div>
-                                     <p className="font-medium mb-2 text-base">Model Answer Guide:</p>
-                                      <div className="space-y-4">
-                                        {q.modelAnswer.split('\n\n').filter(point => point.trim() !== '').map((point, i) => {
-                                            const lines = point.split('\n');
-                                            const title = lines[0];
-                                            const explanation = lines.slice(1).join('\n').replace(/^Sample:\s*/, '');
-
-
-                                            return (
-                                                <div key={`${q.id}-point-${i}`} className="flex items-start gap-3">
-                                                    <Checkbox id={`${q.id}-point-${i}`} className="mt-1 flex-shrink-0" />
-                                                    <div className="grid gap-1 flex-1">
-                                                        <Label htmlFor={`${q.id}-point-${i}`} className="font-medium text-foreground leading-snug cursor-pointer">
-                                                            {title}
-                                                        </Label>
-                                                        {explanation && (
-                                                            <p className="text-sm text-muted-foreground whitespace-pre-line">
-                                                                {explanation}
-                                                            </p>
-                                                        )}
-                                                    </div>
-                                                </div>
-                                            )
-                                        })}
-                                      </div>
-                                   </div>
-
-                                    <div className="pt-4 border-t space-y-4">
-                                        <div>
-                                            <div className="flex justify-between items-center mb-2">
-                                                <Label htmlFor={`score-slider-${q.id}`} className="text-base font-medium">Score Answer</Label>
-                                                <div className="flex items-baseline gap-1">
-                                                    <span className="font-bold text-2xl text-primary">{scores[q.id!] || 0}</span>
-                                                    <span className="text-sm text-muted-foreground">/ 10</span>
-                                                </div>
-                                            </div>
-                                            <Slider
-                                                id={`score-slider-${q.id}`}
-                                                value={[scores[q.id!] || 0]}
-                                                max={10}
-                                                step={1}
-                                                onValueChange={(value) => handleScoreChange(q.id!, value)}
-                                            />
-                                        </div>
-                                        <div>
-                                          <Label htmlFor={`notes-${q.id}`} className="text-base font-medium">Panelist Notes</Label>
-                                           <NotesTextarea 
-                                              id={`notes-${q.id}`}
-                                              placeholder="Enter your notes here..."
-                                              value={notes[q.id!] || ''}
-                                              onChange={(e) => handleNotesChange(q.id!, e.target.value)}
-                                              className="mt-2"
-                                           />
+                    <Accordion type="multiple" className="w-full space-y-4">
+                        {interviewKit.competencies.map((comp, index) => (
+                        <Card key={comp.id || index} className="overflow-hidden">
+                            <AccordionItem value={`item-${index}`} className="border-b-0">
+                                <AccordionTrigger className="p-4 md:p-6 bg-muted/50 hover:no-underline">
+                                    <div className='flex justify-between w-full items-center'>
+                                        <CardTitle className="text-xl">{comp.name}</CardTitle>
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-sm bg-background text-muted-foreground px-2 py-1 rounded-md border">Importance: {comp.importance}</span>
                                         </div>
                                     </div>
-                                 </div>
-                               )
-                              })}
-                           </div>
-                        </CardContent>
-                      </Card>
-                    ))}
+                                </AccordionTrigger>
+                                <AccordionContent className="p-4 md:p-6">
+                                <div className="space-y-4">
+                                    {comp.questions.map((q) => {
+                                    return (
+                                        <div key={q.id} className="p-4 rounded-lg bg-background border space-y-4">
+                                        <p className="font-semibold">{q.question}</p>
+                                        
+                                        {q.interviewerNote && (
+                                                <div className="flex items-start gap-2 text-xs italic text-muted-foreground bg-muted/50 p-2 rounded-md">
+                                                    <Info className="h-4 w-4 mt-0.5 flex-shrink-0 text-primary" />
+                                                    <p><span className="font-semibold text-foreground/90">Interviewer Note:</span> {q.interviewerNote}</p>
+                                                </div>
+                                            )}
+
+                                        <div className="text-xs text-muted-foreground flex items-center gap-x-2 flex-wrap">
+                                            <span className="bg-secondary px-2 py-0.5 rounded-full">{q.type}</span>
+                                            <span className="bg-secondary px-2 py-0.5 rounded-full">{q.category}</span>
+                                            <span className="bg-secondary px-2 py-0.5 rounded-full">{q.difficulty}</span>
+                                            <span className="bg-secondary px-2 py-0.5 rounded-full">{q.estimatedTimeMinutes} mins</span>
+                                        </div>
+                                        
+                                        <div>
+                                        <p className="font-medium mb-2 text-base">Model Answer Guide:</p>
+                                            <div className="space-y-4">
+                                                {q.modelAnswer.split('\n\n\n').filter(point => point.trim() !== '').map((point, i) => {
+                                                    const parts = point.split('\n\nSample:\n');
+                                                    const title = parts[0];
+                                                    const explanation = parts[1] || '';
+
+                                                    return (
+                                                        <div key={`${q.id}-point-${i}`} className="flex items-start gap-3">
+                                                            <Checkbox id={`${q.id}-point-${i}`} className="mt-1 flex-shrink-0" />
+                                                            <div className="grid gap-1 flex-1">
+                                                                <Label htmlFor={`${q.id}-point-${i}`} className="font-medium text-foreground leading-snug cursor-pointer">
+                                                                    {title}
+                                                                </Label>
+                                                                {explanation && (
+                                                                    <p className="text-sm text-muted-foreground whitespace-pre-line">
+                                                                        {explanation}
+                                                                    </p>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                    )
+                                                })}
+                                            </div>
+                                        </div>
+
+                                            <div className="pt-4 border-t space-y-4">
+                                                <div>
+                                                    <div className="flex justify-between items-center mb-2">
+                                                        <Label htmlFor={`score-slider-${q.id}`} className="text-base font-medium">Score Answer</Label>
+                                                        <div className="flex items-baseline gap-1">
+                                                            <span className="font-bold text-2xl text-primary">{scores[q.id!] || 0}</span>
+                                                            <span className="text-sm text-muted-foreground">/ 10</span>
+                                                        </div>
+                                                    </div>
+                                                    <Slider
+                                                        id={`score-slider-${q.id}`}
+                                                        value={[scores[q.id!] || 0]}
+                                                        max={10}
+                                                        step={1}
+                                                        onValueChange={(value) => handleScoreChange(q.id!, value)}
+                                                    />
+                                                </div>
+                                                <div>
+                                                <Label htmlFor={`notes-${q.id}`} className="text-base font-medium">Panelist Notes</Label>
+                                                <NotesTextarea 
+                                                    id={`notes-${q.id}`}
+                                                    placeholder="Enter your notes here..."
+                                                    value={notes[q.id!] || ''}
+                                                    onChange={(e) => handleNotesChange(q.id!, e.target.value)}
+                                                    className="mt-2"
+                                                />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )
+                                    })}
+                                </div>
+                                </AccordionContent>
+                            </AccordionItem>
+                        </Card>
+                        ))}
+                    </Accordion>
                   </div>
                 </div>
                 <div>

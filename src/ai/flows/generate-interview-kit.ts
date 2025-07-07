@@ -37,7 +37,7 @@ const QuestionAnswerPairSchema = z.object({
   id: z.string().optional().describe("A unique identifier for the question. This is for internal use and will be added automatically. Do not generate this field."),
   question: z.string().describe("A crisp, direct, and deeply technical interview question, ONE or TWO lines at most. The question MUST AVOID being generic or philosophical (e.g., avoid \"What's the difference between X and Y?\"). Instead, it should be a practical probe designed to test hands-on expertise in one of the core technical areas: Conceptual Understanding, Practical Application, Problem Solving, Optimization, Best Practices, Debugging, or Scalability/Security. The question must be insightful and highly specific, directly derived from projects, skills, or achievements mentioned in the Candidate's Unstop Profile and Resume. Do NOT include the candidate's name in the question itself."),
   interviewerNote: z.string().describe("A brief, one-sentence note FOR THE INTERVIEWER. This note MUST explain the strategic purpose of the question, guiding the interviewer on what to look for. For example, 'This tests the candidate's ability to articulate the business impact of their technical work' or 'This probes the depth of their hands-on experience with [Technology from Resume]'. This note should NOT be visible to the candidate."),
-  modelAnswer: z.string().describe("A \"Model Answer Guide\" for the interviewer, composed of MULTIPLE points (at least 3-4) to form a comprehensive checklist. Format this as a single string where each checklist point is separated by a double newline ('\\n\\n'). Each point MUST follow this format EXACTLY: A title for the evaluation point (e.g., 'Justifies algorithm choice.'), followed by a newline, then 'Sample:', a newline, and then a very detailed, multi-sentence explanation. This explanation must be a legitimate, high-quality answer to the point, written to educate a non-technical interviewer. It MUST NOT be an instruction about what the candidate should say (e.g., AVOID 'The candidate should explain...')."),
+  modelAnswer: z.string().describe("A \"Model Answer Guide\" for the interviewer, composed of MULTIPLE points (at least 3-4) to form a comprehensive checklist. Format this as a single string where each checklist point is separated by a double newline ('\\n\\n'). Each point MUST follow this format EXACTLY: A title for the evaluation point, followed by two newlines, then 'Sample:', followed by a newline, and then a very detailed, multi-sentence explanation. This explanation must be a legitimate, high-quality answer to the point, written to educate a non-technical interviewer. It MUST NOT be an instruction about what the candidate should say (e.g., AVOID 'The candidate should explain...')."),
   type: z.enum(['Technical', 'Scenario', 'Behavioral']).describe('The type of question. Technical for skills/tools, Scenario for problem-solving, Behavioral for past actions (STAR method).'),
   category: z.enum(['Technical', 'Non-Technical']).describe("The category of the question. 'Technical' for questions assessing specific hard skills or tool knowledge. 'Non-Technical' for questions assessing problem-solving, behavioral traits, scenarios, or soft skills. Infer this primarily from the question type and content."),
   difficulty: z.enum(['Naive', 'Beginner', 'Intermediate', 'Expert', 'Master']).describe("The difficulty level of the question, on a 5-point scale: 'Naive', 'Beginner', 'Intermediate', 'Expert', 'Master'. Assign based on JD requirements and candidate's apparent skill level."),
@@ -74,7 +74,7 @@ const generateInterviewKitPrompt = ai.definePrompt({
   input: {schema: GenerateInterviewKitInputSchema},
   output: {schema: GenerateInterviewKitOutputSchema},
   prompt: `
-You are a world-class AI-powered recruitment strategist, acting as an expert technical interviewer. Your mission is to create a deeply technical and practical interview kit. Your core directive is to **AVOID generic or philosophical questions**. Instead, you must generate **direct, situational, technical questions** that test a candidate's ability to solve real problems and demonstrate hands-on expertise. The **Job Description is your primary source** for technologies and skills to test.
+You are a world-class AI-powered recruitment strategist, acting as an expert technical interviewer at a major tech company. Your mission is to create a deeply technical and practical interview kit to evaluate a candidate for a data science/machine learning position. Your core directive is to **AVOID generic or philosophical questions**. Instead, you must generate **direct, situational, technical questions** that test a candidate's ability to solve real problems and demonstrate hands-on expertise.
 
 **CONTEXT FOR ANALYSIS (YOU MUST SYNTHESIZE ALL OF THE FOLLOWING SOURCES):**
 *   **Job Description**: {{{jobDescription}}}
@@ -82,48 +82,38 @@ You are a world-class AI-powered recruitment strategist, acting as an expert tec
 {{#if candidateResumeDataUri}}*   **Candidate Resume ({{candidateResumeFileName}})**: {{media url=candidateResumeDataUri}} (CRITICAL: You MUST analyze the full content of this document with extreme depth. Your primary goal is to assess the candidate's fitness for the role described in the Job Description, using the specific details from the resume to **tailor and personalize** the JD-centric questions.){{/if}}
 {{#if candidateExperienceContext}}*   **Additional Candidate Context**: {{{candidateExperienceContext}}}{{/if}}
 
-**YOUR PROCESS**
+**YOUR TASK: GENERATE THE INTERVIEW KIT**
 
-**CRITICAL STEP 1: DEEP ANALYSIS**
-First, conduct a silent, internal analysis of the candidate's profile against the **Job Description**. The JD dictates the required skills. The resume provides the context to personalize questions. Synthesize all information to understand the candidate's strengths and weaknesses relative to the role.
+Based on your deep analysis of both the Job Description and the candidate's Resume, and on current industry standards for this role, generate a comprehensive set of **15-20 highly technical, realistic interview questions**.
 
-**CRITICAL STEP 2: STRATEGIC TECHNICAL QUESTION GENERATION**
-Based on your analysis, construct the interview kit. Your goal is to create a comprehensive kit with **15-20 questions**. The vast majority of these questions MUST be highly technical and directly probe the requirements and tech stack outlined in the **Job Description**. You MUST select and personalize questions from the following **GOLD-STANDARD QUESTION BANK**. When personalizing, replace placeholders like "[Technology from JD]" or "[Project from Resume]" by drawing from both the Job Description's required tech stack and the candidate's resume. **Limit questions referring to a specific project on the resume to a maximum of 2-3.** The remainder of questions MUST focus on the core technologies and skills required by the role.
+**QUESTION GENERATION PRINCIPLES:**
 
-Every question you generate MUST be a direct, technical probe designed to test one or more of these core competency areas:
-1.  **Conceptual Understanding**: Can the candidate explain the core concepts behind a technology?
-2.  **Practical Application**: Can they write code, design a system, or troubleshoot real issues?
-3.  **Problem Solving**: Can they break down and solve technical challenges?
-4.  **Optimization**: Do they know how to make something faster, more efficient, or more reliable?
-5.  **Best Practices**: Are they aware of standards, design patterns, or common pitfalls?
-6.  **Debugging and Testing**: Can they identify and fix bugs and ensure quality?
-7.  **Scalability/Security**: Do they consider performance, scalability, or security in their solutions?
+1.  **Technical Depth**: Questions must be specific and probe for deep understanding, not surface-level knowledge.
+2.  **Mix of Question Types**: The questions must cover a mix of:
+    *   **Deep Conceptual Understanding**: e.g., "Explain how X works, why it’s important in practice, common pitfalls, how you’d apply it in production."
+    *   **Technical Stack & Tools**: e.g., "How would you use library/tool Y for scenario Z?" (Draw tools from the JD and resume).
+    *   **Real Project Scenarios**: e.g., "Describe a time you solved…", "How would you build…", "Suppose you encounter… what’s your debugging approach?"
+    *   **Tradeoffs & Reasoning**: e.g., "Which algorithm would you pick for… why not the alternatives?", "How do you balance performance vs interpretability?"
+3.  **Contextualization**:
+    *   Most questions should be derived from the core requirements of the **Job Description**.
+    *   A few (2-3) questions should be **directly tailored** to the candidate's resume, referencing specific projects or skills to verify their experience.
+    *   The style must be at a technical level, not an HR level.
 
----
-**GOLD-STANDARD QUESTION BANK (Your primary source for questions)**
-*   **What is [Technology from JD, e.g., Java], and what is its importance in the modern tech industry?**
-*   **The job requires deep knowledge of [Technology from JD, e.g., React]. Can you explain how its [Core Concept, e.g., 'virtual DOM'] works under the hood?**
-*   **The role involves [Task from JD, e.g., 'building scalable APIs']. Your resume mentions using [Technology from Resume, e.g., Node.js] on a project. Can you write a small code snippet to accomplish a related task, like [Specific Task, e.g., 'asynchronously fetch data from two endpoints and combine the results']?**
-*   **(Project-specific) Walk me through the design and implementation of the [Feature from Project on Resume] you built. What were the key data structures or algorithms, and why did you choose them?**
-*   **Imagine you are working on a system like the one described in the JD. You deploy a model, and its performance (e.g., AUC) drops significantly on the first day's live data. What is your step-by-step debugging process?**
-*   **(Project-specific) Describe a time you had to debug a particularly challenging bug on [Project from Resume]. What was your process for identifying the root cause, and what tools did you use?**
-*   **Given a highly imbalanced dataset (e.g., 1:100 positive:negative) for a task like [Domain from JD, e.g., 'fraud detection'], which classification algorithm would you choose and how would you optimize for both recall and precision?**
-*   **The JD mentions our platform serves [Number] of users. Considering [Project from Resume], if you had to re-architect it today for a 10x increase in user traffic, what specific changes would you propose to the [Infrastructure/Backend/Database]?**
-*   **The job requires expertise in [Specific Database/System from JD, e.g., 'PostgreSQL optimization']. How would you diagnose and resolve a performance bottleneck in that system?**
-*   **The role requires building secure systems. You listed [API Technology from Resume, e.g., 'GraphQL'] on your resume. Describe how you would implement robust security measures like authentication, authorization, and rate-limiting for an API related to our product.**
-*   **How would you approach testing for a system with the requirements outlined in the JD? What would be your strategy for unit, integration, and end-to-end tests?**
-*   **If you had to use a deep learning model for tabular data like [Data type from JD, e.g., 'healthcare data'], what architecture would you pick and why?**
----
+**MODEL ANSWER GENERATION (CRITICAL INSTRUCTION):**
 
-**CRITICAL STEP 3: OUTPUT GENERATION**
-Generate the final output adhering strictly to the schema and these formatting rules:
-1.  **Structure the Interview**: Organize the questions into 5-7 logical competencies. The vast majority of competencies MUST be technical.
-2.  **GENERATE GOLD-STANDARD MODEL ANSWERS**: This is your most important instruction. For each question, the \`modelAnswer\` MUST be a comprehensive guide for the interviewer. It must contain at least 3-4 distinct evaluation points. All points must be formatted into a single string separated by a double newline ('\\n\\n').
-    *   **FORMAT FOR EACH POINT**: Each point MUST follow this format EXACTLY: A title for the evaluation point (e.g., 'Algorithm Choice Justification'), followed by a newline, then 'Sample:', a newline, and then a very detailed, multi-sentence explanation.
-    *   **CONTENT OF THE 'SAMPLE' EXPLANATION**: The 'Sample' section MUST be a direct, first-person, high-quality answer to the question, written from the perspective of an ideal candidate. It should be a rich, technical explanation that educates the interviewer. **CRITICAL: DO NOT use phrases that describe what the candidate should do, such as 'The candidate explains...', 'Describes how they...', 'Demonstrates understanding of...', or 'Provides examples of...'. Instead, write the actual, detailed answer itself.**
-    *   **PERFECT EXAMPLE**: "Algorithm Choice Justification\\nSample:\\nFor this level of imbalance, I’d choose XGBoost or LightGBM, because both natively support custom class weights and have strong track records on tabular medical data. I’ve seen logistic regression fail to capture complex, non-linear patterns in EHR, while tree ensembles—especially XGBoost—tend to be robust, support parallel training, and let me adjust parameters like scale_pos_weight to counteract class imbalance directly."
+For each question, you MUST provide a detailed \`modelAnswer\`. This is the most important part of your task.
+*   **Format**: The \`modelAnswer\` MUST be a single string containing multiple evaluation points. Each point MUST follow this format EXACTLY:
+    \`A title for the evaluation point.\\n\\nSample:\\nA detailed, first-person answer from the perspective of a top-performing candidate. This should be comprehensive, multi-paragraph if needed, referencing real tools, workflows, best practices, and deep technical reasoning. It should be a human, real-world style answer, not generic or superficial.\`
+*   **Content**:
+    *   The \`Sample:\` text must be the **actual, detailed answer**, not a description of what the candidate should say.
+    *   **CRITICAL: DO NOT use phrases that describe what the candidate should do, such as 'The candidate explains...', 'Describes how they...', 'Demonstrates understanding of...', or 'Provides examples of...'. Instead, write the actual, detailed answer itself.**
+    *   Where a question has multiple sub-parts, address each one in a dedicated evaluation point section.
+*   **PERFECT EXAMPLE**:
+    Question: Given a highly imbalanced healthcare dataset (1:100 positive:negative), which classification algorithm would you choose and how would you optimize for recall and precision?
+    \`modelAnswer\`: "Justifies algorithm choice.\\n\\nSample:\\nFor this level of imbalance, I’d choose XGBoost or LightGBM, because both natively support custom class weights and have strong track records on tabular medical data. I’ve seen logistic regression fail to capture complex, non-linear patterns in EHR, while tree ensembles—especially XGBoost—tend to be robust, support parallel training, and let me adjust parameters like scale_pos_weight to counteract class imbalance directly.\\n\\nDescribes tuning for recall/precision.\\n\\nSample:\\nI’d focus on maximizing recall first, as missing positives in healthcare is often critical. My process would be to use the 'scale_pos_weight' parameter in XGBoost, starting at the inverse of the class ratio—so, 100 in this case. I would also implement stratified k-fold cross-validation to ensure each fold preserves the class imbalance during training and validation. For evaluation, I would plot both ROC and Precision-Recall curves. My main focus would be tuning the decision threshold on the predicted probabilities to push recall to an acceptable level, while monitoring how much precision drops. I might also use GridSearchCV with a custom scoring metric like the F2-score, which weighs recall more heavily than precision, to find the best hyperparameters.\\n\\nExplains validation and metrics.\\n\\nSample:\\nInstead of relying on accuracy, which is misleading here, I’d report sensitivity (recall), specificity, and AUC-PR on a holdout test set. A detailed confusion matrix is also essential. To simulate real-world deployment, I would validate the final model on a month of unseen data and analyze any false positives and negatives with domain experts to ensure the model’s error patterns are acceptable. I would also document all chosen thresholds and recommend that borderline cases be flagged for manual review."
 
-3.  **Assign Classifications**: For each question, assign its type, category, and difficulty.
+**FINAL OUTPUT:**
+Organize the questions into 5-7 logical competencies. The vast majority of competencies MUST be technical. Also generate a scoring rubric based on the core skills required by the JD.
 `,
 });
 
