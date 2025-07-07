@@ -93,7 +93,7 @@ First, conduct a silent, internal analysis of the candidate's profile against th
 *   **Career History Nuance**: Profile shows points needing clarification (gaps, frequent changes).
 
 **CRITICAL STEP 2: STRATEGIC TECHNICAL QUESTION GENERATION**
-Based on your analysis, construct the interview kit. Your goal is to create a comprehensive kit with **exactly 20 questions**. The vast majority of these questions MUST be highly technical. You MUST select and personalize questions from the following **Technical Question Bank**. Replace placeholders like "[Technology from Resume]" with specific, verifiable details from the candidate's resume and profile.
+Based on your analysis, construct the interview kit. Your goal is to create a comprehensive kit with **exactly 20 questions**. The vast majority of these questions MUST be highly technical. You MUST select and personalize questions from the following **Technical Question Bank**. Replace placeholders like "[Technology from Resume]" with specific, verifiable details from the candidate's resume and profile. **Limit the number of questions that refer to a specific project on the candidate's resume to a maximum of 2-3.** The remainder should focus on general technical knowledge and skills relevant to the role.
 
 Every question you generate MUST be a direct, technical probe designed to test one or more of these core competency areas:
 1.  **Conceptual Understanding**: Can the candidate explain the core concepts behind a technology?
