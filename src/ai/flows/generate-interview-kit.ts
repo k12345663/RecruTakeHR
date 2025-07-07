@@ -100,7 +100,7 @@ Based on your deep analysis of both the Job Description and the candidate's Resu
 
 4.  **Contextualization**:
     *   Most questions should be derived from the core requirements of the **Job Description**.
-    *   A few (2-3) questions should be **directly tailored** to the candidate's resume, referencing specific projects or skills to verify their experience.
+    *   One or two questions at most should be **directly tailored** to the candidate's resume, referencing specific projects or skills to verify their experience.
     *   The style must be at a technical level, not an HR level.
 
 **MODEL ANSWER GENERATION (CRITICAL INSTRUCTION):**
