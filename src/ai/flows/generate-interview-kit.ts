@@ -53,8 +53,8 @@ const CompetencySchema = z.object({
 
 const ScoringCriterionSchema = z.object({
   id: z.string().optional().describe("A unique identifier for the criterion. This is for internal use and will be added automatically. Do not generate this field."),
-  name: z.string().describe("The name of a well-defined, distinct, and high-quality scoring criterion. It must be actionable, measurable, and directly relevant to the role. Each criterion MUST be extremely specific, explicitly mentioning key technologies, skills, project types, or domain-specific concepts found in the Job Description AND supported by evidence in the Candidate's Resume/Context. The set of criteria MUST provide a deep, contextual basis for evaluating technical and domain expertise, understandable by someone not expert in the role's domain."),
-  weight: z.number().describe('The weight of this criterion (a value between 0.0 and 1.0). All criterion weights in the rubric must sum to 1.0.'),
+  name: z.string().optional().describe("The name of a well-defined, distinct, and high-quality scoring criterion. It must be actionable, measurable, and directly relevant to the role. Each criterion MUST be extremely specific, explicitly mentioning key technologies, skills, project types, or domain-specific concepts found in the Job Description AND supported by evidence in the Candidate's Resume/Context. The set of criteria MUST provide a deep, contextual basis for evaluating technical and domain expertise, understandable by someone not expert in the role's domain."),
+  weight: z.number().optional().describe('The weight of this criterion (a value between 0.0 and 1.0). All criterion weights in the rubric must sum to 1.0.'),
 });
 
 const GenerateInterviewKitOutputSchema = z.object({
@@ -150,25 +150,27 @@ const generateInterviewKitFlow = ai.defineFlow(
           estimatedTimeMinutes: q.estimatedTimeMinutes || (difficultyTimeMap[q.difficulty || "Intermediate"]),
         })),
       })),
-      scoringRubric: (output.scoringRubric || []).map(crit => ({
-        id: randomUUID(),
-        name: crit.name || "Unnamed Criterion (must be well-defined, distinct, high-quality, actionable, measurable, and contextually reference JD/resume/projects/education/context for comprehensive evaluation). AI should refine this.",
-        weight: typeof crit.weight === 'number' ? Math.max(0, Math.min(1, crit.weight)) : 0.2,
+      scoringRubric: (output.scoringRubric || [])
+        .filter(crit => crit && crit.name && typeof crit.weight === 'number')
+        .map(crit => ({
+          id: randomUUID(),
+          name: crit.name!,
+          weight: Math.max(0, Math.min(1, crit.weight!)),
       })),
     };
 
     // Ensure rubric weights sum to 1.0
-    let totalWeight = validatedOutput.scoringRubric.reduce((sum, crit) => sum + crit.weight, 0);
+    let totalWeight = validatedOutput.scoringRubric.reduce((sum, crit) => sum + (crit.weight || 0), 0);
     if (validatedOutput.scoringRubric.length > 0 && Math.abs(totalWeight - 1.0) > 0.001) {
         if (totalWeight === 0) { // If all weights are 0, distribute equally
             const equalWeight = 1.0 / validatedOutput.scoringRubric.length;
-            validatedOutput.scoringRubric.forEach((crit, index) => {
+            validatedOutput.scoringRubric.forEach((crit) => {
                 crit.weight = equalWeight;
             });
         } else { // If weights are non-zero but don't sum to 1.0, normalize
             const factor = 1.0 / totalWeight;
             validatedOutput.scoringRubric.forEach(crit => {
-                crit.weight *= factor;
+                crit.weight = (crit.weight || 0) * factor;
             });
         }
 
@@ -176,7 +178,7 @@ const generateInterviewKitFlow = ai.defineFlow(
         let runningSum = 0;
         validatedOutput.scoringRubric.forEach((crit, index, arr) => {
             if (index < arr.length - 1) {
-                const roundedWeight = parseFloat(crit.weight.toFixed(2));
+                const roundedWeight = parseFloat((crit.weight || 0).toFixed(2));
                 crit.weight = roundedWeight;
                 runningSum += roundedWeight;
             } else {
