@@ -278,7 +278,8 @@ export default function Home() {
                                         {q.modelAnswer.split('\n\n').filter(point => point.trim() !== '').map((point, i) => {
                                             const lines = point.split('\n');
                                             const title = lines[0];
-                                            const explanation = lines.slice(1).join('\n');
+                                            const explanation = lines.slice(1).join('\n').replace(/^Sample:\s*/, '');
+
 
                                             return (
                                                 <div key={`${q.id}-point-${i}`} className="flex items-start gap-3">
