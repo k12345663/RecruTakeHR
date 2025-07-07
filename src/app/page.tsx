@@ -286,9 +286,9 @@ export default function Home() {
                                         <p className="font-medium mb-2 text-base">Model Answer Guide:</p>
                                             <div className="space-y-4">
                                                 {q.modelAnswer.split('\n\n\n').filter(point => point.trim() !== '').map((point, i) => {
-                                                    const parts = point.split('\n\nSample:\n');
-                                                    const title = parts[0];
-                                                    const explanation = parts[1] || '';
+                                                    const firstNewlineIndex = point.indexOf('\n');
+                                                    const title = firstNewlineIndex !== -1 ? point.substring(0, firstNewlineIndex) : point;
+                                                    const explanation = firstNewlineIndex !== -1 ? point.substring(firstNewlineIndex + 1).trim() : '';
 
                                                     return (
                                                         <div key={`${q.id}-point-${i}`} className="flex items-start gap-3">

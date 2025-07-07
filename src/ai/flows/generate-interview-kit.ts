@@ -48,7 +48,7 @@ const CompetencySchema = z.object({
   id: z.string().optional().describe("A unique identifier for the competency. This is for internal use and will be added automatically. Do not generate this field."),
   name: z.string().describe('The name of the competency, derived from the job description.'),
   importance: z.enum(['High', 'Medium', 'Low']).describe('The importance of this competency for the role, based on the job description.'),
-  questions: z.array(QuestionAnswerPairSchema).describe("A rich set of 4-6 questions for this competency. These must be a mix of Technical, Scenario, and Behavioral questions that are deeply tailored to BOTH the job description and the candidate's resume. Questions should actively probe claims and details found in the candidate's resume, including specific projects (their tech stack, goals, accomplishments, challenges) and connect them to the role's requirements."),
+  questions: z.array(QuestionAnswerPairSchema).describe("A rich set of 5-7 questions for this competency. These must be a mix of Technical, Scenario, and Behavioral questions that are deeply tailored to BOTH the job description and the candidate's resume. Questions should actively probe claims and details found in the candidate's resume, including specific projects (their tech stack, goals, accomplishments, challenges) and connect them to the role's requirements."),
 });
 
 const ScoringCriterionSchema = z.object({
