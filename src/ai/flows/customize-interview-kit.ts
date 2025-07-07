@@ -61,7 +61,7 @@ export type CustomizeInterviewKitInput = z.infer<typeof CustomizeInterviewKitInp
 // The output schema is the same as the editable parts of the input
 const CustomizeInterviewKitOutputSchema = z.object({
     competencies: z.array(CompetencySchema),
-    scoringRubric: z.array(RubricCriterionSchema),
+    scoringRubric: z.array(RubricCriterionSchema).optional(),
 });
 
 export type CustomizeInterviewKitOutput = z.infer<typeof CustomizeInterviewKitOutputSchema>;
@@ -118,7 +118,7 @@ Intelligently refine the provided interview kit. Respect the user's edits, but u
 
 9.  **Preserve IDs**: Preserve the \`id\` fields for all competencies, questions, and rubric criteria exactly as they are in the input.
 
-Now, refine the content based on the user's changes and your expert judgment to produce a polished, final version of the kit.
+Now, refine the content based on the user's changes and your expert judgment to produce a polished, final version of the kit. Your response MUST be a single JSON object containing both the 'competencies' and 'scoringRubric' keys at the top level.
 `,
 });
 
