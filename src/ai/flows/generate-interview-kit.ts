@@ -58,6 +58,7 @@ const ScoringCriterionSchema = z.object({
 });
 
 const GenerateInterviewKitOutputSchema = z.object({
+  candidateAnalysisNotes: z.string().optional().describe("A brief summary of any notable career gaps, technology stack shifts, or full career shifts identified from the candidate's resume. This provides context for the interviewer."),
   competencies: z.array(CompetencySchema).describe('The 5-7 core competencies for the job, including their importance and tailored questions.'),
   scoringRubric: z
     .array(ScoringCriterionSchema)
@@ -79,7 +80,8 @@ You are a world-class AI-powered recruitment strategist, acting as an expert tec
 **CONTEXT FOR ANALYSIS (YOU MUST SYNTHESIZE ALL OF THE FOLLOWING SOURCES):**
 *   **Job Description**: {{{jobDescription}}}
 *   **Unstop Profile Link**: {{{unstopProfileLink}}}
-{{#if candidateResumeDataUri}}*   **Candidate Resume ({{candidateResumeFileName}})**: {{media url=candidateResumeDataUri}} (CRITICAL: You MUST analyze the full content of this document with extreme depth. Your primary goal is to assess the candidate's fitness for the role described in the Job Description, using the specific details from the resume to **tailor and personalize** the JD-centric questions.){{/if}}
+{{#if candidateResumeDataUri}}*   **Candidate Resume ({{candidateResumeFileName}})**: {{media url=candidateResumeDataUri}} (CRITICAL: You MUST analyze the full content of this document with extreme depth. Your primary goal is to assess the candidate's fitness for the role described in the Job Description, using the specific details from the resume to **tailor and personalize** the JD-centric questions. You must also identify any notable career gaps, technology stack shifts, or full career shifts from the resume and summarize your findings in the 'candidateAnalysisNotes' field.)
+{{/if}}
 {{#if candidateExperienceContext}}*   **Additional Candidate Context**: {{{candidateExperienceContext}}}{{/if}}
 
 **YOUR TASK: GENERATE THE INTERVIEW KIT**
@@ -88,17 +90,21 @@ Based on your deep analysis of the Job Description, the candidate's Resume, and 
 
 **QUESTION GENERATION PRINCIPLES:**
 
-1.  **Technical Depth**: Questions must be specific and probe for deep understanding, not surface-level knowledge. If the Job Description mentions core computer science fundamentals (e.g., data structures, algorithms, system design, databases), you MUST generate questions that test these fundamentals in a practical, scenario-based context.
+1.  **Calibrate to Experience Level**: Your first priority is to ensure the difficulty and nature of the questions are appropriate for the candidate's experience level as described in the context. If a user's edit makes a question too simple for a senior candidate (e.g., "What is Python?"), you MUST refine it to be more advanced (e.g., "Describe how Python's GIL affects concurrent programming and what strategies you'd use to mitigate it in a high-throughput data pipeline."). Conversely, if a question is too complex for a junior role, simplify it to test foundational knowledge.
 
-2.  **Strategic Interviewer Notes**: For EVERY question, you MUST generate a concise \`interviewerNote\`. This note's purpose is to guide the interviewer on what to listen for, steering the evaluation towards practical application, business impact, and real-world problem-solving skills rather than just theoretical knowledge. It explains the 'why' behind the question. Each note MUST conclude with the exact sentence: "If the candidate provides relevant, practical answers, mark them accordingly. If the answer is partially correct, partial marks should be allocated."
+2.  **Maintain Role Focus**: Your primary goal is to ensure the question kit evaluates fitness for the role defined in the **Job Description**. When refining, the resume should be used for context and for tailoring a small number of questions (2-3 at most) to probe specific experiences. Avoid letting the kit become a simple review of the resume; it must remain a rigorous test for the job's requirements.
 
-3.  **Mix of Question Types**: The questions must cover a mix of:
+3.  **Technical Depth**: Questions must be specific and probe for deep understanding, not surface-level knowledge. If the Job Description mentions core computer science fundamentals (e.g., data structures, algorithms, system design, databases), you MUST generate questions that test these fundamentals in a practical, scenario-based context.
+
+4.  **Strategic Interviewer Notes**: For EVERY question, you MUST generate a concise \`interviewerNote\`. This note's purpose is to guide the interviewer on what to listen for, steering the evaluation towards practical application, business impact, and real-world problem-solving skills rather than just theoretical knowledge. It explains the 'why' behind the question. Each note MUST conclude with the exact sentence: "If the candidate provides relevant, practical answers, mark them accordingly. If the answer is partially correct, partial marks should be allocated."
+
+5.  **Mix of Question Types**: The questions must cover a mix of:
     *   **Deep Conceptual Understanding**: e.g., "Explain how X works, why it’s important in practice, common pitfalls, how you’d apply it in production."
     *   **Technical Stack & Tools**: e.g., "How would you use library/tool Y for scenario Z?" (Draw tools from the JD and resume).
     *   **Real Project Scenarios**: e.g., "Describe a time you solved…", "How would you build…", "Suppose you encounter… what’s your debugging approach?"
     *   **Tradeoffs & Reasoning**: e.g., "Which algorithm would you pick for… why not the alternatives?", "How do you balance performance vs interpretability?"
 
-4.  **Contextualization and Focus**:
+6.  **Contextualization and Focus**:
     *   The vast majority of your questions (all but 2-3) MUST be derived solely from the technical requirements, skills, and responsibilities outlined in the **Job Description**. This is your primary source for question generation.
     *   Strictly limit resume-specific questions to 2-3 at most. These questions must directly reference a project or skill from the resume to verify their experience.
     *   The style must be at a technical level, not an HR level.
@@ -135,6 +141,7 @@ const generateInterviewKitFlow = ai.defineFlow(
 
      // Basic validation and default-filling for robustness
     const validatedOutput: GenerateInterviewKitOutput = {
+      candidateAnalysisNotes: output.candidateAnalysisNotes,
       competencies: (output.competencies || []).map(comp => ({
         id: randomUUID(),
         name: comp.name || "Unnamed Competency",

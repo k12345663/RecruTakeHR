@@ -240,6 +240,19 @@ export default function Home() {
             )}
             {interviewKit && (
               <div className="space-y-6">
+                {interviewKit.candidateAnalysisNotes && (
+                    <div>
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>Candidate Analysis Notes</CardTitle>
+                                <CardDescription>Key observations from the candidate's resume.</CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <p className="text-sm text-foreground whitespace-pre-line">{interviewKit.candidateAnalysisNotes}</p>
+                            </CardContent>
+                        </Card>
+                    </div>
+                )}
                 <div>
                     <div className="flex justify-between items-center flex-wrap gap-4 mb-4">
                         <h2 className="text-2xl font-bold">Interview Competencies</h2>
