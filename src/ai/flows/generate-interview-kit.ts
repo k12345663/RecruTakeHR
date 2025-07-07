@@ -37,7 +37,7 @@ const QuestionAnswerPairSchema = z.object({
   id: z.string().optional().describe("A unique identifier for the question. This is for internal use and will be added automatically. Do not generate this field."),
   question: z.string().describe("A crisp, direct, and deeply technical interview question, ONE or TWO lines at most. The question MUST AVOID being generic or philosophical (e.g., avoid \"What's the difference between X and Y?\"). Instead, it should be a practical probe designed to test hands-on expertise in one of the core technical areas: Conceptual Understanding, Practical Application, Problem Solving, Optimization, Best Practices, Debugging, or Scalability/Security. The question must be insightful and highly specific, directly derived from projects, skills, or achievements mentioned in the Candidate's Unstop Profile and Resume. Do NOT include the candidate's name in the question itself."),
   interviewerNote: z.string().describe("A brief, one-sentence note FOR THE INTERVIEWER. This note MUST explain the strategic purpose of the question, guiding the interviewer on what to look for. For example, 'This tests the candidate's ability to articulate the business impact of their technical work' or 'This probes the depth of their hands-on experience with [Technology from Resume]'. This note should NOT be visible to the candidate."),
-  modelAnswer: z.string().describe("A \"Model Answer Guide\" for the interviewer, composed of MULTIPLE points (at least 3-4) to form a comprehensive checklist. Format this as a single string where each checklist point is separated by a triple newline ('\\n\\n\\n'). Each point MUST follow this format EXACTLY: A title for the evaluation point, followed by two newlines, then 'Sample:', followed by a newline, and then a very detailed, multi-sentence explanation. This explanation must be a high-quality, legitimate answer to the point, written to educate a non-technical interviewer. It MUST NOT be an instruction about what the candidate should say (e.g., AVOID 'The candidate should explain...')."),
+  modelAnswer: z.string().describe("A \"Model Answer Guide\" for the interviewer, composed of MULTIPLE points (at least 3-4) to form a comprehensive checklist. Format this as a single string where each checklist point is separated by a triple newline ('\\n\\n\\n'). Each point MUST follow this format EXACTLY: `A title for the evaluation point.\\n\\nSample:\\nA detailed explanation written as an expert would deliver it. This should be a comprehensive, multi-paragraph if needed, referencing real tools, workflows, and best practices with deep technical reasoning. It should be a human, real-world style answer, not generic or superficial.` CRITICAL: DO NOT use phrases that describe what the candidate should do (e.g., AVOID 'The candidate explains...', 'Describes how they...'). Similarly, AVOID first-person narrative (e.g., AVOID 'I did this...'). Instead, write the actual, detailed answer itself as a generalized, expert-level explanation."),
   type: z.enum(['Technical', 'Scenario', 'Behavioral']).describe('The type of question. Technical for skills/tools, Scenario for problem-solving, Behavioral for past actions (STAR method).'),
   category: z.enum(['Technical', 'Non-Technical']).describe("The category of the question. 'Technical' for questions assessing specific hard skills or tool knowledge. 'Non-Technical' for questions assessing problem-solving, behavioral traits, scenarios, or soft skills. Infer this primarily from the question type and content."),
   difficulty: z.enum(['Naive', 'Beginner', 'Intermediate', 'Expert', 'Master']).describe("The difficulty level of the question, on a 5-point scale: 'Naive', 'Beginner', 'Intermediate', 'Expert', 'Master'. Assign based on JD requirements and candidate's apparent skill level."),
@@ -89,12 +89,16 @@ Based on your deep analysis of both the Job Description and the candidate's Resu
 **QUESTION GENERATION PRINCIPLES:**
 
 1.  **Technical Depth**: Questions must be specific and probe for deep understanding, not surface-level knowledge.
-2.  **Mix of Question Types**: The questions must cover a mix of:
+
+2.  **Strategic Interviewer Notes**: For EVERY question, you MUST generate a concise \`interviewerNote\`. This note's purpose is to guide the interviewer on what to listen for, steering the evaluation towards practical application, business impact, and real-world problem-solving skills rather than just theoretical knowledge. It explains the 'why' behind the question.
+
+3.  **Mix of Question Types**: The questions must cover a mix of:
     *   **Deep Conceptual Understanding**: e.g., "Explain how X works, why it’s important in practice, common pitfalls, how you’d apply it in production."
     *   **Technical Stack & Tools**: e.g., "How would you use library/tool Y for scenario Z?" (Draw tools from the JD and resume).
     *   **Real Project Scenarios**: e.g., "Describe a time you solved…", "How would you build…", "Suppose you encounter… what’s your debugging approach?"
     *   **Tradeoffs & Reasoning**: e.g., "Which algorithm would you pick for… why not the alternatives?", "How do you balance performance vs interpretability?"
-3.  **Contextualization**:
+
+4.  **Contextualization**:
     *   Most questions should be derived from the core requirements of the **Job Description**.
     *   A few (2-3) questions should be **directly tailored** to the candidate's resume, referencing specific projects or skills to verify their experience.
     *   The style must be at a technical level, not an HR level.
