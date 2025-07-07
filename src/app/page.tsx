@@ -276,8 +276,8 @@ export default function Home() {
                                      <p className="font-medium mb-2 text-base">Model Answer Guide:</p>
                                       <div className="space-y-4">
                                         {q.modelAnswer.split('\n\n').filter(point => point.trim() !== '').map((point, i) => {
-                                            const [title, ...sampleLines] = point.split('\n');
-                                            const sample = sampleLines.join('\n').replace(/^Sample:- /, '').trim();
+                                            const [title, ...explanationLines] = point.split('\n');
+                                            const explanation = explanationLines.join('\n').trim();
 
                                             return (
                                                 <div key={`${q.id}-point-${i}`} className="flex items-start gap-3">
@@ -286,9 +286,9 @@ export default function Home() {
                                                         <Label htmlFor={`${q.id}-point-${i}`} className="font-medium text-foreground leading-snug cursor-pointer">
                                                             {title}
                                                         </Label>
-                                                        {sample && (
-                                                            <p className="text-sm text-muted-foreground">
-                                                                <span className="font-semibold text-muted-foreground/80">Sample: </span>{sample}
+                                                        {explanation && (
+                                                            <p className="text-sm text-muted-foreground whitespace-pre-line">
+                                                                {explanation}
                                                             </p>
                                                         )}
                                                     </div>
