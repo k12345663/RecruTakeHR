@@ -35,7 +35,7 @@ export type GenerateInterviewKitInput = z.infer<typeof GenerateInterviewKitInput
 
 const QuestionAnswerPairSchema = z.object({
   id: z.string().optional().describe("A unique identifier for the question. This is for internal use and will be added automatically. Do not generate this field."),
-  question: z.string().describe("A crisp and concise interview question, ONE or TWO lines at most. The question MUST be deeply technical and domain-specific, designed to validate and probe the depth of a candidate's technical understanding and hands-on experience. It should connect the candidate's project experience directly to the requirements and challenges outlined in the Job Description. Instead of justasking if they know a technology, the question should ask them to demonstrate their expertise with specific examples of architectural decisions, complex technical challenges they solved, or how their work delivered specific business outcomes. The question must be insightful and highly specific, directly derived from projects, skills, or achievements mentioned in the Candidate's Unstop Profile and Resume. Every technical detail in the resume is a potential source for a probing question that tests true comprehension, not just memorization. Do NOT include the candidate's name in the question itself."),
+  question: z.string().describe("A crisp, direct, and deeply technical interview question, ONE or TWO lines at most. The question MUST AVOID being generic or philosophical (e.g., avoid \"What's the difference between X and Y?\"). Instead, it should be a practical probe designed to test hands-on expertise in one of the core technical areas: Conceptual Understanding, Practical Application, Problem Solving, Optimization, Best Practices, Debugging, or Scalability/Security. The question must be insightful and highly specific, directly derived from projects, skills, or achievements mentioned in the Candidate's Unstop Profile and Resume. Do NOT include the candidate's name in the question itself."),
   interviewerNote: z.string().describe("A brief, one-sentence note FOR THE INTERVIEWER. This note MUST explain the strategic purpose of the question, guiding the interviewer on what to look for. For example, 'This tests the candidate's ability to articulate the business impact of their technical work' or 'This probes the depth of their hands-on experience with [Technology from Resume]'. This note should NOT be visible to the candidate."),
   modelAnswer: z.string().describe("A \"Model Answer Guide\" for the interviewer, composed of MULTIPLE points (at least 3-4) to form a comprehensive checklist. Format this as a single string where each checklist point is separated by a double newline ('\\n\\n'). Each point MUST follow this format EXACTLY: A title for the evaluation point (e.g., 'Explains Core Principles of OOP'), followed by a newline, and then 'Sample:- ' followed by a detailed, technically rich sample of a good answer. The sample should be comprehensive and several sentences long, enough for a non-technical interviewer to understand what a strong answer sounds like and what key concepts to listen for. For example: 'Explains what is Java.\\nSample:- Java is a high-level, class-based, object-oriented programming language that is designed to have as few implementation dependencies as possible. It is known for its 'write once, run anywhere' (WORA) capability, meaning that compiled Java code can run on all platforms that support Java without the need for recompilation. Its key features include strong memory management, automatic garbage collection, and a rich API.'"),
   type: z.enum(['Technical', 'Scenario', 'Behavioral']).describe('The type of question. Technical for skills/tools, Scenario for problem-solving, Behavioral for past actions (STAR method).'),
@@ -74,7 +74,7 @@ const generateInterviewKitPrompt = ai.definePrompt({
   input: {schema: GenerateInterviewKitInputSchema},
   output: {schema: GenerateInterviewKitOutputSchema},
   prompt: `
-You are a world-class AI-powered recruitment strategist. Your mission is to create a deeply personalized and strategically sound interview kit that empowers any interviewer to conduct a thorough and insightful evaluation. Your core directive is to move beyond face-value claims on a resume and generate questions that require the candidate to prove their expertise through concrete evidence and detailed examples. A CRITICAL RULE: Interview questions must sound natural and conversational. They should NEVER explicitly mention "the job description" or "the role requires." Instead, use the job description as your internal context to understand what skills are important, and then formulate questions based on the candidate's resume.
+You are a world-class AI-powered recruitment strategist, acting as an expert technical interviewer. Your mission is to create a deeply technical and practical interview kit. Your core directive is to **AVOID generic or philosophical questions** (e.g., "Why did you use this technology?" or "What's the difference between X and Y?"). Instead, you must generate **direct, technical questions** that test a candidate's ability to solve real problems and demonstrate hands-on expertise.
 
 **CONTEXT FOR ANALYSIS (YOU MUST SYNTHESIZE ALL OF THE FOLLOWING SOURCES):**
 *   **Job Description**: {{{jobDescription}}}
@@ -85,89 +85,63 @@ You are a world-class AI-powered recruitment strategist. Your mission is to crea
 **YOUR PROCESS**
 
 **CRITICAL STEP 1: CANDIDATE-TO-ROLE ANALYSIS**
-First, conduct a silent, internal analysis of the candidate's profile against the Job Description. If a resume is provided, it is your MOST IMPORTANT source of information. You must synthesize the Unstop link, the full resume content, and any additional context to identify the primary interview scenario. This classification will determine your question strategy.
-*   **Solid, Directly Relevant Experience**: Candidate's experience is a strong match for the JD's core requirements.
-*   **Overqualified**: Candidate's experience significantly exceeds the role's level (e.g., a senior applying for a mid-level role).
-*   **Underqualified or Junior**: Candidate has clear gaps in required experience, is a recent graduate, or has experience that is strong but less than the years requested (e.g., 3 years of project leadership vs. 5+ years of PM experience requested).
-*   **Domain-Shift**: Candidate is moving from a different industry (e.g., gaming to fintech), technology domain (e.g., OpenAI to Gemini), role type (e.g., QA to DevOps, or a technical expert to a Sales Manager), or academic background (e.g., physics PhD for a data science role).
-*   **Career History Nuance**: Candidate's profile shows points needing clarification, such as significant employment gaps, frequent job changes, or ambiguous role titles.
+First, conduct a silent, internal analysis of the candidate's profile against the Job Description. If a resume is provided, it is your MOST IMPORTANT source of information. Synthesize all context to determine the candidate's profile. This classification will determine your question strategy.
+*   **Solid, Directly Relevant Experience**: Strong match for the JD's core requirements.
+*   **Overqualified**: Experience significantly exceeds the role's level.
+*   **Underqualified or Junior**: Gaps in required experience, recent graduate.
+*   **Domain-Shift**: Moving from a different industry, technology domain, or role type.
+*   **Career History Nuance**: Profile shows points needing clarification (gaps, frequent changes).
 
-**CRITICAL STEP 2: STRATEGIC QUESTION SELECTION**
-Based on your analysis, you will now construct the interview kit. You MUST draw questions from the following strategic question bank. **Crucially, you must personalize these questions by replacing placeholders (e.g., "[Technology from Resume]", "[Project from Resume]") with specific, verifiable details taken directly from the candidate's resume. Use the job description for context on what to probe for, but DO NOT mention it in the questions.** Select a broad mix of the most relevant questions for the determined scenario. Your goal is to create a comprehensive and strategic interview kit with a total of **exactly 20 questions**. Distribute these questions logically across the competencies to ensure a thorough evaluation. Ensure that the majority of the questions are technical in nature, drawing heavily from the 'DEEPLY TECHNICAL PROBES' category. **Crucially, you must select at least five questions from the 'Domain & Industry Knowledge' category** to probe the candidate's strategic thinking and business acumen. Each question must be critical, logical, and deeply domain-specific, designed to challenge the candidate's core problem-solving abilities and force them to articulate the reasoning behind their decisions.
+**CRITICAL STEP 2: STRATEGIC TECHNICAL QUESTION GENERATION**
+Based on your analysis, construct the interview kit. Your goal is to create a comprehensive kit with **exactly 20 questions**. You MUST select and personalize questions from the following **Technical Question Bank**. Replace placeholders like "[Technology from Resume]" with specific, verifiable details from the candidate's resume and profile.
+
+Every question you generate MUST be a direct, technical probe designed to test one or more of these core competency areas:
+1.  **Conceptual Understanding**: Can the candidate explain the core concepts behind a technology?
+2.  **Practical Application**: Can they write code, design a system, or troubleshoot real issues?
+3.  **Problem Solving**: Can they break down and solve technical challenges?
+4.  **Optimization**: Do they know how to make something faster, more efficient, or more reliable?
+5.  **Best Practices**: Are they aware of standards, design patterns, or common pitfalls?
+6.  **Debugging and Testing**: Can they identify and fix bugs and ensure quality?
+7.  **Scalability/Security**: Do they consider performance, scalability, or security in their solutions?
 
 ---
-**STRATEGIC QUESTION BANK**
+**TECHNICAL QUESTION BANK (Your primary source for questions)**
 
-**1. Universal Ice-breakers**
-(Purpose: Always useful—set the tone, surface key themes before going deep)
-*   "Tell me a bit about yourself and what drew you to this role in particular."
-*   "Walk me through your professional journey so far—what are the pivots or milestones you’re proudest of?"
-*   "What in your last project excited you the most, and why?"
+**1. Conceptual Understanding Probes**
+*   "Your resume lists [Technology from Resume]. Can you explain how its [Core Concept, e.g., 'virtual DOM' for React, 'garbage collection' for Java] works under the hood?"
+*   "Could you explain how a [Fundamental Concept from JD, e.g., 'Java CompletableFuture'] differs from a [Related Concept]? Why might you choose one over the other in a practical scenario?"
+*   (For recent grads) "Your [Academic Project from Resume] is interesting. Can you describe its architecture and how you handled a key technical concept like [Concept, e.g., 'concurrency' or 'data normalization']?"
 
-**2. Candidate has Solid, Directly Relevant Experience (DEEPLY TECHNICAL PROBES)**
-(Purpose: Confirm depth, scope, and impact. These questions MUST be highly technical and verify expertise, not just confirm it.)
-*   "On your project, [Project from Resume], you mentioned using [Technology from Resume]. Describe a specific problem you solved with it that a beginner would not have been able to. What were the alternatives you considered and why was your solution the best one?"
-*   "What measurable outcome (e.g., latency reduction, revenue increase) did your work on [Project from Resume] deliver to the business? How do you know your specific contribution led to that outcome?"
-*   "Your resume lists expertise in [Another Technology from Resume]. How did you influence architecture or technical decisions related to it in your team? Can you cite a specific trade-off you championed?"
+**2. Practical Application & Problem-Solving Probes**
 *   "Walk me through the design and implementation of the [Feature from Project on Resume] you built. What were the key data structures, design patterns, or algorithms involved, and why did you choose them?"
-*   "Your resume mentions experience with [Specific Database/System, e.g., 'PostgreSQL optimization' or 'Kafka stream processing']. Can you explain how you would debug a performance issue in that system? What specific tools or commands would you use?"
+*   "Describe the most complex system you've designed. What were the main components, and how did they interact? Draw a simple block diagram if it helps."
+*   "You used [Technology from Resume] on [Project from Resume]. Write a small code snippet to accomplish [Specific Task, e.g., 'asynchronously fetch data from two endpoints and combine the results']."
+*   "What measurable outcome (e.g., latency reduction, revenue increase) did your work on [Project from Resume] deliver to the business? How do you know your specific contribution led to that outcome?"
+
+**3. Optimization, Scalability & Security Probes**
 *   "Considering [Project from Resume], if you had to re-architect it today for a 10x increase in user traffic, what would be your primary concerns and what specific changes would you propose to the [Infrastructure/Backend/Database]?"
-*   "You listed [API Technology, e.g., 'GraphQL'] on your resume. Describe how you've handled API versioning, security (e.g., authentication, authorization), and documentation in a past project."
+*   "Your resume mentions experience with [Specific Database/System, e.g., 'PostgreSQL optimization' or 'Kafka stream processing']. Can you explain how you would diagnose and resolve a performance bottleneck in that system?"
+*   "You listed [API Technology, e.g., 'GraphQL' or 'REST'] on your resume. Describe how you've handled API security, such as authentication, authorization, and rate-limiting, in a past project."
 
-**3. Overqualified Candidates**
-(Purpose: Understand motivation and assess flexibility)
-*   "You clearly have senior/lead experience—what appeals to you about this mid-level individual-contributor role?"
-*   "How do you ensure you stay hands-on and collaborative when working with less-experienced teammates?"
+**4. Best Practices, Debugging & Testing Probes**
+*   "How did you approach testing for your [Project from Resume]? What was your strategy for unit, integration, and end-to-end tests?"
+*   "Describe a time you had to debug a particularly challenging bug. What was your process for identifying the root cause, and what tools did you use?"
+*   "Talk about a time you conducted a code review that led to a significant improvement in the codebase. What was the issue, and how did you communicate the feedback?"
 
-**4. Underqualified or Junior Candidates**
-(Purpose: Gauge fundamentals and potential)
-*   "Could you explain how a [Fundamental Concept from JD, e.g., 'Java CompletableFuture'] differs from a [Related Concept]? Why might you choose one over the other?"
-*   (For recent grads) "Your [Academic Project from Resume] seems very relevant. Could you describe its architecture and how you handled real-world development considerations like scalability or robustness?"
-
-**5. Probing for Learning Agility & Growth Mindset**
-(Purpose: Assess adaptability, resilience, and curiosity. CRITICAL for all candidates.)
-*   "Describe a time you had to learn a new technology or skill very quickly to meet a project deadline. What was your process?"
-*   "Tell me about a significant piece of critical feedback you've received. How did it change your approach to your work?"
-*   "Walk me through a situation where a project's requirements were ambiguous or changed suddenly. How did you adapt, and what was the outcome?"
-*   "Outside of your formal work, how do you stay up-to-date with new trends and technologies in [Relevant Field from JD, e.g., 'cloud infrastructure' or 'generative AI']?"
-*   "Describe a project or task that failed. What was your role in the failure, and what did you learn from it?"
-
-**6. Domain-Shift Scenarios**
-(Purpose: Test adaptability and transferability of skills)
-*   **Tech Stack Shift (e.g., OpenAI to Gemini):** "I see you have deep experience with [Technology from Resume, e.g., OpenAI API]. How do you see that experience translating to working with [Technology from JD, e.g., Gemini API]?"
-*   **Industry Shift (e.g., e-commerce to fintech):** "I noticed you're moving from [Previous Domain, e.g., e-commerce] to [Our Domain, e.g., fintech]. What sparked your interest in this shift, and how do you plan to get up to speed on industry-specific regulations?"
-*   **Role Type Shift (e.g., QA to DevOps, or a technical expert to a Sales Manager):** "What motivated your transition from [Previous Role Type] to [New Role Type], and how does your past experience give you a unique advantage in this new function?"
-
-**7. Domain & Industry Knowledge**
-(Purpose: Gauge understanding of the industry landscape and specific challenges)
-*   "What are some of the biggest technical challenges or trends you see in the [Industry from JD, e.g., 'fintech' or 'healthcare tech'] space right now?"
-*   "From your perspective, what differentiates our company from other players in the [Industry from JD] space?"
-*   "How do you think about balancing innovation with regulatory compliance in an industry like [Industry from JD]?"
-*   (If applicable) "Can you discuss your understanding of [Specific Standard or Regulation from JD, e.g., 'HIPAA' or 'PCI-DSS'] and its implications for software development?"
-
-**8. Cross-cutting Behavioural / Culture-Fit Questions**
-(insert these regardless of scenario when you need depth)
-*   "Describe a time when you had a disagreement with a teammate. How did you resolve it?"
-*   "Describe a situation where business priorities shifted suddenly, forcing you to rethink your approach. How did you realign your work?"
-
-**9. Career History Clarification**
-(Purpose: Respectfully probe for context on resume details)
-*   (If Gap) "I noticed on your resume there's an employment gap between [Start Date] and [End Date]. Could you tell me more about what you were focused on during that time?"
-*   (If Frequent Job Switching) "You've held a few different roles over the past few years. Could you share what you've learned from these transitions and what you're seeking in your next role to ensure a long-term fit and growth?"
-*   (If Ambiguous Title) "Your role as '[Ambiguous Title]' sounds like it covered a lot of ground. Could you clarify how much of your time was dedicated to hands-on development versus other responsibilities?"
+**5. Behavioral Questions (Use Sparingly)**
+*   (If Career History Nuance) "I noticed on your resume there's an employment gap between [Start Date] and [End Date]. Could you tell me more about what you were focused on during that time?"
+*   "Describe a time when business priorities shifted suddenly, forcing you to rethink your technical approach. How did you adapt?"
 ---
 
 **CRITICAL STEP 3: OUTPUT GENERATION**
-Now, generate the final output adhering strictly to the output schema. Your questions must be **crisp, concise, and professional**, sounding like they come from an experienced recruiter. When personalizing, **subtly weave details from the resume into practical, probing questions** rather than just stating facts from the document.
-
-1.  **Generate Rich Model Answers**: For each question, the \`modelAnswer\` MUST contain a comprehensive checklist of multiple (at least 3-4) evaluation points. Each point must have a title and a detailed, technically rich \`Sample\` answer that is several sentences long. This is crucial for enabling non-technical interviewers to effectively evaluate the candidate.
-2.  **Assign Classifications**: For each question, you MUST assign its type, category, and difficulty from the available options. This ensures a well-rounded and structured interview kit.
-3.  **Organize Logically:** You MUST structure the interview by organizing the selected questions into 5-7 logical competencies. The flow should be natural and progressive, starting broad and then diving deep into technical specifics. A significant portion of the competencies MUST be technical. Follow this structure:
-    *   **Introduction & Motivation:** The first competency. It MUST start with a personalized "Tell me about yourself" question, followed by questions about their interest in the role and company.
-    *   **Technical Project Deep Dives:** Dedicate at least one or two competencies to the most significant projects from the candidate's resume. These competencies should contain your most rigorous technical questions, probing deep into architecture, design choices, specific challenges, and measurable outcomes.
-    *   **Core Technical Skills:** Have another competency dedicated to testing fundamental technical skills, algorithms, data structures, and tools required by the Job Description but perhaps not explicitly covered in a project.
-    *   **Behavioral & Growth Mindset:** Group questions from the "Learning Agility" and "Cross-cutting Behavioural" sections to assess teamwork, problem-solving, and adaptability.
-    *   Ensure every question and rubric criterion you create is deeply informed by your holistic analysis and the principles of the strategic question bank.
+Generate the final output adhering strictly to the schema.
+1.  **Structure the Interview**: Organize the 20 questions into 5-7 logical competencies. The flow should be natural, starting broad and then diving deep. The majority of competencies MUST be technical.
+    *   **Introduction & Motivation:** Start with ONE brief ice-breaker (e.g., "Walk me through your proudest project").
+    *   **Technical Deep Dives**: Dedicate competencies to projects from the resume, using your most rigorous technical questions.
+    *   **Core Technical Skills**: Have competencies testing fundamental skills from the JD.
+    *   **Problem Solving & System Design**: Group questions that test design and architectural thinking.
+2.  **Generate Rich Model Answers**: For each question, the \`modelAnswer\` MUST contain a comprehensive checklist of 3-4 evaluation points. Each point must have a title and a detailed, technically rich \`Sample\` answer that is several sentences long, enabling a non-technical interviewer to evaluate the candidate effectively.
+3.  **Assign Classifications**: For each question, assign its type, category, and difficulty.
 `,
 });
 
