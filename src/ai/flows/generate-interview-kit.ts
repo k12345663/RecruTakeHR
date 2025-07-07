@@ -40,7 +40,7 @@ const QuestionAnswerPairSchema = z.object({
   modelAnswer: z.string().describe("A \"Model Answer Guide\" for the interviewer, composed of MULTIPLE points (at least 3-4) to form a comprehensive checklist. Format this as a single string where each checklist point is separated by a triple newline ('\\n\\n\\n'). Each point MUST follow this format EXACTLY: `A title for the evaluation point.\\n\\nA detailed, multi-paragraph explanation written as an expert would deliver it, referencing real tools, workflows, and best practices with deep technical reasoning. It must be a human, real-world style answer, not generic or superficial.` CRITICAL: DO NOT use phrases that describe what the candidate should do (e.g., AVOID 'The candidate explains...', 'Describes how they...'). Similarly, AVOID first-person narrative (e.g., AVOID 'I did this...'). Instead, write the actual, detailed answer itself as a generalized, expert-level explanation."),
   type: z.enum(['Technical', 'Scenario', 'Behavioral']).describe('The type of question. Technical for skills/tools, Scenario for problem-solving, Behavioral for past actions (STAR method).'),
   category: z.enum(['Technical', 'Non-Technical']).describe("The category of the question. 'Technical' for questions assessing specific hard skills or tool knowledge. 'Non-Technical' for questions assessing problem-solving, behavioral traits, scenarios, or soft skills. Infer this primarily from the question type and content."),
-  difficulty: z.enum(['Naive', 'Beginner', 'Intermediate', 'Expert', 'Master']).describe("The difficulty level of the question, on a 5-point scale: 'Naive', 'Beginner', 'Intermediate', 'Expert', 'Master'. Assign based on JD requirements and candidate's apparent skill level."),
+  difficulty: z.enum(['Naive', 'Beginner', 'Intermediate', 'Expert', 'Master']).describe("The difficulty level of the question, on a 5-point scale. This MUST be calibrated based on the candidate's experience level and the role's seniority. Junior roles should have more Beginner/Intermediate questions, while senior roles should focus on Expert/Master. Assign based on JD requirements and candidate's apparent skill level."),
   estimatedTimeMinutes: z.number().describe('Suitable estimated time in minutes a candidate might need for a thorough answer, considering question complexity and experience level. Default suggestions: Naive(2), Beginner(4), Intermediate(6), Expert(8), Master(10).'),
 });
 
@@ -84,7 +84,7 @@ You are a world-class AI-powered recruitment strategist, acting as an expert tec
 
 **YOUR TASK: GENERATE THE INTERVIEW KIT**
 
-Based on your deep analysis of both the Job Description and the candidate's Resume, and on current industry standards for this role, generate a comprehensive set of **at least 25 highly technical, realistic interview questions**.
+Based on your deep analysis of the Job Description, the candidate's Resume, and the provided **candidateExperienceContext**, generate a comprehensive set of **at least 25 highly technical, realistic interview questions**. You MUST calibrate the difficulty and scope of your questions to align with BOTH the role's requirements and the candidate's stated experience level, adhering to current industry standards. For junior roles, this includes foundational questions (e.g., "What is...?"). For senior roles, focus on architectural, strategic, and leadership challenges.
 
 **QUESTION GENERATION PRINCIPLES:**
 
