@@ -274,15 +274,27 @@ export default function Home() {
                                    
                                    <div>
                                      <p className="font-medium mb-2 text-base">Model Answer Guide:</p>
-                                     <div className="space-y-3">
-                                        {q.modelAnswer.split('\n').filter(line => line.trim() !== '').map((point, i) => (
-                                            <div key={`${q.id}-point-${i}`} className="flex items-start gap-3">
-                                                <Checkbox id={`${q.id}-point-${i}`} className="mt-1 flex-shrink-0" />
-                                                <Label htmlFor={`${q.id}-point-${i}`} className="text-sm font-normal text-muted-foreground leading-snug cursor-pointer">
-                                                {point}
-                                                </Label>
-                                            </div>
-                                        ))}
+                                      <div className="space-y-4">
+                                        {q.modelAnswer.split('\n\n').filter(point => point.trim() !== '').map((point, i) => {
+                                            const [title, ...sampleLines] = point.split('\n');
+                                            const sample = sampleLines.join('\n').replace(/^Sample:- /, '').trim();
+
+                                            return (
+                                                <div key={`${q.id}-point-${i}`} className="flex items-start gap-3">
+                                                    <Checkbox id={`${q.id}-point-${i}`} className="mt-1 flex-shrink-0" />
+                                                    <div className="grid gap-1 flex-1">
+                                                        <Label htmlFor={`${q.id}-point-${i}`} className="font-medium text-foreground leading-snug cursor-pointer">
+                                                            {title}
+                                                        </Label>
+                                                        {sample && (
+                                                            <p className="text-sm text-muted-foreground">
+                                                                <span className="font-semibold text-muted-foreground/80">Sample: </span>{sample}
+                                                            </p>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            )
+                                        })}
                                       </div>
                                    </div>
 
