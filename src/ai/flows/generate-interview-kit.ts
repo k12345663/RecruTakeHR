@@ -27,7 +27,7 @@ export type GenerateInterviewKitInput = z.infer<typeof GenerateInterviewKitInput
 const QuestionAnswerPairSchema = z.object({
   id: z.string().optional().describe("A unique identifier. Do not generate this field; it will be added later."),
   question: z.string().describe("A crisp, direct, and deeply technical interview question."),
-  modelAnswer: z.string().describe("A brief, pointwise answer formatted using markdown bullet points (e.g., '*' or '-'). Each bullet point should be a concise explanation. The entire answer MUST be a single string. Include formulas or code snippets where relevant."),
+  modelAnswer: z.string().describe("A brief, pointwise answer formatted using markdown bullet points. The entire answer MUST be a single string. For coding questions, provide the complete code snippet using markdown fences, followed by a bulleted explanation. For other questions, use bullet points for concise explanations, including formulas where relevant."),
 });
 
 const GenerateInterviewKitOutputSchema = z.object({
@@ -58,12 +58,16 @@ CONTEXT FOR ANALYSIS:
 YOUR TASK:
 
 1.  **Generate a Flat List of Questions**: Create a list of 20-30 purely technical questions. The questions should progress from fundamental knowledge to more complex, application-based scenarios.
-2.  **Ensure High Quality & Proper Sourcing**:
+2.  **Include Coding Questions**: For software-related roles, ensure that **2-3 questions** are practical coding challenges. These could involve:
+    *   Asking the candidate to write a function to solve a specific problem.
+    *   Providing a code snippet and asking the candidate to identify bugs, explain its functionality, or refactor it for performance.
+    *   The \`modelAnswer\` for these questions MUST include the complete, correct code snippet formatted with markdown code fences, followed by a bulleted explanation of the logic.
+3.  **Ensure High Quality & Proper Sourcing**:
     *   The **Job Description is the primary source** for questions. The majority of your questions (at least 25) must be derived from the technical skills and responsibilities mentioned in the JD.
     *   If a resume is provided, you may generate **a maximum of two (2) questions** that are directly tailored to the candidate's specific projects or experiences listed on the resume. These questions should be used to probe their hands-on experience.
     *   All questions must be tailored to the role's domain and the specified seniority level.
-3.  **Provide Brief, Pointwise Answers**: For each question, provide a \`modelAnswer\` that is structured as a series of bullet points.
-    *   **Format**: Use markdown for bullet points (\`*\` or \`-\`). Each bullet point should deliver a single, concise point.
+4.  **Provide Brief, Pointwise Answers**: For each question, provide a \`modelAnswer\` that is structured as a series of bullet points.
+    *   **Format**: Use markdown for bullet points (\`*\` or \`-\`). Each bullet point should deliver a single, concise point. For coding questions, provide the full code snippet first (using markdown fences), then the explanation in bullets.
     *   **Content**: The answer should be direct and factual. Include key concepts, definitions, formulas, or short code snippets where applicable.
     *   **Structure**: The entire answer must be a single string. Do not use paragraphs; use bullet points exclusively for the answer structure.
 
