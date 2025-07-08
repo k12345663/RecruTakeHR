@@ -47,7 +47,7 @@ const generateInterviewKitPrompt = ai.definePrompt({
   prompt: `
 You are an expert technical interviewer. Your mission is to generate a comprehensive list of 20-30 purely technical interview questions based on the provided job description and candidate context.
 
-The questions should be tailored to the role's specific domain (e.g., Software Development, DevOps, Data Science, Finance, Sales) and calibrated to the seniority level required. The question set should cover a range of difficulty, from foundational concepts to advanced, practical problem-solving.
+The questions should be tailored to the role's specific domain (e.g., Software Development, DevOps, Data Science, Finance, Sales) and calibrated to the seniority level required.
 
 CONTEXT FOR ANALYSIS:
 *   **Job Description**: {{{jobDescription}}}
@@ -57,17 +57,18 @@ CONTEXT FOR ANALYSIS:
 
 YOUR TASK:
 
-1.  **Generate a Flat List of Questions**: Create a list of 20-30 purely technical questions. The questions should progress from fundamental knowledge to more complex, application-based scenarios.
-2.  **Include Coding Questions**: For software-related roles, ensure that **2-3 questions** are practical coding challenges. These could involve:
-    *   Asking the candidate to write a function to solve a specific problem.
-    *   Providing a code snippet and asking the candidate to identify bugs, explain its functionality, or refactor it for performance.
-    *   The \`modelAnswer\` for these questions MUST include the complete, correct code snippet formatted with markdown code fences, followed by a bulleted explanation of the logic.
-3.  **Ensure High Quality & Proper Sourcing**:
+1.  **Generate a Diverse and Deeply Technical Question Set**: Create a list of 20-30 purely technical questions. The set MUST include a mix of the following types, progressing from fundamental knowledge to complex application:
+    *   **Conceptual Questions**: Test foundational knowledge (e.g., "What is the difference between X and Y?").
+    *   **Practical Coding Questions (2-3 questions)**: For software-related roles, include practical coding challenges. These could involve writing a function to solve a specific problem, or analyzing/refactoring a given code snippet. The model answer MUST include the complete code with markdown fences, followed by a bulleted explanation.
+    *   **System Design Questions (1-2 questions)**: For relevant roles (Backend, Full-stack, SRE, etc.), include high-level system design questions (e.g., "Design a system for X..."). The model answer should outline the architecture, components, database choices, and scaling strategies in bullet points.
+
+2.  **Ensure High Quality & Proper Sourcing**:
     *   The **Job Description is the primary source** for questions. The majority of your questions (at least 25) must be derived from the technical skills and responsibilities mentioned in the JD.
     *   If a resume is provided, you may generate **a maximum of two (2) questions** that are directly tailored to the candidate's specific projects or experiences listed on the resume. These questions should be used to probe their hands-on experience.
     *   All questions must be tailored to the role's domain and the specified seniority level.
-4.  **Provide Comprehensive, Pointwise Answers**: For each question, provide a \`modelAnswer\` that is structured as a series of bullet points.
-    *   **Format**: Use markdown for bullet points (\`*\` or \`-\`). The number of points should be appropriate for the question's complexity—a simple definition might only need 2-3 points, while a complex design question could require 5-7 points to be thorough. Each bullet point should deliver a single, concise point. For coding questions, provide the full code snippet first (using markdown fences), then the explanation in bullets.
+
+3.  **Provide Comprehensive, Pointwise Answers**:
+    *   **Format**: Use markdown for bullet points (\`*\` or \`-\`). The number of points should be appropriate for the question's complexity—a simple definition might only need 2-3 points, while a system design question could require 5-7 points to be thorough. Each bullet point should deliver a single, concise point. For coding questions, provide the full code snippet first (using markdown fences), then the explanation in bullets.
     *   **Content**: The answer must be direct and factual. It is critical that you include key concepts, definitions, **formulas (e.g., for finance or data science questions)**, or short code snippets where applicable. Do not just describe theory; provide the actual formula or calculation if the question implies it.
     *   **Structure**: The entire answer must be a single string. Do not use paragraphs; use bullet points exclusively for the answer structure.
 
