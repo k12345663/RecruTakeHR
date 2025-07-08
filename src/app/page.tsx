@@ -11,6 +11,7 @@ import { Loader2, FileUp, Briefcase, RotateCcw } from 'lucide-react';
 import { generateInterviewKit, GenerateInterviewKitOutput } from '@/ai/flows/generate-interview-kit';
 import { useToast } from "@/hooks/use-toast"
 import { ThemeToggle } from '@/components/theme-toggle';
+import { Checkbox } from '@/components/ui/checkbox';
 
 export default function Home() {
   const [jobDescription, setJobDescription] = useState('');
@@ -215,8 +216,18 @@ export default function Home() {
                           <p className="font-semibold text-base">{q.question}</p>
                           <div>
                             <h4 className="font-medium mb-2 text-base">Model Answer:</h4>
-                            <div className="prose prose-sm dark:prose-invert max-w-none">
-                              <p className="whitespace-pre-wrap">{q.modelAnswer}</p>
+                             <div className="space-y-3">
+                                {q.modelAnswer.split('\n').filter(line => line.trim() !== '').map((point, pointIndex) => (
+                                <div key={`${q.id}-${pointIndex}`} className="flex items-start space-x-3">
+                                    <Checkbox id={`${q.id}-${pointIndex}`} className="mt-1 flex-shrink-0" />
+                                    <label
+                                        htmlFor={`${q.id}-${pointIndex}`}
+                                        className="text-sm font-normal"
+                                    >
+                                        {point.replace(/^[*\-]\s*/, '').trim()}
+                                    </label>
+                                </div>
+                                ))}
                             </div>
                           </div>
                         </CardContent>
