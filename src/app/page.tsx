@@ -13,6 +13,47 @@ import { useToast } from "@/hooks/use-toast"
 import { ThemeToggle } from '@/components/theme-toggle';
 import { Checkbox } from '@/components/ui/checkbox';
 
+// Helper component to render the model answer with special handling for code blocks
+const ModelAnswer = ({ answer, questionId }: { answer: string; questionId: string }) => {
+    // Regex to split the answer by markdown code blocks, keeping the delimiters for identification
+    const parts = answer.split(/(```[\s\S]*?```)/g).filter(part => part.trim() !== '');
+
+    return (
+        <div className="space-y-3">
+            {parts.map((part, index) => {
+                const isCodeBlock = part.startsWith('```') && part.endsWith('```');
+                if (isCodeBlock) {
+                    // Extract code content from the block
+                    const codeContent = part.replace(/```.*\n/, '').replace(/```/, '').trim();
+                    return (
+                        <div key={`${questionId}-code-${index}`} className="flex items-start space-x-3">
+                            <Checkbox id={`${questionId}-code-${index}`} className="mt-1 flex-shrink-0" />
+                            <label htmlFor={`${questionId}-code-${index}`} className="text-sm font-normal w-full">
+                                <pre className="bg-muted p-4 rounded-md overflow-x-auto text-sm w-full">
+                                    <code>{codeContent}</code>
+                                </pre>
+                            </label>
+                        </div>
+                    );
+                } else {
+                    // This part contains regular bullet points
+                    return part.split('\n').filter(line => line.trim() !== '').map((point, pointIndex) => (
+                        <div key={`${questionId}-point-${index}-${pointIndex}`} className="flex items-start space-x-3">
+                            <Checkbox id={`${questionId}-point-${index}-${pointIndex}`} className="mt-1 flex-shrink-0" />
+                            <label
+                                htmlFor={`${questionId}-point-${index}-${pointIndex}`}
+                                className="text-sm font-normal"
+                            >
+                                {point.replace(/^[*\-]\s*/, '').trim()}
+                            </label>
+                        </div>
+                    ));
+                }
+            })}
+        </div>
+    );
+};
+
 export default function Home() {
   const [jobDescription, setJobDescription] = useState('');
   const [unstopProfileLink, setUnstopProfileLink] = useState('');
@@ -216,19 +257,7 @@ export default function Home() {
                           <p className="font-semibold text-base">{q.question}</p>
                           <div>
                             <h4 className="font-medium mb-2 text-base">Model Answer:</h4>
-                             <div className="space-y-3">
-                                {q.modelAnswer.split('\n').filter(line => line.trim() !== '').map((point, pointIndex) => (
-                                <div key={`${q.id}-${pointIndex}`} className="flex items-start space-x-3">
-                                    <Checkbox id={`${q.id}-${pointIndex}`} className="mt-1 flex-shrink-0" />
-                                    <label
-                                        htmlFor={`${q.id}-${pointIndex}`}
-                                        className="text-sm font-normal"
-                                    >
-                                        {point.replace(/^[*\-]\s*/, '').trim()}
-                                    </label>
-                                </div>
-                                ))}
-                            </div>
+                             <ModelAnswer answer={q.modelAnswer} questionId={q.id!} />
                           </div>
                         </CardContent>
                       </Card>
