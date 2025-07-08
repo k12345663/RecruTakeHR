@@ -68,7 +68,7 @@ YOUR TASK:
     *   All questions must be tailored to the role's domain and the specified seniority level.
 4.  **Provide Brief, Pointwise Answers**: For each question, provide a \`modelAnswer\` that is structured as a series of bullet points.
     *   **Format**: Use markdown for bullet points (\`*\` or \`-\`). Each bullet point should deliver a single, concise point. For coding questions, provide the full code snippet first (using markdown fences), then the explanation in bullets.
-    *   **Content**: The answer should be direct and factual. Include key concepts, definitions, formulas, or short code snippets where applicable.
+    *   **Content**: The answer must be direct and factual. It is critical that you include key concepts, definitions, **formulas (e.g., for finance or data science questions)**, or short code snippets where applicable. Do not just describe theory; provide the actual formula or calculation if the question implies it.
     *   **Structure**: The entire answer must be a single string. Do not use paragraphs; use bullet points exclusively for the answer structure.
 
 The entire output MUST be a single JSON object with a "questions" key, which contains an array of question-answer objects as per the schema.
