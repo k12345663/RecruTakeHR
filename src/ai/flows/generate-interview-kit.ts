@@ -75,7 +75,7 @@ const generateInterviewKitPrompt = ai.definePrompt({
   input: {schema: GenerateInterviewKitInputSchema},
   output: {schema: GenerateInterviewKitOutputSchema},
   prompt: `
-You are a world-class AI-powered recruitment strategist, acting as an expert technical interviewer at a major tech company. Your mission is to create a deeply technical and practical interview kit to evaluate a candidate for a data science/machine learning position.
+You are a world-class AI-powered recruitment strategist. Your mission is to create a deeply technical and practical interview kit to evaluate candidates for a wide range of roles, including **Software Development, DevOps, Data Science, Finance, and Sales**. You must act as an expert technical interviewer for the specific domain requested.
 
 **CONTEXT FOR ANALYSIS (YOU MUST SYNTHESIZE ALL OF THE FOLLOWING SOURCES):**
 *   **Job Description**: {{{jobDescription}}}
@@ -118,9 +118,16 @@ For each question, you MUST provide a detailed \`modelAnswer\`. This is the most
     *   The detailed explanation must be the **actual, detailed answer**, not a description of what the candidate should say.
     *   **CRITICAL: DO NOT use phrases that describe what the candidate should do (e.g., AVOID 'The candidate explains...', 'Describes how they...', 'Demonstrates understanding of...', or 'Provides examples of...'). Similarly, AVOID first-person narrative (e.g., AVOID 'I did this...', 'In my last project...'). Instead, write the actual, detailed answer itself as a generalized, expert-level explanation.**
     *   Where a question has multiple sub-parts, address each one in a dedicated evaluation point section.
-*   **PERFECT EXAMPLE**:
-    Question: Given a highly imbalanced healthcare dataset (1:100 positive:negative), which classification algorithm would you choose and how would you optimize for recall and precision?
-    \`modelAnswer\`: "Algorithm Choice Justification.\\n\\nFor this level of imbalance, tree-based ensemble models like XGBoost or LightGBM are strong choices. They natively support custom class weights and have strong track records on tabular medical data. In contrast, linear models like logistic regression can fail to capture complex, non-linear patterns often present in electronic health records (EHR). Tree ensembles, especially XGBoost, are robust, support parallel training, and allow for direct adjustment of parameters like \`scale_pos_weight\` to counteract class imbalance.\\n\\n\\nRecall and Precision Tuning Strategy.\\n\\nA key strategy is to focus on maximizing recall, as missing positive cases in a healthcare context is often critical. This process involves using the \`scale_pos_weight\` parameter in XGBoost, often starting with a value equal to the inverse of the class ratio—in this case, 100. Stratified k-fold cross-validation is essential to ensure each fold preserves the original class imbalance during training and validation. For evaluation, both ROC and Precision-Recall curves are plotted. The main focus is tuning the decision threshold on the predicted probabilities to push recall to an acceptable level, while carefully monitoring the corresponding drop in precision. Another effective technique is to use GridSearchCV with a custom scoring metric like the F2-score, which weighs recall more heavily than precision, to find the optimal set of hyperparameters.\\n\\n\\nValidation and Metrics Reporting.\\n\\nStandard accuracy is a misleading metric for imbalanced datasets. Best practice is to report sensitivity (recall), specificity, and the Area Under the Precision-Recall Curve (AUC-PR) on a held-out test set. A detailed confusion matrix is also essential for understanding error types. To simulate a real-world deployment scenario, the final model should be validated on a temporally distinct dataset (e.g., a subsequent month of unseen data). Any false positives and negatives from this validation should be analyzed alongside domain experts to ensure the model’s error patterns are clinically acceptable. All chosen decision thresholds must be documented, and borderline cases flagged for manual review."
+
+**EXEMPLARY QUESTIONS AND MODEL ANSWERS (GUIDANCE FOR QUALITY):**
+
+*   **Example 1 (Software Development):**
+    *   **Question:** "Describe the concept of a binary search algorithm and its time complexity."
+    *   **modelAnswer:** "Algorithm Definition.\\n\\nA binary search is an efficient algorithm for finding an element in a sorted array. It works by repeatedly dividing the search interval in half. It compares the target value to the middle element and eliminates half of the array from consideration in each step.\\n\\n\\nSearch Procedure.\\n\\nThe search begins by comparing the target to the middle element. If they are equal, the search is successful. If the target is smaller than the middle element, the search continues in the lower half of the array. If the target is larger, the search continues in the upper half. This process repeats until the element is found or the interval becomes empty.\\n\\n\\nTime Complexity Analysis.\\n\\nThe time complexity of binary search is O(log n). This is because the algorithm eliminates half of the remaining elements at each step, leading to a logarithmic number of comparisons in the worst case. This makes it significantly faster than a linear search (O(n)) for large datasets."
+
+*   **Example 2 (DevOps):**
+    *   **Question:** "Explain CI/CD in the context of DevOps."
+    *   **modelAnswer:** "Continuous Integration (CI).\\n\\nCI is a practice where developers frequently merge code changes into a central repository, triggering automated builds and tests. The goal is to detect integration issues early. Each successful CI run produces a validated build artifact.\\n\\n\\nContinuous Delivery (CD).\\n\\nCD extends CI by ensuring that every change passing all tests is deployable to a production-like environment. The actual deployment to production remains a manual decision, but the software is always release-ready, reducing deployment risk.\\n\\n\\nContinuous Deployment.\\n\\nContinuous Deployment takes this a step further by automatically deploying every validated change to production without human intervention. This requires high confidence in the automated testing pipeline and enables multiple releases per day."
 
 **FINAL OUTPUT:**
 Organize the questions into 5-7 logical competencies. The vast majority of competencies MUST be technical. Also generate a scoring rubric based on the core skills required by the JD. Your response MUST be a single JSON object containing both the 'competencies' and 'scoringRubric' keys at the top level.
@@ -166,32 +173,34 @@ const generateInterviewKitFlow = ai.defineFlow(
     };
 
     // Ensure rubric weights sum to 1.0
-    let totalWeight = validatedOutput.scoringRubric.reduce((sum, crit) => sum + (crit.weight || 0), 0);
-    if (validatedOutput.scoringRubric.length > 0 && Math.abs(totalWeight - 1.0) > 0.001) {
-        if (totalWeight === 0) { // If all weights are 0, distribute equally
-            const equalWeight = 1.0 / validatedOutput.scoringRubric.length;
-            validatedOutput.scoringRubric.forEach((crit) => {
-                crit.weight = equalWeight;
-            });
-        } else { // If weights are non-zero but don't sum to 1.0, normalize
-            const factor = 1.0 / totalWeight;
-            validatedOutput.scoringRubric.forEach(crit => {
-                crit.weight = (crit.weight || 0) * factor;
+    if (validatedOutput.scoringRubric && validatedOutput.scoringRubric.length > 0) {
+        let totalWeight = validatedOutput.scoringRubric.reduce((sum, crit) => sum + (crit.weight || 0), 0);
+        if (Math.abs(totalWeight - 1.0) > 0.001) {
+            if (totalWeight === 0) { // If all weights are 0, distribute equally
+                const equalWeight = 1.0 / validatedOutput.scoringRubric.length;
+                validatedOutput.scoringRubric.forEach((crit) => {
+                    crit.weight = equalWeight;
+                });
+            } else { // If weights are non-zero but don't sum to 1.0, normalize
+                const factor = 1.0 / totalWeight;
+                validatedOutput.scoringRubric.forEach(crit => {
+                    crit.weight = (crit.weight || 0) * factor;
+                });
+            }
+
+            // Final rounding pass to ensure perfect sum and avoid floating point issues
+            let runningSum = 0;
+            validatedOutput.scoringRubric.forEach((crit, index, arr) => {
+                if (index < arr.length - 1) {
+                    const roundedWeight = parseFloat((crit.weight || 0).toFixed(2));
+                    crit.weight = roundedWeight;
+                    runningSum += roundedWeight;
+                } else {
+                    // Assign the remainder to the last item
+                    crit.weight = parseFloat(Math.max(0, 1.0 - runningSum).toFixed(2));
+                }
             });
         }
-
-        // Final rounding pass to ensure perfect sum and avoid floating point issues
-        let runningSum = 0;
-        validatedOutput.scoringRubric.forEach((crit, index, arr) => {
-            if (index < arr.length - 1) {
-                const roundedWeight = parseFloat((crit.weight || 0).toFixed(2));
-                crit.weight = roundedWeight;
-                runningSum += roundedWeight;
-            } else {
-                // Assign the remainder to the last item
-                crit.weight = parseFloat(Math.max(0, 1.0 - runningSum).toFixed(2));
-            }
-        });
     }
 
     return validatedOutput;
