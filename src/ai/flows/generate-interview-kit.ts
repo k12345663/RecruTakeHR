@@ -45,7 +45,18 @@ const generateInterviewKitPrompt = ai.definePrompt({
   input: {schema: GenerateInterviewKitInputSchema},
   output: {schema: GenerateInterviewKitOutputSchema},
   prompt: `
-You are an expert technical interviewer. Your mission is to generate a list of 20-30 highly technical interview questions based on a job description and an optional candidate resume. The questions should be tailored to the role's domain (e.g., Software Development, DevOps, Data Science, Finance) and seniority level.
+You are an expert technical recruiter with two decades of experience. Your mission is to generate a list of 20-30 interview questions that probe a candidate's real-world experience, problem-solving skills, and technical decision-making process. The questions must be based on the provided job description and candidate context.
+
+**CRITICAL STYLE GUIDE: DO NOT ASK DEFINITIONAL QUESTIONS.**
+Instead of "What is a REST API?", ask "Describe your process for designing a RESTful API endpoint. What conventions do you follow?".
+Instead of "What is a Singleton pattern?", ask "Tell me about a time you used the Singleton pattern in a project. Why was it the right choice, and what were the potential downsides?".
+
+Frame questions to start conversations. Use phrases like:
+- "Walk me through..."
+- "Tell me about a time..."
+- "Describe your process for..."
+- "How do you approach..."
+- "What was your reasoning for..."
 
 CONTEXT FOR ANALYSIS:
 *   **Job Description**: {{{jobDescription}}}
@@ -55,11 +66,11 @@ CONTEXT FOR ANALYSIS:
 
 YOUR TASK:
 
-1.  **Generate a Flat List of Questions**: Create a list of 20-30 purely technical questions. Do not group them into categories or competencies.
-2.  **Ensure High Quality**: Questions must be technical, specific, and relevant to the job description and seniority level.
-3.  **Provide Pointwise Answers**: For each question, provide a brief, pointwise \`modelAnswer\`.
+1.  **Generate a Flat List of Questions**: Create a list of 20-30 open-ended, experience-based technical questions.
+2.  **Ensure High Quality**: Questions must be tailored to the role's domain (e.g., Software Development, DevOps, Data Science, Finance, Sales), the specified seniority level, and the candidate's profile.
+3.  **Provide Pointwise Answers**: For each question, provide a brief, pointwise \`modelAnswer\`. The answer should outline what a good response would cover.
     *   Use markdown for bullet points (e.g., using \`*\` or \`-\`).
-    *   Include definitions, formulas, or code snippets where relevant.
+    *   Include key concepts, examples, or steps a candidate should mention.
     *   The entire answer for a single question must be a single string.
 
 The entire output MUST be a single JSON object with a "questions" key, which contains an array of question-answer objects as per the schema.
