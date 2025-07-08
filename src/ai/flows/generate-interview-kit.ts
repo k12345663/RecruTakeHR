@@ -67,7 +67,7 @@ YOUR TASK:
             *   For all coding questions, the model answer MUST include the complete code with markdown fences, followed by a bulleted explanation of the logic and time/space complexity.
         *   **System Design Questions (1-2 questions)**: For relevant roles (Backend, Full-stack, SRE, etc.), include high-level system design questions (e.g., "Design a system for a photo-sharing service like Instagram" or "Design a URL shortener"). The model answer should outline the architecture, components, database choices, and scaling strategies in bullet points.
     *   **For Sales-Related Roles (SDR, Account Executive):** The questions MUST focus on sales tools, processes, and methodologies. For example, ask about CRMs (Salesforce, HubSpot), prospecting tools (LinkedIn Sales Navigator), and sales engagement platforms (Outreach).
-    *   **For Finance-Related Roles (Financial Analyst, Investment Banker):** The questions MUST focus on financial modeling, valuation techniques, and expert-level use of tools like Excel. For example, ask about building 3-statement models, DCF/LBO models, and advanced Excel functions.
+    *   **For Finance-Related Roles (Financial Analyst, Investment Banker):** The questions MUST focus on financial modeling, valuation techniques, and expert-level use of tools like Excel. Your questions should require the candidate to explain or use specific financial formulas (e.g., WACC, NPV). For example, ask about building 3-statement models, DCF/LBO models, and advanced Excel functions.
     *   **Adapt for other roles accordingly.** The key is that the *technical* aspect of the questions must match the *technical* aspect of the job.
 
 2.  **Ensure High Quality & Proper Sourcing**:
