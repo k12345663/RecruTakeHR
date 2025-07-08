@@ -60,6 +60,7 @@ YOUR TASK:
 1.  **Generate a Diverse and Deeply Technical Question Set**: Create a list of 20-30 purely technical questions. For software-related roles, the set MUST include a mix of the following types, progressing from fundamental knowledge to complex application:
     *   **Conceptual Questions**: Test foundational knowledge (e.g., "What is the difference between X and Y?").
     *   **Practical Coding Questions (3-5 questions total)**: Include a mix of practical coding challenges.
+        *   **Language Specificity**: All coding questions MUST be tailored to the primary programming language(s) mentioned in the Job Description and Candidate Resume. For example, if the role requires Java, write the coding challenges in Java. If both Java and Python are mentioned, you might ask one question in Java and another in Python, but **DO NOT ask the same conceptual question in multiple languages**. Your questions should test practical expertise in the specified languages.
         *   **Short, function-based questions (2-3 questions)**: These should be small, self-contained problems, like "write a function to reverse a string."
         *   **Algorithmic / DSA Questions (1-2 questions)**: These should be more complex, LeetCode-style problems that test knowledge of data structures and algorithms.
         *   For all coding questions, the model answer MUST include the complete code with markdown fences, followed by a bulleted explanation of the logic and time/space complexity.
