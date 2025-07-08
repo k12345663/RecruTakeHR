@@ -27,7 +27,7 @@ export type GenerateInterviewKitInput = z.infer<typeof GenerateInterviewKitInput
 const QuestionAnswerPairSchema = z.object({
   id: z.string().optional().describe("A unique identifier. Do not generate this field; it will be added later."),
   question: z.string().describe("A crisp, direct, and deeply technical interview question."),
-  modelAnswer: z.string().describe("A brief, pointwise answer. Use markdown for bullet points. Include formulas or code snippets where relevant. The entire answer should be a single string."),
+  modelAnswer: z.string().describe("A brief, pointwise answer formatted using markdown bullet points (e.g., '*' or '-'). Each bullet point should be a concise explanation. The entire answer MUST be a single string. Include formulas or code snippets where relevant."),
 });
 
 const GenerateInterviewKitOutputSchema = z.object({
@@ -59,10 +59,10 @@ YOUR TASK:
 
 1.  **Generate a Flat List of Questions**: Create a list of 20-30 purely technical questions. The questions should progress from fundamental knowledge to more complex, application-based scenarios.
 2.  **Ensure High Quality**: Questions must be tailored to the role's domain and the specified seniority level. Draw from the provided context to make questions relevant.
-3.  **Provide Pointwise Answers**: For each question, provide a brief, pointwise \`modelAnswer\`. The answer should be concise and easy to digest.
-    *   Use markdown for bullet points (e.g., using \`*\` or \`-\`).
-    *   Include key concepts, examples, formulas, or code snippets where relevant.
-    *   The entire answer for a single question must be a single string.
+3.  **Provide Brief, Pointwise Answers**: For each question, provide a \`modelAnswer\` that is structured as a series of bullet points.
+    *   **Format**: Use markdown for bullet points (\`*\` or \`-\`). Each bullet point should deliver a single, concise point.
+    *   **Content**: The answer should be direct and factual. Include key concepts, definitions, formulas, or short code snippets where applicable.
+    *   **Structure**: The entire answer must be a single string. Do not use paragraphs; use bullet points exclusively for the answer structure.
 
 The entire output MUST be a single JSON object with a "questions" key, which contains an array of question-answer objects as per the schema.
 `,
