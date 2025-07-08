@@ -47,7 +47,7 @@ const generateInterviewKitPrompt = ai.definePrompt({
   prompt: `
 You are an expert technical interviewer. Your mission is to generate a comprehensive list of 20-30 purely technical interview questions. **The Job Description is the primary source of truth for all questions.** Your analysis must be rooted in the specific skills, technologies, and responsibilities mentioned within it.
 
-The questions should be tailored to the role's specific domain (e.g., Software Development, DevOps, Data Science, Finance, Sales) and calibrated to the seniority level required.
+**First, determine the role's domain from the Job Description (e.g., Software Development, DevOps, Data Science, Finance, Sales). The type of questions you generate MUST align with this domain.** For example, do not ask a Sales candidate about Python algorithms, even if Python is on their resume. The questions must be relevant to the core functions of the job.
 
 CONTEXT FOR ANALYSIS:
 *   **Job Description**: {{{jobDescription}}}
@@ -57,14 +57,18 @@ CONTEXT FOR ANALYSIS:
 
 YOUR TASK:
 
-1.  **Generate a Diverse and Deeply Technical Question Set**: Create a list of 20-30 purely technical questions. For software-related roles, the set MUST include a mix of the following types, progressing from fundamental knowledge to complex application:
-    *   **Conceptual Questions**: Test foundational knowledge (e.g., "What is the difference between X and Y?").
-    *   **Practical Coding Questions (3-5 questions total)**: Include a mix of practical coding challenges.
-        *   **Language Specificity**: All coding questions MUST be tailored to the primary programming language(s) mentioned in the Job Description and Candidate Resume. For example, if the role requires Java, write the coding challenges in Java. If both Java and Python are mentioned, you might ask one question in Java and another in Python, but **DO NOT ask the same conceptual question in multiple languages**. Your questions should test practical expertise in the specified languages.
-        *   **Short, function-based questions (2-3 questions)**: These should be small, self-contained problems, like "write a function to reverse a string."
-        *   **Algorithmic / DSA Questions (1-2 questions)**: These should be more complex, LeetCode-style problems that test knowledge of data structures and algorithms.
-        *   For all coding questions, the model answer MUST include the complete code with markdown fences, followed by a bulleted explanation of the logic and time/space complexity.
-    *   **System Design Questions (1-2 questions)**: For relevant roles (Backend, Full-stack, SRE, etc.), include high-level system design questions (e.g., "Design a system for a photo-sharing service like Instagram" or "Design a URL shortener"). The model answer should outline the architecture, components, database choices, and scaling strategies in bullet points.
+1.  **Generate a Diverse and Deeply Technical Question Set**: Based on the identified domain, create a list of 20-30 purely technical questions.
+    *   **For Software-Related Roles (Software Development, Backend, Frontend, Full-Stack, SDET):** The question set MUST include a mix of the following types, progressing from fundamental knowledge to complex application:
+        *   **Conceptual Questions**: Test foundational knowledge (e.g., "What is the difference between X and Y?").
+        *   **Practical Coding Questions (3-5 questions total)**: Include a mix of practical coding challenges.
+            *   **Language Specificity**: All coding questions MUST be tailored to the primary programming language(s) mentioned in the Job Description and Candidate Resume. For example, if the role requires Java, write the coding challenges in Java. If both Java and Python are mentioned, you might ask one question in Java and another in Python, but **DO NOT ask the same conceptual question in multiple languages**. Your questions should test practical expertise in the specified languages.
+            *   **Short, function-based questions (2-3 questions)**: These should be small, self-contained problems, like "write a function to reverse a string."
+            *   **Algorithmic / DSA Questions (1-2 questions)**: These should be more complex, LeetCode-style problems that test knowledge of data structures and algorithms.
+            *   For all coding questions, the model answer MUST include the complete code with markdown fences, followed by a bulleted explanation of the logic and time/space complexity.
+        *   **System Design Questions (1-2 questions)**: For relevant roles (Backend, Full-stack, SRE, etc.), include high-level system design questions (e.g., "Design a system for a photo-sharing service like Instagram" or "Design a URL shortener"). The model answer should outline the architecture, components, database choices, and scaling strategies in bullet points.
+    *   **For Sales-Related Roles (SDR, Account Executive):** The questions MUST focus on sales tools, processes, and methodologies. For example, ask about CRMs (Salesforce, HubSpot), prospecting tools (LinkedIn Sales Navigator), and sales engagement platforms (Outreach).
+    *   **For Finance-Related Roles (Financial Analyst, Investment Banker):** The questions MUST focus on financial modeling, valuation techniques, and expert-level use of tools like Excel. For example, ask about building 3-statement models, DCF/LBO models, and advanced Excel functions.
+    *   **Adapt for other roles accordingly.** The key is that the *technical* aspect of the questions must match the *technical* aspect of the job.
 
 2.  **Ensure High Quality & Proper Sourcing**:
     *   The **Job Description is the primary source**. The majority of your questions (at least 25) must be derived from the technical skills and responsibilities mentioned in the JD.
