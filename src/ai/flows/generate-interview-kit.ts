@@ -58,7 +58,10 @@ CONTEXT FOR ANALYSIS:
 YOUR TASK:
 
 1.  **Generate a Flat List of Questions**: Create a list of 20-30 purely technical questions. The questions should progress from fundamental knowledge to more complex, application-based scenarios.
-2.  **Ensure High Quality**: Questions must be tailored to the role's domain and the specified seniority level. Draw from the provided context to make questions relevant.
+2.  **Ensure High Quality & Proper Sourcing**:
+    *   The **Job Description is the primary source** for questions. The majority of your questions (at least 25) must be derived from the technical skills and responsibilities mentioned in the JD.
+    *   If a resume is provided, you may generate **a maximum of two (2) questions** that are directly tailored to the candidate's specific projects or experiences listed on the resume. These questions should be used to probe their hands-on experience.
+    *   All questions must be tailored to the role's domain and the specified seniority level.
 3.  **Provide Brief, Pointwise Answers**: For each question, provide a \`modelAnswer\` that is structured as a series of bullet points.
     *   **Format**: Use markdown for bullet points (\`*\` or \`-\`). Each bullet point should deliver a single, concise point.
     *   **Content**: The answer should be direct and factual. Include key concepts, definitions, formulas, or short code snippets where applicable.
