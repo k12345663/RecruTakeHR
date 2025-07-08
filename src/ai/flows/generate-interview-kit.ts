@@ -57,10 +57,13 @@ CONTEXT FOR ANALYSIS:
 
 YOUR TASK:
 
-1.  **Generate a Diverse and Deeply Technical Question Set**: Create a list of 20-30 purely technical questions. The set MUST include a mix of the following types, progressing from fundamental knowledge to complex application:
+1.  **Generate a Diverse and Deeply Technical Question Set**: Create a list of 20-30 purely technical questions. For software-related roles, the set MUST include a mix of the following types, progressing from fundamental knowledge to complex application:
     *   **Conceptual Questions**: Test foundational knowledge (e.g., "What is the difference between X and Y?").
-    *   **Practical Coding Questions (2-3 questions)**: For software-related roles, include practical coding challenges. These could involve writing a function to solve a specific problem, or analyzing/refactoring a given code snippet. The model answer MUST include the complete code with markdown fences, followed by a bulleted explanation.
-    *   **System Design Questions (1-2 questions)**: For relevant roles (Backend, Full-stack, SRE, etc.), include high-level system design questions (e.g., "Design a system for X..."). The model answer should outline the architecture, components, database choices, and scaling strategies in bullet points.
+    *   **Practical Coding Questions (3-5 questions total)**: Include a mix of practical coding challenges.
+        *   **Short, function-based questions (2-3 questions)**: These should be small, self-contained problems, like "write a function to reverse a string."
+        *   **Algorithmic / DSA Questions (1-2 questions)**: These should be more complex, LeetCode-style problems that test knowledge of data structures and algorithms.
+        *   For all coding questions, the model answer MUST include the complete code with markdown fences, followed by a bulleted explanation of the logic and time/space complexity.
+    *   **System Design Questions (1-2 questions)**: For relevant roles (Backend, Full-stack, SRE, etc.), include high-level system design questions (e.g., "Design a system for a photo-sharing service like Instagram" or "Design a URL shortener"). The model answer should outline the architecture, components, database choices, and scaling strategies in bullet points.
 
 2.  **Ensure High Quality & Proper Sourcing**:
     *   The **Job Description is the primary source** for questions. The majority of your questions (at least 25) must be derived from the technical skills and responsibilities mentioned in the JD.
