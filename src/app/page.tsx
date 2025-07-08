@@ -7,19 +7,10 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Loader2, FileUp, Briefcase, Info, RotateCcw } from 'lucide-react';
+import { Loader2, FileUp, Briefcase, RotateCcw } from 'lucide-react';
 import { generateInterviewKit, GenerateInterviewKitOutput } from '@/ai/flows/generate-interview-kit';
 import { useToast } from "@/hooks/use-toast"
 import { ThemeToggle } from '@/components/theme-toggle';
-import { Slider } from '@/components/ui/slider';
-import { Textarea as NotesTextarea } from '@/components/ui/textarea'; // Renamed to avoid conflict
-import { Checkbox } from '@/components/ui/checkbox';
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion"
 
 export default function Home() {
   const [jobDescription, setJobDescription] = useState('');
@@ -27,8 +18,6 @@ export default function Home() {
   const [resumeFile, setResumeFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [interviewKit, setInterviewKit] = useState<GenerateInterviewKitOutput | null>(null);
-  const [scores, setScores] = useState<Record<string, number>>({});
-  const [notes, setNotes] = useState<Record<string, string>>({});
   const { toast } = useToast();
   const resumeInputRef = useRef<HTMLInputElement>(null);
 
@@ -67,8 +56,6 @@ export default function Home() {
     }
     setIsLoading(true);
     setInterviewKit(null);
-    setScores({});
-    setNotes({});
 
     try {
         let resumeDataUri: string | undefined;
@@ -98,41 +85,11 @@ export default function Home() {
     }
   };
 
-  const handleScoreChange = (questionId: string, value: number[]) => {
-    const newScore = value[0];
-    setScores(prevScores => ({
-        ...prevScores,
-        [questionId]: newScore,
-    }));
-  };
-
-  const handleNotesChange = (questionId: string, value: string) => {
-    setNotes(prevNotes => ({
-        ...prevNotes,
-        [questionId]: value,
-    }));
-  };
-
-  const calculateAverageScore = () => {
-    if (!interviewKit) return 0;
-    const allQuestions = interviewKit.competencies.flatMap(c => c.questions);
-    if (Object.keys(scores).length === 0) return 0;
-    
-    const scoredQuestionsCount = allQuestions.filter(q => scores[q.id!] !== undefined).length;
-    if (scoredQuestionsCount === 0) return 0;
-
-    const totalScore = allQuestions.reduce((acc, q) => acc + (scores[q.id!] || 0), 0);
-    const average = totalScore / scoredQuestionsCount;
-    return average;
-  };
-
   const handleRestart = () => {
     setJobDescription('');
     setUnstopProfileLink('');
     setResumeFile(null);
     setInterviewKit(null);
-    setScores({});
-    setNotes({});
     if (resumeInputRef.current) {
       resumeInputRef.current.value = "";
     }
@@ -234,7 +191,7 @@ export default function Home() {
                     <Briefcase className="h-16 w-16 text-muted-foreground/50" />
                     <h3 className="mt-4 text-xl font-semibold">Your Interview Kit Will Appear Here</h3>
                     <p className="mt-2 text-sm text-muted-foreground">
-                        Fill out the form on the left to generate questions, a scoring rubric, and more.
+                        Fill out the form on the left to generate a list of technical questions.
                     </p>
                 </div>
             )}
@@ -242,141 +199,30 @@ export default function Home() {
               <div className="space-y-6">
                 <div>
                     <div className="flex justify-between items-center flex-wrap gap-4 mb-4">
-                        <h2 className="text-2xl font-bold">Interview Competencies</h2>
+                        <h2 className="text-2xl font-bold">Generated Technical Questions</h2>
                         <Button variant="outline" onClick={handleRestart}>
                             <RotateCcw className="mr-2 h-4 w-4" />
                             Generate New Kit
                         </Button>
                     </div>
                   <div className="space-y-4">
-                    <Accordion type="multiple" className="w-full space-y-4">
-                        {interviewKit.competencies.map((comp, index) => (
-                        <Card key={comp.id || index} className="overflow-hidden">
-                            <AccordionItem value={`item-${index}`} className="border-b-0">
-                                <AccordionTrigger className="p-4 md:p-6 bg-muted/50 hover:no-underline">
-                                    <div className='flex justify-between w-full items-center'>
-                                        <CardTitle className="text-xl">{comp.name}</CardTitle>
-                                        <div className="flex items-center gap-2">
-                                            <span className="text-sm bg-background text-muted-foreground px-2 py-1 rounded-md border">Importance: {comp.importance}</span>
-                                        </div>
-                                    </div>
-                                </AccordionTrigger>
-                                <AccordionContent className="p-4 md:p-6">
-                                <div className="space-y-4">
-                                    {comp.questions.map((q) => {
-                                    return (
-                                        <div key={q.id} className="p-4 rounded-lg bg-background border space-y-4">
-                                        <p className="font-semibold">{q.question}</p>
-                                        
-                                        {q.interviewerNote && (
-                                                <div className="flex items-start gap-2 text-xs italic text-muted-foreground bg-muted/50 p-2 rounded-md">
-                                                    <Info className="h-4 w-4 mt-0.5 flex-shrink-0 text-primary" />
-                                                    <p><span className="font-semibold text-foreground/90">Interviewer Note:</span> {q.interviewerNote}</p>
-                                                </div>
-                                            )}
-
-                                        <div className="text-xs text-muted-foreground flex items-center gap-x-2 flex-wrap">
-                                            <span className="bg-secondary px-2 py-0.5 rounded-full">{q.type}</span>
-                                            <span className="bg-secondary px-2 py-0.5 rounded-full">{q.category}</span>
-                                            <span className="bg-secondary px-2 py-0.5 rounded-full">{q.difficulty}</span>
-                                            <span className="bg-secondary px-2 py-0.5 rounded-full">{q.estimatedTimeMinutes} mins</span>
-                                        </div>
-                                        
-                                        <div>
-                                        <p className="font-medium mb-2 text-base">Model Answer Guide:</p>
-                                            <div className="space-y-4">
-                                                {q.modelAnswer.split('\n\n\n').filter(point => point.trim() !== '').map((point, i) => {
-                                                    const firstNewlineIndex = point.indexOf('\n');
-                                                    const title = firstNewlineIndex !== -1 ? point.substring(0, firstNewlineIndex) : point;
-                                                    const explanation = firstNewlineIndex !== -1 ? point.substring(firstNewlineIndex + 1).trim() : '';
-
-                                                    return (
-                                                        <div key={`${q.id}-point-${i}`} className="flex items-start gap-3">
-                                                            <Checkbox id={`${q.id}-point-${i}`} className="mt-1 flex-shrink-0" />
-                                                            <div className="grid gap-1 flex-1">
-                                                                <Label htmlFor={`${q.id}-point-${i}`} className="font-medium text-foreground leading-snug cursor-pointer">
-                                                                    {title}
-                                                                </Label>
-                                                                {explanation && (
-                                                                    <p className="text-sm text-muted-foreground whitespace-pre-line">
-                                                                        {explanation}
-                                                                    </p>
-                                                                )}
-                                                            </div>
-                                                        </div>
-                                                    )
-                                                })}
-                                            </div>
-                                        </div>
-
-                                            <div className="pt-4 border-t space-y-4">
-                                                <div>
-                                                    <div className="flex justify-between items-center mb-2">
-                                                        <Label htmlFor={`score-slider-${q.id}`} className="text-base font-medium">Score Answer</Label>
-                                                        <div className="flex items-baseline gap-1">
-                                                            <span className="font-bold text-2xl text-primary">{scores[q.id!] || 0}</span>
-                                                            <span className="text-sm text-muted-foreground">/ 10</span>
-                                                        </div>
-                                                    </div>
-                                                    <Slider
-                                                        id={`score-slider-${q.id}`}
-                                                        value={[scores[q.id!] || 0]}
-                                                        max={10}
-                                                        step={1}
-                                                        onValueChange={(value) => handleScoreChange(q.id!, value)}
-                                                    />
-                                                </div>
-                                                <div>
-                                                <Label htmlFor={`notes-${q.id}`} className="text-base font-medium">Panelist Notes</Label>
-                                                <NotesTextarea 
-                                                    id={`notes-${q.id}`}
-                                                    placeholder="Enter your notes here..."
-                                                    value={notes[q.id!] || ''}
-                                                    onChange={(e) => handleNotesChange(q.id!, e.target.value)}
-                                                    className="mt-2"
-                                                />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )
-                                    })}
-                                </div>
-                                </AccordionContent>
-                            </AccordionItem>
-                        </Card>
-                        ))}
-                    </Accordion>
-                  </div>
-                </div>
-                <div>
-                  <h2 className="text-2xl font-bold mb-4">Scoring Rubric</h2>
-                  <Card>
-                    <CardContent className="p-6">
-                      <ul className="space-y-4">
-                        {interviewKit.scoringRubric.map((criterion) => (
-                          <li key={criterion.id!} className="flex justify-between items-start gap-4 p-3 rounded-lg bg-background border">
-                            <span className="flex-1 text-sm">{criterion.name}</span>
-                            <span className="ml-4 font-bold text-primary whitespace-nowrap">{(criterion.weight * 100).toFixed(0)}%</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </CardContent>
-                  </Card>
-                </div>
-                 <div>
-                    <h2 className="text-2xl font-bold mb-4">Overall Score</h2>
-                    <Card>
+                    {interviewKit.questions.map((q, index) => (
+                      <Card key={q.id}>
                         <CardHeader>
-                            <CardTitle>Average Candidate Score</CardTitle>
-                            <CardDescription>
-                                This is the average score calculated across all questions that have been scored.
-                            </CardDescription>
+                          <CardTitle>Question {index + 1}</CardTitle>
                         </CardHeader>
-                        <CardContent className="p-6 text-center">
-                            <span className="text-6xl font-bold text-primary">{calculateAverageScore().toFixed(1)}</span>
-                            <span className="text-2xl text-muted-foreground"> / 10</span>
+                        <CardContent className="space-y-4">
+                          <p className="font-semibold text-base">{q.question}</p>
+                          <div>
+                            <h4 className="font-medium mb-2 text-base">Model Answer:</h4>
+                            <div className="prose prose-sm dark:prose-invert max-w-none">
+                              <p className="whitespace-pre-wrap">{q.modelAnswer}</p>
+                            </div>
+                          </div>
                         </CardContent>
-                    </Card>
+                      </Card>
+                    ))}
+                  </div>
                 </div>
               </div>
             )}
