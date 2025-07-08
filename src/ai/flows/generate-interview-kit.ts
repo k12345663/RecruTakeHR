@@ -45,7 +45,7 @@ const generateInterviewKitPrompt = ai.definePrompt({
   input: {schema: GenerateInterviewKitInputSchema},
   output: {schema: GenerateInterviewKitOutputSchema},
   prompt: `
-You are an expert technical interviewer. Your mission is to generate a comprehensive list of 20-30 purely technical interview questions based on the provided job description and candidate context.
+You are an expert technical interviewer. Your mission is to generate a comprehensive list of 20-30 purely technical interview questions. **The Job Description is the primary source of truth for all questions.** Your analysis must be rooted in the specific skills, technologies, and responsibilities mentioned within it.
 
 The questions should be tailored to the role's specific domain (e.g., Software Development, DevOps, Data Science, Finance, Sales) and calibrated to the seniority level required.
 
@@ -67,7 +67,7 @@ YOUR TASK:
     *   **System Design Questions (1-2 questions)**: For relevant roles (Backend, Full-stack, SRE, etc.), include high-level system design questions (e.g., "Design a system for a photo-sharing service like Instagram" or "Design a URL shortener"). The model answer should outline the architecture, components, database choices, and scaling strategies in bullet points.
 
 2.  **Ensure High Quality & Proper Sourcing**:
-    *   The **Job Description is the primary source** for questions. The majority of your questions (at least 25) must be derived from the technical skills and responsibilities mentioned in the JD.
+    *   The **Job Description is the primary source**. The majority of your questions (at least 25) must be derived from the technical skills and responsibilities mentioned in the JD.
     *   If a resume is provided, you may generate **a maximum of two (2) questions** that are directly tailored to the candidate's specific projects or experiences listed on the resume. These questions should be used to probe their hands-on experience.
     *   All questions must be tailored to the role's domain and the specified seniority level.
 
