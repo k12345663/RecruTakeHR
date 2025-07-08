@@ -80,13 +80,16 @@ You are a world-class AI-powered recruitment strategist. Your mission is to crea
 **CONTEXT FOR ANALYSIS (YOU MUST SYNTHESIZE ALL OF THE FOLLOWING SOURCES):**
 *   **Job Description**: {{{jobDescription}}}
 *   **Unstop Profile Link**: {{{unstopProfileLink}}}
-{{#if candidateResumeDataUri}}*   **Candidate Resume ({{candidateResumeFileName}})**: {{media url=candidateResumeDataUri}} (CRITICAL: You MUST analyze the full content of this document with extreme depth. Your primary goal is to assess the candidate's fitness for the role described in the Job Description, using the specific details from the resume to **tailor and personalize** the JD-centric questions. If, and only if, you identify a notable career gap, technology stack shift, or full career shift from the resume, you must generate one (and only one) respectful, non-judgmental behavioral or scenario-based question to understand the candidate's journey and motivations. Place this question within the most relevant competency (e.g., 'Communication & Collaboration' or a new, suitable non-technical competency). This is the ONLY way you should address such observations.)
-{{/if}}
+{{#if candidateResumeDataUri}}*   **Candidate Resume ({{candidateResumeFileName}})**: {{media url=candidateResumeDataUri}} (CRITICAL: You MUST analyze the full content of this document with extreme depth. Your primary goal is to assess the candidate's fitness for the role described in the Job Description, using the specific details from the resume to **tailor and personalize** the JD-centric questions.){{/if}}
 {{#if candidateExperienceContext}}*   **Additional Candidate Context**: {{{candidateExperienceContext}}}{{/if}}
 
-**YOUR TASK: GENERATE THE INTERVIEW KIT**
+**YOUR TASK: GENERATE A DEEPLY TECHNICAL INTERVIEW KIT**
 
-Based on your deep analysis of the Job Description, the candidate's Resume, and the provided **candidateExperienceContext**, generate a comprehensive set of **at least 25 highly technical, realistic interview questions**. You MUST calibrate the difficulty and scope of your questions to align with BOTH the role's requirements and the candidate's stated experience level, adhering to current industry standards. For junior roles, this includes foundational questions (e.g., "What is...?"). For senior roles, focus on architectural, strategic, and leadership challenges.
+Based on your deep analysis of the Job Description, the candidate's Resume, and the provided **candidateExperienceContext**, generate a comprehensive set of **at least 25 interview questions**.
+
+**CRITICAL INSTRUCTION: All questions MUST be purely technical.** This includes practical, hands-on scenario questions that test problem-solving within a technical context. **AVOID generic behavioral or HR-style questions** (e.g., "Tell me about a time you had a conflict"). The competencies you generate must also be technical in nature.
+
+**EXCEPTION FOR CAREER PATH ANALYSIS**: If, and only if, you identify a notable career gap, technology stack shift, or full career shift from the resume, you are permitted to generate one (and only one) respectful, non-judgmental behavioral or scenario-based question to understand the candidate's journey. Place this single question within the most relevant technical competency. This is the ONLY non-technical question allowed in the entire kit.
 
 **QUESTION GENERATION PRINCIPLES:**
 
@@ -98,7 +101,7 @@ Based on your deep analysis of the Job Description, the candidate's Resume, and 
 
 4.  **Strategic Interviewer Notes**: For EVERY question, you MUST generate a concise \`interviewerNote\`. This note's purpose is to guide the interviewer on what to listen for, steering the evaluation towards practical application, business impact, and real-world problem-solving skills rather than just theoretical knowledge. It explains the 'why' behind the question. Each note MUST conclude with the exact sentence: "If the candidate provides relevant, practical answers, mark them accordingly. If the answer is partially correct, partial marks should be allocated."
 
-5.  **Mix of Question Types**: The questions must cover a mix of:
+5.  **Question Types**: Focus on:
     *   **Deep Conceptual Understanding**: e.g., "Explain how X works, why it’s important in practice, common pitfalls, how you’d apply it in production."
     *   **Technical Stack & Tools**: e.g., "How would you use library/tool Y for scenario Z?" (Draw tools from the JD and resume).
     *   **Real Project Scenarios**: e.g., "Describe a time you solved…", "How would you build…", "Suppose you encounter… what’s your debugging approach?"
@@ -107,7 +110,6 @@ Based on your deep analysis of the Job Description, the candidate's Resume, and 
 6.  **Contextualization and Focus**:
     *   The vast majority of your questions (all but 2-3) MUST be derived solely from the technical requirements, skills, and responsibilities outlined in the **Job Description**. This is your primary source for question generation.
     *   Strictly limit resume-specific questions to 2-3 at most. These questions must directly reference a project or skill from the resume to verify their experience.
-    *   The style must be at a technical level, not an HR level.
 
 **MODEL ANSWER GENERATION (CRITICAL INSTRUCTION):**
 
@@ -130,7 +132,7 @@ For each question, you MUST provide a detailed \`modelAnswer\`. This is the most
     *   **modelAnswer:** "Continuous Integration (CI).\\n\\nCI is a practice where developers frequently merge code changes into a central repository, triggering automated builds and tests. The goal is to detect integration issues early. Each successful CI run produces a validated build artifact.\\n\\n\\nContinuous Delivery (CD).\\n\\nCD extends CI by ensuring that every change passing all tests is deployable to a production-like environment. The actual deployment to production remains a manual decision, but the software is always release-ready, reducing deployment risk.\\n\\n\\nContinuous Deployment.\\n\\nContinuous Deployment takes this a step further by automatically deploying every validated change to production without human intervention. This requires high confidence in the automated testing pipeline and enables multiple releases per day."
 
 **FINAL OUTPUT:**
-Organize the questions into 5-7 logical competencies. The vast majority of competencies MUST be technical. Also generate a scoring rubric based on the core skills required by the JD. Your response MUST be a single JSON object containing both the 'competencies' and 'scoringRubric' keys at the top level.
+Organize the questions into 5-7 logical, **purely technical competencies**. Also generate a scoring rubric based on the core skills required by the JD. Your response MUST be a single JSON object containing both the 'competencies' and 'scoringRubric' keys at the top level.
 `,
 });
 
