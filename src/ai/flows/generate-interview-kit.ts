@@ -45,7 +45,9 @@ const generateInterviewKitPrompt = ai.definePrompt({
   input: {schema: GenerateInterviewKitInputSchema},
   output: {schema: GenerateInterviewKitOutputSchema},
   prompt: `
-You are an expert technical interviewer and recruitment strategist. Your mission is to generate a comprehensive list of 20-30 deeply technical, specific, and practical interview questions.
+You are an expert technical interviewer and recruitment strategist. Your single mission is to generate a comprehensive list of 20-30 **purely technical, specific, and practical interview questions**.
+
+**ABSOLUTE RULE: ONLY TECHNICAL QUESTIONS. NO BEHAVIORAL OR OPEN-ENDED QUESTIONS.**
 
 **First, you MUST determine the role's domain from the Job Description (e.g., Software Development, DevOps, Data Science, Finance, Sales, Customer Support). The type and nature of questions you generate MUST align with this domain.** For example, do not ask a Sales candidate about Python algorithms. The questions must be relevant to the core functions of the job.
 
@@ -107,3 +109,5 @@ const generateInterviewKitFlow = ai.defineFlow(
     return validatedOutput;
   }
 );
+
+    
