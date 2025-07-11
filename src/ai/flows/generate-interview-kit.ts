@@ -45,35 +45,33 @@ const generateInterviewKitPrompt = ai.definePrompt({
   input: {schema: GenerateInterviewKitInputSchema},
   output: {schema: GenerateInterviewKitOutputSchema},
   prompt: `
-You are an expert technical interviewer. Your mission is to generate a comprehensive list of 20-30 purely technical interview questions. **The Job Description is the primary source of truth for all questions.** Your analysis must be rooted in the specific skills, technologies, and responsibilities mentioned within it.
+You are an expert technical interviewer and recruitment strategist. Your mission is to generate a comprehensive list of 20-30 deeply technical, specific, and practical interview questions.
 
-**First, determine the role's domain from the Job Description (e.g., Software Development, DevOps, Data Science, Finance, Sales). The type of questions you generate MUST align with this domain.** For example, do not ask a Sales candidate about Python algorithms, even if Python is on their resume. The questions must be relevant to the core functions of the job.
+**First, you MUST determine the role's domain from the Job Description (e.g., Software Development, DevOps, Data Science, Finance, Sales, Customer Support). The type and nature of questions you generate MUST align with this domain.** For example, do not ask a Sales candidate about Python algorithms. The questions must be relevant to the core functions of the job.
 
 CONTEXT FOR ANALYSIS:
 *   **Job Description**: {{{jobDescription}}}
 *   **Unstop Profile Link**: {{{unstopProfileLink}}}
-{{#if candidateResumeDataUri}}*   **Candidate Resume ({{candidateResumeFileName}})**: {{media url=candidateResumeDataUri}} (Analyze this to tailor questions to the candidate's specific experience.){{/if}}
+{{#if candidateResumeDataUri}}*   **Candidate Resume ({{candidateResumeFileName}})**: {{media url=candidateResumeUri}} (Analyze this to tailor questions to the candidate's specific experience.){{/if}}
 {{#if candidateExperienceContext}}*   **Additional Candidate Context**: {{{candidateExperienceContext}}}{{/if}}
 
 YOUR TASK:
 
 1.  **Generate a Diverse and Deeply Technical Question Set**: Based on the identified domain, create a list of 20-30 purely technical questions.
-    *   **CRITICAL RULE FOR ALL QUESTIONS**: Questions MUST be direct, factual, and technical. **AVOID open-ended, behavioral, or vague questions** like "Describe your experience with X" or "What would you do if Y?". Instead, ask for specific definitions, explanations, code, or calculations.
-    *   **For Software-Related Roles (Software Development, Backend, Frontend, Full-Stack, SDET):** The question set MUST include a mix of the following types, progressing from fundamental knowledge to complex application:
-        *   **Conceptual Questions**: Test foundational knowledge (e.g., "What is the difference between X and Y?").
-        *   **Practical Coding Questions (3-5 questions total)**: Include a mix of practical coding challenges.
-            *   **Language Specificity**: All coding questions MUST be tailored to the primary programming language(s) mentioned in the Job Description and Candidate Resume. For example, if the role requires Java, write the coding challenges in Java. If both Java and Python are mentioned, you might ask one question in Java and another in Python, but **DO NOT ask the same conceptual question in multiple languages**. Your questions should test practical expertise in the specified languages.
-            *   **Short, function-based questions (2-3 questions)**: These should be small, self-contained problems, like "write a function to reverse a string."
-            *   **Algorithmic / DSA Questions (1-2 questions)**: These should be more complex, LeetCode-style problems that test knowledge of data structures and algorithms.
-            *   For all coding questions, the model answer MUST include the complete code with markdown fences, followed by a bulleted explanation of the logic and time/space complexity.
-        *   **System Design Questions (1-2 questions)**: For relevant roles (Backend, Full-stack, SRE, etc.), include high-level system design questions (e.g., "Design a system for a photo-sharing service like Instagram" or "Design a URL shortener"). The model answer should outline the architecture, components, database choices, and scaling strategies in bullet points.
-    *   **For Sales-Related Roles (SDR, Account Executive):** The questions MUST focus on sales tools, processes, and methodologies. For example, ask about CRMs (Salesforce, HubSpot), prospecting tools (LinkedIn Sales Navigator), and sales engagement platforms (Outreach).
-    *   **For Finance-Related Roles (Financial Analyst, Investment Banker):** The questions MUST focus on financial modeling, valuation techniques, and expert-level use of tools like Excel. Your questions should require the candidate to explain or use specific financial formulas (e.g., WACC, NPV). For example, ask about building 3-statement models, DCF/LBO models, and advanced Excel functions.
+    *   **CRITICAL RULE FOR ALL QUESTIONS**: Questions MUST be direct, factual, and technical probes. **ABSOLUTELY AVOID open-ended, behavioral, or vague questions** like "Describe your experience with X", "What are the responsibilities of...", "How would you handle Y?", or "Why are X skills important?". Instead, ask for specific definitions, explanations, code, calculations, or process walkthroughs. Every question must be designed to test a concrete skill or knowledge area.
+    *   **For Software-Related Roles (Software Development, Backend, Frontend, Full-Stack, SDET):** The question set MUST include a mix of the following types:
+        *   **Language Specificity**: All coding questions MUST be tailored to the primary programming language(s) mentioned in the Job Description and Candidate Resume. Do not ask the same conceptual question in multiple languages.
+        *   **Short, function-based questions (2-3 questions)**: E.g., "Write a Python function that takes a list of strings and returns a new list with the strings sorted by length."
+        *   **Algorithmic / DSA Questions (1-2 questions)**: E.g., "Given a sorted array of integers, write a function that finds the starting and ending position of a given target value."
+        *   **System Design Questions (1-2 questions)**: E.g., "Design a basic URL shortening service like bit.ly." or "Outline the architecture for a simple photo-sharing service."
+    *   **For Sales-Related Roles (SDR, Account Executive):** Focus on tools, processes, and methodologies. E.g., "You've been given a list of 100 cold leads. Describe the sequence of steps you would take in Salesforce to track your outreach." or "What are the key differences between a 'Lead', an 'Account', and an 'Opportunity' object in a standard CRM?"
+    *   **For Finance-Related Roles (Financial Analyst, Investment Banker):** Focus on financial modeling, valuation, and tool proficiency. E.g., "Given Revenue, COGS, and Operating Expenses, what is the formula to calculate EBITDA?" or "In Excel, you have a column of stock prices. Which function would you use to calculate the 30-day moving average?"
+    *   **For Customer Support Roles:** Focus on scenario-based problem solving and tool usage. E.g., "A customer reports that they have not received their order. What are the first three pieces of information you would need to collect from them to investigate the issue?" or "You receive an email from an angry customer. Draft a professional, empathetic, and concise initial response."
     *   **Adapt for other roles accordingly.** The key is that the *technical* aspect of the questions must match the *technical* aspect of the job.
 
 2.  **Ensure High Quality & Proper Sourcing**:
     *   The **Job Description is the primary source**. The majority of your questions (at least 25) must be derived from the technical skills and responsibilities mentioned in the JD.
-    *   If a resume is provided, you may generate **a maximum of two (2) questions** that are directly tailored to the candidate's specific projects or experiences listed on the resume. These questions should be used to probe their hands-on experience.
+    *   If a resume is provided, you may generate **a maximum of two (2) questions** that are directly tailored to the candidate's specific projects or experiences listed on the resume. These questions should be used to probe their hands-on experience, not ask for a summary.
     *   All questions must be tailored to the role's domain and the specified seniority level.
 
 3.  **Provide Comprehensive, Pointwise Answers**:
