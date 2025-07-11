@@ -26,7 +26,7 @@ export type GenerateInterviewKitInput = z.infer<typeof GenerateInterviewKitInput
 
 const QuestionAnswerPairSchema = z.object({
   id: z.string().optional().describe("A unique identifier. Do not generate this field; it will be added later."),
-  question: z.string().describe("A crisp, direct, and deeply technical interview question."),
+  question: z.string().describe("A crisp, direct, and deeply technical interview question. The question MUST NOT be open-ended, philosophical, or behavioral (e.g., AVOID 'How would you handle X?', 'Describe a time when...'). It must be a direct probe for factual, technical knowledge or a specific problem to solve."),
   modelAnswer: z.string().describe("A comprehensive, pointwise answer formatted using markdown bullet points. The number of points should be proportional to the question's complexity (e.g., 2-3 for simple definitions, 5-7 for complex topics). The entire answer MUST be a single string. For coding questions, provide the complete code snippet using markdown fences, followed by a bulleted explanation. For other questions, use bullet points for concise explanations, including formulas where relevant."),
 });
 
@@ -58,6 +58,7 @@ CONTEXT FOR ANALYSIS:
 YOUR TASK:
 
 1.  **Generate a Diverse and Deeply Technical Question Set**: Based on the identified domain, create a list of 20-30 purely technical questions.
+    *   **CRITICAL RULE FOR ALL QUESTIONS**: Questions MUST be direct, factual, and technical. **AVOID open-ended, behavioral, or vague questions** like "Describe your experience with X" or "What would you do if Y?". Instead, ask for specific definitions, explanations, code, or calculations.
     *   **For Software-Related Roles (Software Development, Backend, Frontend, Full-Stack, SDET):** The question set MUST include a mix of the following types, progressing from fundamental knowledge to complex application:
         *   **Conceptual Questions**: Test foundational knowledge (e.g., "What is the difference between X and Y?").
         *   **Practical Coding Questions (3-5 questions total)**: Include a mix of practical coding challenges.
