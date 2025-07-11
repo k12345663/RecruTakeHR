@@ -27,7 +27,7 @@ export type GenerateInterviewKitInput = z.infer<typeof GenerateInterviewKitInput
 const QuestionAnswerPairSchema = z.object({
   id: z.string().optional().describe("A unique identifier. Do not generate this field; it will be added later."),
   question: z.string().describe("A crisp, direct, and deeply technical interview question. The question MUST NOT be open-ended, philosophical, or behavioral (e.g., AVOID 'How would you handle X?', 'Describe a time when...'). It must be a direct probe for factual, technical knowledge or a specific problem to solve."),
-  modelAnswer: z.string().describe("A comprehensive, pointwise answer formatted using markdown bullet points. The number of points should be proportional to the question's complexity (e.g., 2-3 for simple definitions, 5-7 for complex topics). The entire answer MUST be a single string. For coding questions, provide the complete code snippet using markdown fences, followed by a bulleted explanation. For other questions, use bullet points for concise explanations, including formulas where relevant."),
+  modelAnswer: z.string().describe("A comprehensive, pointwise answer formatted using markdown bullet points. The number of points should be proportional to the question's complexity (e.g., 2-3 for simple definitions, 5-7 for complex topics). The entire answer MUST be a single string. For coding questions, provide the complete code snippet first using markdown fences, followed by a bulleted explanation. For other questions, use bullet points for concise explanations, including formulas where relevant."),
 });
 
 const GenerateInterviewKitOutputSchema = z.object({
@@ -77,10 +77,10 @@ YOUR TASK:
     *   All questions must be tailored to the role's domain and the specified seniority level.
 
 3.  **Provide Comprehensive, Pointwise Answers**:
-    *   **Format**: Use markdown for bullet points (\`*\` or \`-\`). The number of points should be appropriate for the question's complexity—a simple definition might only need 2-3 points, while a system design question could require 5-7 points to be thorough. Each bullet point should deliver a single, concise point. For coding questions, provide the full code snippet first (using markdown fences), then the explanation in bullets.
+    *   **Format**: Use markdown for bullet points ('*' or '-'). The number of points should be appropriate for the question's complexity—a simple definition might only need 2-3 points, while a system design question could require 5-7 points to be thorough. Each bullet point should deliver a single, concise point. For coding questions, provide the full code snippet first (using markdown fences), then the explanation in bullets.
     *   **Content**: The answer must be direct and factual. It is critical that you include key concepts, definitions, **formulas (e.g., for finance or data science questions)**, or short code snippets where applicable. Do not just describe theory; provide the actual formula or calculation if the question implies it.
     *   **Structure**: The entire answer must be a single string. Do not use paragraphs; use bullet points exclusively for the answer structure.
-    *   **CRITICAL RULE FOR MODEL ANSWERS**: The \`modelAnswer\` MUST be the **actual answer** to the question, written from the perspective of an expert candidate providing a model response. **DO NOT** under any circumstances provide instructions, commentary, or a script for the interviewer. For example, you must **AVOID** phrases like 'This question aims to...', 'The interviewer should look for...', 'I would ask...', or 'The candidate should explain...'. Your purpose is to provide the ideal answer, not to guide the interviewer on how to conduct the interview.
+    *   **CRITICAL RULE FOR MODEL ANSWERS**: The 'modelAnswer' MUST be the **actual answer** to the question, written from the perspective of an expert candidate providing a model response. **DO NOT** under any circumstances provide instructions, commentary, or a script for the interviewer. For example, you must **AVOID** phrases like 'This question aims to...', 'The interviewer should look for...', 'I would ask...', or 'The candidate should explain...'. Your purpose is to provide the ideal answer, not to guide the interviewer on how to conduct the interview.
 
 The entire output MUST be a single JSON object with a "questions" key, which contains an array of question-answer objects as per the schema.
 `,
@@ -109,5 +109,3 @@ const generateInterviewKitFlow = ai.defineFlow(
     return validatedOutput;
   }
 );
-
-    
