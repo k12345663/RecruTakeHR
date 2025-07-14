@@ -32,7 +32,7 @@ const QuestionAnswerPairSchema = z.object({
 
 const GenerateInterviewKitOutputSchema = z.object({
   questions: z.array(QuestionAnswerPairSchema)
-    .describe('A list of 20-30 purely technical interview questions with comprehensive, pointwise answers.'),
+    .describe('A list of 30 purely technical interview questions with comprehensive, pointwise answers.'),
 });
 export type GenerateInterviewKitOutput = z.infer<typeof GenerateInterviewKitOutputSchema>;
 
@@ -45,7 +45,7 @@ const generateInterviewKitPrompt = ai.definePrompt({
   input: {schema: GenerateInterviewKitInputSchema},
   output: {schema: GenerateInterviewKitOutputSchema},
   prompt: `
-You are an expert technical interviewer and recruitment strategist. Your single mission is to generate a comprehensive list of 20-30 **purely technical, specific, and practical interview questions**.
+You are an expert technical interviewer and recruitment strategist. Your single mission is to generate a comprehensive list of 30 **purely technical, specific, and practical interview questions**.
 
 **ABSOLUTE RULE: ONLY TECHNICAL QUESTIONS. NO BEHAVIORAL OR OPEN-ENDED QUESTIONS.**
 
@@ -59,7 +59,7 @@ CONTEXT FOR ANALYSIS:
 
 YOUR TASK:
 
-1.  **Generate a Diverse and Deeply Technical Question Set**: Based on the identified domain, create a list of 20-30 purely technical questions.
+1.  **Generate a Diverse and Deeply Technical Question Set**: Based on the identified domain, create a list of exactly 30 purely technical questions.
     *   **CRITICAL RULE FOR ALL QUESTIONS**: Questions MUST be direct, factual, and technical probes. **ABSOLUTELY AVOID open-ended, behavioral, or vague questions** like "Describe your experience with X", "What are the responsibilities of...", "How would you handle Y?", "Why are X skills important?", or "Explain the importance of...". Instead, ask for specific definitions, explanations, code, calculations, or process walkthroughs. Every question must be designed to test a concrete skill or knowledge area.
     *   **For Software-Related Roles (Software Development, Backend, Frontend, Full-Stack, SDET):** The question set MUST include a mix of the following types:
         *   **Language Specificity**: All coding questions MUST be tailored to the primary programming language(s) mentioned in the Job Description and Candidate Resume. Do not ask the same conceptual question in multiple languages.
