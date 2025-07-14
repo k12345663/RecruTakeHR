@@ -27,12 +27,12 @@ export type GenerateInterviewKitInput = z.infer<typeof GenerateInterviewKitInput
 const QuestionAnswerPairSchema = z.object({
   id: z.string().optional().describe("A unique identifier. Do not generate this field; it will be added later."),
   question: z.string().describe("A crisp, direct, and deeply technical interview question. The question MUST NOT be open-ended, philosophical, or behavioral (e.g., AVOID 'How would you handle X?', 'Describe a time when...'). It must be a direct probe for factual, technical knowledge or a specific problem to solve."),
-  modelAnswer: z.string().describe("A comprehensive, pointwise answer formatted using markdown bullet points. The number of points should be proportional to the question's complexity (e.g., 2-3 for simple definitions, 5-7 for complex topics). The entire answer MUST be a single string. For coding questions, provide the complete code snippet first using markdown fences, followed by a bulleted explanation. For other questions, use bullet points for concise explanations, including formulas where relevant."),
+  modelAnswer: z.string().describe("A comprehensive, multi-point answer. For each point, provide a title followed by a detailed explanation. Separate each point with a triple newline ('\\n\\n\\n'). The entire answer MUST be a single string. For coding questions, provide the complete code snippet first, followed by a multi-point explanation of the code's logic, structure, and efficiency."),
 });
 
 const GenerateInterviewKitOutputSchema = z.object({
   questions: z.array(QuestionAnswerPairSchema)
-    .describe('A list of 30 purely technical interview questions with comprehensive, pointwise answers.'),
+    .describe('A list of 30 purely technical interview questions with comprehensive, multi-point answers.'),
 });
 export type GenerateInterviewKitOutput = z.infer<typeof GenerateInterviewKitOutputSchema>;
 
@@ -72,10 +72,9 @@ YOUR TASK:
     *   If a resume is provided, you may generate **a maximum of two (2) questions** that are directly tailored to the candidate's specific projects or experiences listed on the resume. **CRITICAL: Only do this if the skill is directly relevant to the Job Description's domain.**
     *   All questions must be tailored to the specified seniority level.
 
-3.  **Provide Comprehensive, Pointwise Answers**:
-    *   **Format**: Use markdown for bullet points ('*' or '-'). The number of points should be proportional to the question's complexity (e.g., 2-3 for simple definitions, 5-7 for complex topics). For coding questions, provide the full code snippet first (using markdown fences), then the explanation in bullets.
-    *   **Content**: The answer must be direct and factual. It is critical that you include key concepts, definitions, **formulas (e.g., for finance or data science questions)**, or short code snippets where applicable.
-    *   **Structure**: The entire answer must be a single string.
+3.  **Provide GOLD-STANDARD MODEL ANSWERS**:
+    *   **Format**: The 'modelAnswer' MUST be a single string containing multiple evaluation points, separated by a triple newline ('\\n\\n\\n'). Each point MUST follow this format EXACTLY: \`A title for the evaluation point.\\n\\nA detailed, multi-paragraph explanation written as an expert would deliver it, referencing real tools, workflows, and best practices with deep technical reasoning. It must be a human, real-world style answer, not generic or superficial.\`
+    *   **Content**: For coding questions, provide the full code snippet first, then a multi-point explanation. For other questions, provide a comprehensive, multi-point answer. Each point must provide a detailed explanation, including key concepts, definitions, or formulas. The goal is to create a comprehensive checklist for the interviewer.
     *   **CRITICAL RULE FOR MODEL ANSWERS**: The 'modelAnswer' MUST be the **actual answer** to the question, written from the perspective of an expert candidate. **DO NOT** provide instructions or commentary for the interviewer (e.g., AVOID 'The candidate should explain...').
 
 The entire output MUST be a single JSON object with a "questions" key, containing an array of 30 question-answer objects.
