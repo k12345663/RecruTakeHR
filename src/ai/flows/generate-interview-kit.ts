@@ -73,7 +73,7 @@ YOUR TASK:
     *   All questions must be tailored to the specified seniority level.
 
 3.  **Provide Comprehensive, Pointwise Answers**:
-    *   **Format**: Use markdown for bullet points ('*' or '-'). The number of points should be appropriate for the question's complexity. For coding questions, provide the full code snippet first (using markdown fences), then the explanation in bullets.
+    *   **Format**: Use markdown for bullet points ('*' or '-'). The number of points should be proportional to the question's complexity (e.g., 2-3 for simple definitions, 5-7 for complex topics). For coding questions, provide the full code snippet first (using markdown fences), then the explanation in bullets.
     *   **Content**: The answer must be direct and factual. It is critical that you include key concepts, definitions, **formulas (e.g., for finance or data science questions)**, or short code snippets where applicable.
     *   **Structure**: The entire answer must be a single string.
     *   **CRITICAL RULE FOR MODEL ANSWERS**: The 'modelAnswer' MUST be the **actual answer** to the question, written from the perspective of an expert candidate. **DO NOT** provide instructions or commentary for the interviewer (e.g., AVOID 'The candidate should explain...').
