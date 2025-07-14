@@ -63,7 +63,7 @@ CONTEXT FOR ANALYSIS:
 YOUR TASK:
 
 1.  **Analyze Job Description & Formulate Questions**: First, deeply analyze the Job Description to identify the core technical skills required. Then, formulate exactly 30 technical questions that are perfectly aligned with those skills, covering the full range of requirements.
-    *   **For Software Roles (Software Development, Backend, Frontend, DevOps, SDET):** Questions must cover specific languages, frameworks, algorithms, data structures, and system design concepts mentioned in the JD. Include short, function-based coding questions.
+    *   **For Software Roles (Software Development, Backend, Frontend, DevOps, SDET):** Questions must cover specific languages, frameworks, algorithms, data structures, and system design concepts mentioned in the JD. You MUST include several short, function-based coding questions that require the candidate to write actual code.
     *   **For Sales Roles (SDR, Account Executive):** Questions must focus on sales methodologies, CRM tools (like Salesforce), lead qualification, and process-oriented tasks mentioned in the JD.
     *   **For Finance Roles (Financial Analyst, Investment Banker):** Questions must focus on financial modeling, valuation methods, and specific spreadsheet functions (like VLOOKUP, Pivot Tables in Excel) if required by the JD. Include questions that require formulas or calculations.
     *   **For Customer Support Roles:** Questions must be practical and scenario-based, focusing on troubleshooting processes, communication techniques, and proficiency with required tools (like Excel for reporting).
