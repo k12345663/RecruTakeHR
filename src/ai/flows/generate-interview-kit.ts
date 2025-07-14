@@ -27,7 +27,7 @@ export type GenerateInterviewKitInput = z.infer<typeof GenerateInterviewKitInput
 const QuestionAnswerPairSchema = z.object({
   id: z.string().optional().describe("A unique identifier. Do not generate this field; it will be added later."),
   question: z.string().describe("A crisp, direct, and deeply technical interview question. The question MUST NOT be open-ended, philosophical, or behavioral (e.g., AVOID 'How would you handle X?', 'Describe a time when...'). It must be a direct probe for factual, technical knowledge or a specific problem to solve."),
-  modelAnswer: z.string().describe("A comprehensive, pointwise answer. For each point, provide a title followed by a detailed explanation. Separate each point with a triple newline ('\\n\\n\\n'). The entire answer MUST be a single string. For coding questions, provide the complete code snippet first, followed by a multi-point explanation of the code's logic, structure, and efficiency."),
+  modelAnswer: z.string().describe("A comprehensive, multi-point answer. For each point, provide a title followed by a detailed explanation. Separate each point with a triple newline ('\\n\\n\\n'). The entire answer MUST be a single string. For coding questions, provide the complete code snippet first, followed by a multi-point explanation of the code's logic, structure, and efficiency."),
 });
 
 const GenerateInterviewKitOutputSchema = z.object({
@@ -74,8 +74,8 @@ YOUR TASK:
     *   All questions must be tailored to the specified seniority level.
 
 3.  **Provide GOLD-STANDARD MODEL ANSWERS**:
-    *   **Format**: The 'modelAnswer' MUST be a single string containing multiple evaluation points, separated by a triple newline ('\\n\\n\\n'). Each point MUST follow this format EXACTLY: \`A title for the point.\\n\\nA concise, one-sentence explanation for that point.\`
-    *   **Content**: For coding questions, provide the full code snippet first, then a multi-point explanation. For other questions, provide a comprehensive, multi-point answer. Each point must provide a clear, small point of information. The goal is to create a simple checklist for the interviewer.
+    *   **Format**: The 'modelAnswer' MUST be a single string containing multiple evaluation points, separated by a triple newline ('\\n\\n\\n'). Each point MUST follow this format EXACTLY: \`A title for the point.\\n\\nA detailed, self-explanatory explanation for that point.\`
+    *   **Content**: For coding questions, provide the full code snippet first, then a multi-point explanation following the format above. For other questions, provide a comprehensive, multi-point answer. Each point must provide a clear, detailed piece of information. The goal is to create a simple, yet thorough checklist for the interviewer.
     *   **CRITICAL RULE FOR MODEL ANSWERS**: The 'modelAnswer' MUST be the **actual answer** to the question, written from the perspective of an expert candidate. **DO NOT** provide instructions or commentary for the interviewer (e.g., AVOID 'The candidate should explain...').
 
 The entire output MUST be a single JSON object with a "questions" key, containing an array of 30 question-answer objects.
