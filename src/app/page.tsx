@@ -21,20 +21,29 @@ const ModelAnswer = ({ answer, questionId }: { answer: string; questionId: strin
     return (
         <div className="space-y-4">
             {sections.map((section, sectionIndex) => {
+                const trimmedSection = section.trim();
                 // Check if the section is a code block
-                const isCodeBlock = section.trim().startsWith('```') && section.trim().endsWith('```');
+                const isCodeBlock = trimmedSection.startsWith('```') && trimmedSection.endsWith('```');
 
                 if (isCodeBlock) {
-                    const codeContent = section.replace(/```.*\n/, '').replace(/```/, '').trim();
+                    // Extract content within the triple backticks
+                    const codeContent = trimmedSection
+                        .replace(/^```[a-z]*\n/, '') // Remove starting backticks and optional language identifier
+                        .replace(/```$/, '') // Remove ending backticks
+                        .trim();
+                    
                     const pointId = `${questionId}-code-${sectionIndex}`;
                     return (
-                        <div key={pointId} className="flex items-start space-x-3">
-                            <Checkbox id={pointId} className="mt-1 flex-shrink-0" />
-                            <label htmlFor={pointId} className="text-sm font-normal w-full">
+                        <div key={pointId} className="space-y-2">
+                           <div className="flex items-start space-x-3">
+                                <Checkbox id={pointId} className="mt-1 flex-shrink-0" />
+                                <label htmlFor={pointId} className="text-sm font-semibold w-full">Code Snippet:</label>
+                           </div>
+                           <div className="pl-7 w-full">
                                 <pre className="bg-muted p-4 rounded-md overflow-x-auto text-sm w-full">
                                     <code>{codeContent}</code>
                                 </pre>
-                            </label>
+                           </div>
                         </div>
                     );
                 } else {
