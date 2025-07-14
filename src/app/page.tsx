@@ -15,20 +15,22 @@ import { Checkbox } from '@/components/ui/checkbox';
 
 // Helper component to render the model answer with special handling for code blocks
 const ModelAnswer = ({ answer, questionId }: { answer: string; questionId: string }) => {
-    // Regex to split the answer by markdown code blocks, keeping the delimiters for identification
-    const parts = answer.split(/(```[\s\S]*?```)/g).filter(part => part.trim() !== '');
+    // Split the answer into sections based on the triple newline separator
+    const sections = answer.split('\n\n\n').filter(section => section.trim() !== '');
 
     return (
-        <div className="space-y-3">
-            {parts.map((part, index) => {
-                const isCodeBlock = part.startsWith('```') && part.endsWith('```');
+        <div className="space-y-4">
+            {sections.map((section, sectionIndex) => {
+                // Check if the section is a code block
+                const isCodeBlock = section.trim().startsWith('```') && section.trim().endsWith('```');
+
                 if (isCodeBlock) {
-                    // Extract code content from the block
-                    const codeContent = part.replace(/```.*\n/, '').replace(/```/, '').trim();
+                    const codeContent = section.replace(/```.*\n/, '').replace(/```/, '').trim();
+                    const pointId = `${questionId}-code-${sectionIndex}`;
                     return (
-                        <div key={`${questionId}-code-${index}`} className="flex items-start space-x-3">
-                            <Checkbox id={`${questionId}-code-${index}`} className="mt-1 flex-shrink-0" />
-                            <label htmlFor={`${questionId}-code-${index}`} className="text-sm font-normal w-full">
+                        <div key={pointId} className="flex items-start space-x-3">
+                            <Checkbox id={pointId} className="mt-1 flex-shrink-0" />
+                            <label htmlFor={pointId} className="text-sm font-normal w-full">
                                 <pre className="bg-muted p-4 rounded-md overflow-x-auto text-sm w-full">
                                     <code>{codeContent}</code>
                                 </pre>
@@ -36,23 +38,26 @@ const ModelAnswer = ({ answer, questionId }: { answer: string; questionId: strin
                         </div>
                     );
                 } else {
-                    // This part contains regular bullet points
-                    return part.split('\n').filter(line => line.trim() !== '').map((point, pointIndex) => (
-                        <div key={`${questionId}-point-${index}-${pointIndex}`} className="flex items-start space-x-3">
-                            <Checkbox id={`${questionId}-point-${index}-${pointIndex}`} className="mt-1 flex-shrink-0" />
-                            <label
-                                htmlFor={`${questionId}-point-${index}-${pointIndex}`}
-                                className="text-sm font-normal"
-                            >
-                                {point.replace(/^[*\-]\s*/, '').trim()}
+                    // It's a regular text section with a title and explanation
+                    const [title, ...explanationParts] = section.split('\n');
+                    const explanation = explanationParts.join('\n').trim();
+                    const pointId = `${questionId}-point-${sectionIndex}`;
+                    
+                    return (
+                        <div key={pointId} className="flex items-start space-x-3">
+                            <Checkbox id={pointId} className="mt-1 flex-shrink-0" />
+                            <label htmlFor={pointId} className="text-sm font-normal w-full space-y-1">
+                                {title && <p className="font-semibold">{title.trim()}</p>}
+                                {explanation && <p className="text-muted-foreground">{explanation}</p>}
                             </label>
                         </div>
-                    ));
+                    );
                 }
             })}
         </div>
     );
 };
+
 
 export default function Home() {
   const [jobDescription, setJobDescription] = useState('');
