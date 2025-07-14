@@ -84,7 +84,7 @@ YOUR TASK:
 
 The entire output MUST be a single JSON object with a "questions" key, which contains an array of question-answer objects as per the schema.
 `,
-  model: 'googleai/gemini-2.0-pro',
+  model: 'googleai/gemini-1.5-pro-latest',
 });
 
 const generateInterviewKitFlow = ai.defineFlow(
@@ -110,3 +110,5 @@ const generateInterviewKitFlow = ai.defineFlow(
     return validatedOutput;
   }
 );
+
+    
