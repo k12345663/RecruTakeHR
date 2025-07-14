@@ -49,7 +49,7 @@ You are an expert technical interviewer and recruitment strategist. Your single 
 
 **ABSOLUTE RULE: ONLY TECHNICAL QUESTIONS. NO BEHAVIORAL OR OPEN-ENDED QUESTIONS.**
 
-**First, you MUST determine the role's domain from the Job Description (e.g., Software Development, DevOps, Data Science, Finance, Sales, Customer Support). The type and nature of questions you generate MUST align with this domain.** For example, do not ask a Sales candidate about Python algorithms. The questions must be relevant to the core functions of the job.
+**First, you MUST determine the role's domain from the Job Description (e.g., Software Development, DevOps, Data Science, Finance, Sales, Customer Support). The type and nature of questions you generate MUST align with this domain.** For example, do not ask a Sales candidate about Python algorithms, even if Python is on their resume. The questions must be relevant to the core functions of the job.
 
 CONTEXT FOR ANALYSIS:
 *   **Job Description**: {{{jobDescription}}}
@@ -73,7 +73,7 @@ YOUR TASK:
 
 2.  **Ensure High Quality & Proper Sourcing**:
     *   The **Job Description is the primary source**. The majority of your questions (at least 25) must be derived from the technical skills and responsibilities mentioned in the JD.
-    *   If a resume is provided, you may generate **a maximum of two (2) questions** that are directly tailored to the candidate's specific projects or experiences listed on the resume. These questions should be used to probe their hands-on experience, not ask for a summary.
+    *   If a resume is provided, you may generate **a maximum of two (2) questions** that are directly tailored to the candidate's specific projects or experiences listed on the resume. These questions should be used to probe their hands-on experience, not ask for a summary. **CRITICAL: If a skill on the resume is NOT relevant to the Job Description's domain, you MUST ignore it.**
     *   All questions must be tailored to the role's domain and the specified seniority level.
 
 3.  **Provide Comprehensive, Pointwise Answers**:
@@ -109,3 +109,5 @@ const generateInterviewKitFlow = ai.defineFlow(
     return validatedOutput;
   }
 );
+
+    
