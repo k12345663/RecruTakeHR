@@ -32,7 +32,7 @@ const QuestionAnswerPairSchema = z.object({
 
 const GenerateInterviewKitOutputSchema = z.object({
   questions: z.array(QuestionAnswerPairSchema)
-    .describe('A list of technical interview questions with comprehensive, multi-point answers.'),
+    .describe('A list of exactly 30 technical interview questions with comprehensive, multi-point answers.'),
 });
 export type GenerateInterviewKitOutput = z.infer<typeof GenerateInterviewKitOutputSchema>;
 
@@ -42,7 +42,7 @@ export async function generateInterviewKit(input: GenerateInterviewKitInput): Pr
 
 const generateInterviewKitPrompt = ai.definePrompt({
   name: 'generateInterviewKitPrompt',
-  model: 'googleai/gemini-1.5-flash-latest',
+  model: 'googleai/gemini-1.0-pro',
   input: {schema: GenerateInterviewKitInputSchema},
   output: {schema: GenerateInterviewKitOutputSchema},
   prompt: `
