@@ -15,29 +15,21 @@ import { Checkbox } from '@/components/ui/checkbox';
 
 // Helper component to render the model answer with special handling for code blocks
 const ModelAnswer = ({ answer, questionId }: { answer: string; questionId: string }) => {
-    // Split the answer by newlines to process it line by line
-    const sections = answer.split('\n').filter(section => section.trim() !== '');
+    // Split the answer by the code block delimiter to separate code from text
+    const parts = answer.split(/```(?:[a-z]*)?\n/);
 
     return (
         <div className="space-y-4">
-            {sections.map((section, sectionIndex) => {
-                const trimmedSection = section.trim();
-                // A section is a code block if it's enclosed in triple backticks
-                const isCodeBlock = trimmedSection.startsWith('```') && trimmedSection.endsWith('```');
-
-                if (isCodeBlock) {
-                    // Extract the language and code content
-                    const codeContent = trimmedSection
-                        .replace(/^```[a-z]*\n?/, '') // Remove starting ``` with optional language
-                        .replace(/```$/, '')          // Remove ending ```
-                        .trim();
-                    
-                    const pointId = `${questionId}-code-${sectionIndex}`;
+            {parts.map((part, index) => {
+                if (index % 2 === 1) {
+                    // This is a code block
+                    const codeContent = part.trim();
+                    const codeBlockId = `${questionId}-code-${index}`;
                     return (
-                        <div key={pointId} className="space-y-2">
+                        <div key={codeBlockId} className="space-y-2">
                            <div className="flex items-start space-x-3">
-                                <Checkbox id={pointId} className="mt-1 flex-shrink-0" />
-                                <label htmlFor={pointId} className="text-sm font-semibold w-full">Code Snippet:</label>
+                                <Checkbox id={codeBlockId} className="mt-1 flex-shrink-0" />
+                                <label htmlFor={codeBlockId} className="text-sm font-semibold w-full">Code Snippet:</label>
                            </div>
                            <div className="pl-7 w-full">
                                 <pre className="bg-muted p-4 rounded-md overflow-x-auto text-sm w-full">
@@ -46,28 +38,43 @@ const ModelAnswer = ({ answer, questionId }: { answer: string; questionId: strin
                            </div>
                         </div>
                     );
-                } else if (trimmedSection.startsWith('-')) {
-                    // This is a regular bullet point
-                    const pointText = trimmedSection.substring(1).trim();
-                    const pointId = `${questionId}-bullet-${sectionIndex}`;
+                } else {
+                    // This is a text section, which may contain bullet points
+                    const textContent = part.trim();
+                    if (!textContent) return null;
+
+                    const bullets = textContent.split('\n').map(b => b.trim()).filter(b => b.startsWith('-'));
+
+                    if (bullets.length === 0 && textContent.length > 0) {
+                        // Handle text that isn't a bulleted list
+                        const pointId = `${questionId}-text-${index}`;
+                        return (
+                             <div key={pointId} className="flex items-start space-x-3">
+                                 <Checkbox id={pointId} className="mt-1 flex-shrink-0" />
+                                 <label htmlFor={pointId} className="text-sm font-normal w-full">
+                                    {textContent}
+                                </label>
+                            </div>
+                        )
+                    }
+
                     return (
-                        <div key={pointId} className="flex items-start space-x-3">
-                             <Checkbox id={pointId} className="mt-1 flex-shrink-0" />
-                             <label htmlFor={pointId} className="text-sm font-normal w-full">
-                                {pointText}
-                            </label>
-                        </div>
-                    );
-                }
-                else {
-                    // Fallback for non-bulleted lines (e.g., introductory text before code)
-                    const pointId = `${questionId}-point-${sectionIndex}`;
-                    return (
-                        <div key={pointId} className="flex items-start space-x-3">
-                            <Checkbox id={pointId} className="mt-1 flex-shrink-0" />
-                            <label htmlFor={pointId} className="text-sm font-normal w-full space-y-1">
-                               <p>{trimmedSection}</p>
-                            </label>
+                        <div key={`${questionId}-text-section-${index}`} className="space-y-2">
+                             {bullets.length > 0 && index === 0 && (
+                                 <h5 className="font-semibold text-sm">Explanation:</h5>
+                             )}
+                             {bullets.map((bullet, bulletIndex) => {
+                                const bulletId = `${questionId}-bullet-${index}-${bulletIndex}`;
+                                const bulletText = bullet.substring(1).trim();
+                                return (
+                                    <div key={bulletId} className="flex items-start space-x-3 pl-7">
+                                        <Checkbox id={bulletId} className="mt-1 flex-shrink-0" />
+                                        <label htmlFor={bulletId} className="text-sm font-normal w-full">
+                                            {bulletText}
+                                        </label>
+                                    </div>
+                                );
+                             })}
                         </div>
                     );
                 }
