@@ -63,7 +63,7 @@ You are an expert technical assessment architect. Your primary function is to ge
 *Task: Generate Technical Assessment Questions*
 
 1.  *Analyze the Job Description:* Identify the key technical competencies required for the role.
-2.  *Formulate Questions:* Create a list of exactly 15 questions that cover the identified competencies. Questions should be concise, ideally between 10 to 15 words.
+2.  *Formulate Questions:* Create a list of exactly 30 questions that cover the identified competencies. Questions should be concise, ideally between 10 to 15 words.
 3.  *Provide Model Answers:* For each question, supply a "gold-standard" model answer.
       * *Format:* The modelAnswer must be a single string containing multiple points. Each point must have a title and a detailed explanation, separated by a newline. Separate each complete point (title and explanation) with triple newlines (\\n\\n\\n).
       * *Content:* Answers should be accurate, expert-level, and serve as a clear evaluation benchmark.
