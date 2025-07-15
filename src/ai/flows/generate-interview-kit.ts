@@ -27,7 +27,7 @@ export type GenerateInterviewKitInput = z.infer<typeof GenerateInterviewKitInput
 const QuestionAnswerPairSchema = z.object({
   id: z.string().optional().describe("A unique identifier. Do not generate this field; it will be added later."),
   question: z.string().describe("A crisp, direct, and deeply technical interview question."),
-  modelAnswer: z.string().describe("A comprehensive, multi-point answer formatted as a single string with bullet points."),
+  modelAnswer: z.string().describe("A comprehensive, multi-point answer formatted as a single string with bullet points. For code/queries, wrap them in triple backticks."),
 });
 
 const GenerateInterviewKitOutputSchema = z.object({
@@ -50,9 +50,11 @@ You are an expert technical assessment architect. Your primary function is to ge
 *Core Directives for Question Generation:*
 
 1.  *JD as the Single Source of Truth:* All questions must directly map to the technical skills, tools, and responsibilities explicitly stated in the Job Description. Do not introduce concepts or technologies not mentioned in the JD.
-2.  *Balance Theory and Practice:* Formulate questions that probe both foundational knowledge (the "why") and practical application (the "how"). This ensures a holistic evaluation of the candidate's capabilities.
+2.  *Emphasize Analytical and Scenario-Based Questions:* Move beyond simple definitions. Formulate questions that require the candidate to analyze a situation, compare technologies, or solve a hypothetical problem (e.g., "How would you optimize...", "What are the trade-offs between X and Y...", "Describe a process for..."). This ensures a holistic evaluation of the candidate's capabilities.
 3.  *Clarity and Conciseness:* Questions should be direct, unambiguous, and focused on a single technical concept. Avoid compound questions or subjective inquiries.
-4.  *No Behavioral Questions:* Focus exclusively on technical proficiency. Omit questions about teamwork, past experiences, or personal opinions (e.g., "Describe a time when...", "What is your favorite...").
+4.  *Programming Questions (If Applicable):* If the JD mentions specific programming languages (e.g., Python, Java, SQL), include a few relevant programming questions. These questions should test practical coding knowledge.
+5.  *No Behavioral Questions:* Focus exclusively on technical proficiency. Omit questions about teamwork, past experiences, or personal opinions (e.g., "Describe a time when...", "What is your favorite...").
+
 
 *Contextual Analysis:*
 
@@ -62,13 +64,13 @@ You are an expert technical assessment architect. Your primary function is to ge
 *Task: Generate Technical Assessment Questions*
 
 1.  *Analyze the Job Description:* Identify the key technical competencies required for the role.
-2.  *Formulate Questions:* Create a list of exactly 30 questions that cover the identified competencies. Questions should be concise, ideally between 10 to 15 words.
+2.  *Formulate Questions:* Create a list of exactly 30 questions that cover the identified competencies. Questions should be concise, ideally between 10 to 20 words.
 3.  *Provide Model Answers:* For each question, supply a "gold-standard" model answer.
-      * *Format:* The modelAnswer must be a single string. Use bullet points (e.g., - Point one.\\n- Point two.) for clarity.
-      * *Content:* Answers should be accurate, expert-level, and serve as a clear evaluation benchmark. Each point within the answer should also be concise (10-15 words).
+      * *Format:* The modelAnswer must be a single string. Use bullet points (e.g., - Point one.\\n- Point two.) for clarity. If an answer includes a code snippet or query, it **MUST** be wrapped in triple backticks (\`\`\`).
+      * *Content:* Answers should be accurate, expert-level, and serve as a clear evaluation benchmark. Each point within the answer should be concise but comprehensive.
       * *Perspective:* Write the answer as the ideal candidate would articulate it. Do not include instructions for the interviewer.
 
-The final output must be a single JSON object containing a "questions" key with an array of question-answer objects.
+The final output must be a single JSON object containing a "questions" key with an array of exactly 30 question-answer objects.
 
 -----
 
@@ -91,7 +93,7 @@ The final output must be a single JSON object containing a "questions" key with 
     },
     {
       "question": "How would you write a query to find the second highest salary?",
-      "modelAnswer": "- Use OFFSET and FETCH with ORDER BY SALARY DESC.\\n- Alternatively, use a subquery with the MAX() function."
+      "modelAnswer": "There are several ways to do this, a common one is using OFFSET and FETCH:\\n\`\`\`sql\\nSELECT salary\\nFROM employees\\nORDER BY salary DESC\\nOFFSET 1 ROWS\\nFETCH NEXT 1 ROWS ONLY;\\n\`\`\`\\n- This query sorts salaries in descending order and skips the first result to get the second."
     }
   ]
 }
