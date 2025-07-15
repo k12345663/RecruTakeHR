@@ -27,7 +27,7 @@ export type GenerateInterviewKitInput = z.infer<typeof GenerateInterviewKitInput
 const QuestionAnswerPairSchema = z.object({
   id: z.string().optional().describe("A unique identifier. Do not generate this field; it will be added later."),
   question: z.string().describe("A crisp, direct, and deeply technical interview question."),
-  modelAnswer: z.string().describe("A comprehensive, multi-point answer formatted as a single string with multiple bullet points (e.g. '- Point one.\n- Point two.\n- Point three.'). For code/queries, wrap them in triple backticks."),
+  modelAnswer: z.string().describe("A comprehensive, multi-point answer formatted as a single string with multiple bullet points (e.g. '- Point one.\\n- Point two.\\n- Point three.'). For code/queries, wrap them in triple backticks."),
 });
 
 const GenerateInterviewKitOutputSchema = z.object({

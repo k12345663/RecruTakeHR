@@ -15,20 +15,21 @@ import { Checkbox } from '@/components/ui/checkbox';
 
 // Helper component to render the model answer with special handling for code blocks
 const ModelAnswer = ({ answer, questionId }: { answer: string; questionId: string }) => {
-    // Check for bullet points first, then split by newline for other cases
-    const hasBulletPoints = /-\s/.test(answer);
+    // Split the answer by newlines to process it line by line
     const sections = answer.split('\n').filter(section => section.trim() !== '');
 
     return (
         <div className="space-y-4">
             {sections.map((section, sectionIndex) => {
                 const trimmedSection = section.trim();
+                // A section is a code block if it's enclosed in triple backticks
                 const isCodeBlock = trimmedSection.startsWith('```') && trimmedSection.endsWith('```');
 
                 if (isCodeBlock) {
+                    // Extract the language and code content
                     const codeContent = trimmedSection
-                        .replace(/^```[a-z]*\n/, '')
-                        .replace(/```$/, '')
+                        .replace(/^```[a-z]*\n?/, '') // Remove starting ``` with optional language
+                        .replace(/```$/, '')          // Remove ending ```
                         .trim();
                     
                     const pointId = `${questionId}-code-${sectionIndex}`;
@@ -45,7 +46,8 @@ const ModelAnswer = ({ answer, questionId }: { answer: string; questionId: strin
                            </div>
                         </div>
                     );
-                } else if (hasBulletPoints && trimmedSection.startsWith('-')) {
+                } else if (trimmedSection.startsWith('-')) {
+                    // This is a regular bullet point
                     const pointText = trimmedSection.substring(1).trim();
                     const pointId = `${questionId}-bullet-${sectionIndex}`;
                     return (
@@ -58,7 +60,7 @@ const ModelAnswer = ({ answer, questionId }: { answer: string; questionId: strin
                     );
                 }
                 else {
-                    // Fallback for non-bulleted lines or titles
+                    // Fallback for non-bulleted lines (e.g., introductory text before code)
                     const pointId = `${questionId}-point-${sectionIndex}`;
                     return (
                         <div key={pointId} className="flex items-start space-x-3">
