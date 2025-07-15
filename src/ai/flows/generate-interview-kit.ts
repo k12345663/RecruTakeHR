@@ -42,7 +42,7 @@ export async function generateInterviewKit(input: GenerateInterviewKitInput): Pr
 
 const generateInterviewKitPrompt = ai.definePrompt({
   name: 'generateInterviewKitPrompt',
-  model: 'googleai/gemini-1.5-pro-latest',
+  model: 'googleai/gemini-1.5-flash-latest',
   input: {schema: GenerateInterviewKitInputSchema},
   output: {schema: GenerateInterviewKitOutputSchema},
   prompt: `
@@ -116,7 +116,7 @@ json
 json
 {
   "question": "Write a Python function to reverse a linked list and explain its time complexity.",
-  "modelAnswer": "BEGIN MODEL ANSWER\\n\\n\\nPython Function.\\n\\nHere is a Python implementation for reversing a linked list:\\npython\\ndef reverse_linked_list(head):\\n    prev = None\\n    current = head\\n    while current:\\n        next_temp = current.next\\n        current.next = prev\\n        prev = current\\n        current = next_temp\\n    return prev\\n\\n\\n\\nExplanation of Logic.\\n\\nThe function leverages a 'while' loop to traverse...\\n\\n\\nTime Complexity Analysis.\\n\\nThe function's time complexity is...\\n\\n..."
+  "modelAnswer": "BEGIN MODEL ANSWER\\n\\n\\nPython Function.\\n\\nHere is a Python implementation for reversing a linked list:\\n'python'\\ndef reverse_linked_list(head):\\n    prev = None\\n    current = head\\n    while current:\\n        next_temp = current.next\\n        current.next = prev\\n        prev = current\\n        current = next_temp\\n    return prev\\n\\n\\n\\nExplanation of Logic.\\n\\nThe function leverages a 'while' loop to traverse...\\n\\n\\nTime Complexity Analysis.\\n\\nThe function's time complexity is...\\n\\n..."
 }
 
 
