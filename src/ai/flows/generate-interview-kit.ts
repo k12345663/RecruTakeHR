@@ -27,7 +27,7 @@ export type GenerateInterviewKitInput = z.infer<typeof GenerateInterviewKitInput
 const QuestionAnswerPairSchema = z.object({
   id: z.string().optional().describe("A unique identifier. Do not generate this field; it will be added later."),
   question: z.string().describe("A crisp, direct, and deeply technical interview question."),
-  modelAnswer: z.string().describe("A comprehensive, multi-point answer formatted as a single string with bullet points."),
+  modelAnswer: z.string().describe("A comprehensive, multi-point answer formatted as a single string with points separated by triple newlines (\\n\\n\\n)."),
 });
 
 const GenerateInterviewKitOutputSchema = z.object({
@@ -65,8 +65,8 @@ You are an expert technical assessment architect. Your primary function is to ge
 1.  *Analyze the Job Description:* Identify the key technical competencies required for the role.
 2.  *Formulate Questions:* Create a list of exactly 30 questions that cover the identified competencies. Questions should be concise, ideally between 10 to 15 words.
 3.  *Provide Model Answers:* For each question, supply a "gold-standard" model answer.
-      * *Format:* The modelAnswer must be a single string. Use bullet points (e.g., - Point one.\\n- Point two.) for clarity.
-      * *Content:* Answers should be accurate, expert-level, and serve as a clear evaluation benchmark. Each point within the answer should also be concise (10-15 words).
+      * *Format:* The modelAnswer must be a single string containing multiple points. Each point must have a title and a detailed explanation, separated by a newline. Separate each complete point (title and explanation) with triple newlines (\\n\\n\\n).
+      * *Content:* Answers should be accurate, expert-level, and serve as a clear evaluation benchmark.
       * *Perspective:* Write the answer as the ideal candidate would articulate it. Do not include instructions for the interviewer.
 
 The final output must be a single JSON object containing a "questions" key with an array of question-answer objects.
@@ -78,43 +78,11 @@ The final output must be a single JSON object containing a "questions" key with 
   "questions": [
     {
       "question": "What is the primary difference between a LEFT JOIN and an INNER JOIN?",
-      "modelAnswer": "- INNER JOIN: Returns records with matching values in both tables.\\n- LEFT JOIN: Returns all records from the left table, and matched from the right."
-    },
-    {
-      "question": "In SQL, what is the purpose of the GROUP BY clause?",
-      "modelAnswer": "- It groups rows that have the same values into summary rows.\\n- Often used with aggregate functions like COUNT(), MAX(), SUM()."
-    },
-    {
-      "question": "How would you write a query to find the second highest salary?",
-      "modelAnswer": "- Use OFFSET and FETCH with ORDER BY SALARY DESC.\\n- Alternatively, use a subquery with the MAX() function."
-    },
-    {
-      "question": "What is the main difference between UNION and UNION ALL set operators?",
-      "modelAnswer": "- UNION: Combines result sets and removes duplicate records.\\n- UNION ALL: Combines result sets but includes all duplicate records."
+      "modelAnswer": "INNER JOIN Definition\\nReturns records that have matching values in both tables, effectively intersecting the datasets.\\n\\n\\nLEFT JOIN Definition\\nReturns all records from the left table, and the matched records from the right table. If there is no match, the result is NULL on the right side."
     },
     {
       "question": "In Power BI, what is the primary function of DAX?",
-      "modelAnswer": "- DAX (Data Analysis Expressions) is a formula language.\\n- Used to create custom calculations in Power BI models."
-    },
-    {
-      "question": "What is the difference between a calculated column and a measure in DAX?",
-      "modelAnswer": "- Calculated Column: Stored in the model, consumes RAM, row-by-row context.\\n- Measure: Calculated on the fly, uses CPU, evaluated in filter context."
-    },
-    {
-      "question": "How do you define data modeling in the context of Power BI?",
-      "modelAnswer": "- Connecting different data tables using relationships.\\n- Creates a structured and efficient data model for analysis."
-    },
-    {
-      "question": "What is the difference between SUM and SUMX in DAX?",
-      "modelAnswer": "- SUM: Aggregates numbers in a single column.\\n- SUMX: An iterator function that calculates a sum over a table expression."
-    },
-    {
-      "question": "Explain what a p-value represents in statistical hypothesis testing.",
-      "modelAnswer": "- The probability of obtaining results as extreme as the observed results.\\n- A small p-value (typically ≤ 0.05) indicates strong evidence against the null hypothesis."
-    },
-    {
-      "question": "What is the key difference between correlation and causation?",
-      "modelAnswer": "- Correlation: Indicates a relationship or association between two variables.\\n- Causation: Indicates that one event is the result of the occurrence of the other."
+      "modelAnswer": "DAX as a Formula Language\\nDAX (Data Analysis Expressions) is a library of functions and operators used to build formulas and expressions in Power BI.\\n\\n\\nCreating Custom Calculations\\nIt is used to create calculated columns, measures, and custom tables to add new information from your existing data."
     }
   ]
 }
