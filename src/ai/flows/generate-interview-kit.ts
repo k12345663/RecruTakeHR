@@ -42,7 +42,7 @@ export async function generateInterviewKit(input: GenerateInterviewKitInput): Pr
 
 const generateInterviewKitPrompt = ai.definePrompt({
   name: 'generateInterviewKitPrompt',
-  model: 'googleai/gemini-1.5-pro-latest',
+  model: 'googleai/gemini-1.5-flash-latest',
   input: {schema: GenerateInterviewKitInputSchema},
   output: {schema: GenerateInterviewKitOutputSchema},
   prompt: `
@@ -90,7 +90,7 @@ Generate a JSON object containing a comprehensive list of *30 purely technical, 
 # Output Format
 
 The final output must be a single JSON object with the following structure:
-
+json
 {
   "questions": [
     {
@@ -101,6 +101,29 @@ The final output must be a single JSON object with the following structure:
   ]
 }
 
+
+# Examples (For Clarity)
+
+*If a JD emphasizes financial modeling and Excel:*
+json
+{
+  "question": "How would you use VLOOKUP in Excel to match values from two data tables based on a shared key?",
+  "modelAnswer": "BEGIN MODEL ANSWER\\n\\n\\nUsing VLOOKUP Syntax.\\n\\nThe standard syntax for VLOOKUP is '=VLOOKUP(lookup_value, table_array, col_index_num, [range_lookup])'. The key elements are:\\n\\n- 'lookup_value': The value to be searched for.\\n- 'table_array': The range where the search will occur...\\n\\n\\nCorrect Formula.\\n\\nIf matching Employee IDs in Column A with Departments in Table B from Range B1:D50, the formula would be:\\n'=VLOOKUP(A2, $B$1:$D$50, 3, FALSE)'...\\n\\n..."
+}
+
+
+*If a JD emphasizes coding skills (e.g., Python for a backend role):*
+json
+{
+  "question": "Write a Python function to reverse a linked list and explain its time complexity.",
+  "modelAnswer": "BEGIN MODEL ANSWER\\n\\n\\nPython Function.\\n\\nHere is a Python implementation for reversing a linked list:\\npython\\ndef reverse_linked_list(head):\\n    prev = None\\n    current = head\\n    while current:\\n        next_temp = current.next\\n        current.next = prev\\n        prev = current\\n        current = next_temp\\n    return prev\\n\\n\\n\\nExplanation of Logic.\\n\\nThe function leverages a 'while' loop to traverse...\\n\\n\\nTime Complexity Analysis.\\n\\nThe function's time complexity is...\\n\\n..."
+}
+
+
+# Notes
+- You MUST provide exactly 30 high-quality technical questions.
+- Maintain the JSON structure strictly for ease of integration.
+- Use the context ({{{jobDescription}}}, {{{candidateResumeFileName}}}, etc.) correctly without deviating from outlined guidelines.
 
 # Context for Analysis
 *   **Job Description**: {{{jobDescription}}}
