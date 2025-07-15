@@ -70,7 +70,7 @@ Generate a JSON object containing a comprehensive list of *30 purely technical, 
 
      A detailed, self-explanatory explanation for that point.
      
-     Separate each bullet point with triple newlines (\\n\\n\\n).
+     Separate each bullet point with triple newlines ('\\n\\n\\n').
 2. *Content*:
    - Provide detailed and accurate expert-level responses, including variations or nuances where appropriate.
    - For coding questions, include well-commented code along with detailed explanations.
