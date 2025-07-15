@@ -27,12 +27,12 @@ export type GenerateInterviewKitInput = z.infer<typeof GenerateInterviewKitInput
 const QuestionAnswerPairSchema = z.object({
   id: z.string().optional().describe("A unique identifier. Do not generate this field; it will be added later."),
   question: z.string().describe("A crisp, direct, and deeply technical interview question."),
-  modelAnswer: z.string().describe("A comprehensive, multi-point answer formatted as a single string with multiple bullet points (e.g. '- Point one.\\n- Point two.\\n- Point three.'). For code/queries, wrap them in triple backticks."),
+  modelAnswer: z.string().describe("A comprehensive, multi-point answer formatted as a single string with multiple bullet points (e.g. '- Point one.\\n- Point two.\\n- Point three.'). For code/queries, the code block MUST come first, wrapped in triple backticks, followed by the explanatory points."),
 });
 
 const GenerateInterviewKitOutputSchema = z.object({
   questions: z.array(QuestionAnswerPairSchema)
-    .describe('A list of exactly 30 technical interview questions with concise, bullet-point answers.'),
+    .describe('A list of exactly 30 technical interview questions with concise, multi-point answers.'),
 });
 export type GenerateInterviewKitOutput = z.infer<typeof GenerateInterviewKitOutputSchema>;
 
@@ -66,7 +66,8 @@ You are an expert technical assessment architect. Your primary function is to ge
 1.  *Analyze the Job Description:* Identify the key technical competencies required for the role.
 2.  *Formulate Questions:* Create a list of exactly 30 questions that cover the identified competencies. Questions should be concise, ideally between 10 to 20 words.
 3.  *Provide Model Answers:* For each question, supply a "gold-standard" model answer.
-      * *Format:* The modelAnswer must be a single string. Use multiple bullet points (e.g., - Point one.\\n- Point two.\\n- Point three.) for clarity. If an answer includes a code snippet or query, it **MUST** be wrapped in triple backticks (\`\`\`).
+      * *Format:* The modelAnswer must be a single string. Use multiple bullet points (e.g., - Point one.\\n- Point two.\\n- Point three.) for clarity.
+      * *Code/Query Formatting:* If an answer includes a code snippet or query, it **MUST** be the first part of the answer and be wrapped in triple backticks (\`\`\`). The explanatory bullet points must follow the code block.
       * *Content:* Answers should be accurate, expert-level, and serve as a clear evaluation benchmark. Each point within the answer should be concise but comprehensive.
       * *Perspective:* Write the answer as the ideal candidate would articulate it. Do not include instructions for the interviewer.
 
@@ -93,7 +94,7 @@ The final output must be a single JSON object containing a "questions" key with 
     },
     {
       "question": "How would you write a query to find the second highest salary?",
-      "modelAnswer": "There are several ways to do this, a common one is using OFFSET and FETCH:\\n\`\`\`sql\\nSELECT salary\\nFROM employees\\nORDER BY salary DESC\\nOFFSET 1 ROWS\\nFETCH NEXT 1 ROWS ONLY;\\n\`\`\`\\n- This query sorts salaries in descending order.\\n- OFFSET 1 skips the highest salary.\\n- FETCH NEXT 1 ROWS ONLY retrieves the subsequent row, which is the second highest."
+      "modelAnswer": "\`\`\`sql\\nSELECT salary\\nFROM employees\\nORDER BY salary DESC\\nOFFSET 1 ROWS\\nFETCH NEXT 1 ROWS ONLY;\\n\`\`\`\\n- This query sorts salaries in descending order.\\n- OFFSET 1 skips the highest salary.\\n- FETCH NEXT 1 ROWS ONLY retrieves the subsequent row, which is the second highest."
     }
   ]
 }
@@ -125,3 +126,5 @@ const generateInterviewKitFlow = ai.defineFlow(
     return validatedOutput;
   }
 );
+
+    
