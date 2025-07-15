@@ -15,21 +15,22 @@ import { Checkbox } from '@/components/ui/checkbox';
 
 // Helper component to render the model answer with special handling for code blocks
 const ModelAnswer = ({ answer, questionId }: { answer: string; questionId: string }) => {
-    // Split the answer into sections based on the triple newline separator
-    const sections = answer.split('\n\n\n').filter(section => section.trim() !== '');
+    // Check for bullet points first, then split by triple newline for older formats
+    const hasBulletPoints = /-\s/.test(answer);
+    const sections = hasBulletPoints 
+        ? answer.split('\n').filter(section => section.trim().startsWith('-'))
+        : answer.split('\n\n\n').filter(section => section.trim() !== '');
 
     return (
         <div className="space-y-4">
             {sections.map((section, sectionIndex) => {
                 const trimmedSection = section.trim();
-                // Check if the section is a code block
                 const isCodeBlock = trimmedSection.startsWith('```') && trimmedSection.endsWith('```');
 
                 if (isCodeBlock) {
-                    // Extract content within the triple backticks
                     const codeContent = trimmedSection
-                        .replace(/^```[a-z]*\n/, '') // Remove starting backticks and optional language identifier
-                        .replace(/```$/, '') // Remove ending backticks
+                        .replace(/^```[a-z]*\n/, '')
+                        .replace(/```$/, '')
                         .trim();
                     
                     const pointId = `${questionId}-code-${sectionIndex}`;
@@ -46,8 +47,20 @@ const ModelAnswer = ({ answer, questionId }: { answer: string; questionId: strin
                            </div>
                         </div>
                     );
-                } else {
-                    // It's a regular text section with a title and explanation
+                } else if (hasBulletPoints) {
+                    const pointText = trimmedSection.substring(1).trim();
+                    const pointId = `${questionId}-bullet-${sectionIndex}`;
+                    return (
+                        <div key={pointId} className="flex items-start space-x-3">
+                             <Checkbox id={pointId} className="mt-1 flex-shrink-0" />
+                             <label htmlFor={pointId} className="text-sm font-normal w-full">
+                                {pointText}
+                            </label>
+                        </div>
+                    );
+                }
+                else {
+                    // Fallback for old format: a title and explanation
                     const [title, ...explanationParts] = section.split('\n');
                     const explanation = explanationParts.join('\n').trim();
                     const pointId = `${questionId}-point-${sectionIndex}`;
