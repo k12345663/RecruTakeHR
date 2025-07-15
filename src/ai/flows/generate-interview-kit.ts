@@ -42,7 +42,6 @@ export async function generateInterviewKit(input: GenerateInterviewKitInput): Pr
 
 const generateInterviewKitPrompt = ai.definePrompt({
   name: 'generateInterviewKitPrompt',
-  model: 'googleai/gemini-1.0-pro',
   input: {schema: GenerateInterviewKitInputSchema},
   output: {schema: GenerateInterviewKitOutputSchema},
   prompt: `
