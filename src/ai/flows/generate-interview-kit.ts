@@ -27,7 +27,7 @@ export type GenerateInterviewKitInput = z.infer<typeof GenerateInterviewKitInput
 const QuestionAnswerPairSchema = z.object({
   id: z.string().optional().describe("A unique identifier. Do not generate this field; it will be added later."),
   question: z.string().describe("A crisp, direct, and deeply technical interview question."),
-  modelAnswer: z.string().describe("A comprehensive, multi-point answer formatted as a single string with bullet points. For code/queries, wrap them in triple backticks."),
+  modelAnswer: z.string().describe("A comprehensive, multi-point answer formatted as a single string with multiple bullet points (e.g. '- Point one.\n- Point two.\n- Point three.'). For code/queries, wrap them in triple backticks."),
 });
 
 const GenerateInterviewKitOutputSchema = z.object({
@@ -66,7 +66,7 @@ You are an expert technical assessment architect. Your primary function is to ge
 1.  *Analyze the Job Description:* Identify the key technical competencies required for the role.
 2.  *Formulate Questions:* Create a list of exactly 30 questions that cover the identified competencies. Questions should be concise, ideally between 10 to 20 words.
 3.  *Provide Model Answers:* For each question, supply a "gold-standard" model answer.
-      * *Format:* The modelAnswer must be a single string. Use bullet points (e.g., - Point one.\\n- Point two.) for clarity. If an answer includes a code snippet or query, it **MUST** be wrapped in triple backticks (\`\`\`).
+      * *Format:* The modelAnswer must be a single string. Use multiple bullet points (e.g., - Point one.\\n- Point two.\\n- Point three.) for clarity. If an answer includes a code snippet or query, it **MUST** be wrapped in triple backticks (\`\`\`).
       * *Content:* Answers should be accurate, expert-level, and serve as a clear evaluation benchmark. Each point within the answer should be concise but comprehensive.
       * *Perspective:* Write the answer as the ideal candidate would articulate it. Do not include instructions for the interviewer.
 
@@ -85,15 +85,15 @@ The final output must be a single JSON object containing a "questions" key with 
   "questions": [
     {
       "question": "What is the primary difference between a LEFT JOIN and an INNER JOIN?",
-      "modelAnswer": "- INNER JOIN: Returns records with matching values in both tables.\\n- LEFT JOIN: Returns all records from the left table, and matched from the right."
+      "modelAnswer": "- INNER JOIN: Returns records with matching values in both tables.\\n- LEFT JOIN: Returns all records from the left table, and matched records from the right.\\n- Use Case: Use INNER for exact matches, LEFT when you need all records from one table regardless of matches in the other."
     },
     {
       "question": "In SQL, what is the purpose of the GROUP BY clause?",
-      "modelAnswer": "- It groups rows that have the same values into summary rows.\\n- Often used with aggregate functions like COUNT(), MAX(), SUM()."
+      "modelAnswer": "- It groups rows that have the same values into summary rows, like 'total sales per region'.\\n- It is almost always used with aggregate functions like COUNT(), MAX(), MIN(), SUM(), AVG() to perform calculations on each group.\\n- It collapses multiple rows into a single summary row based on the specified column(s)."
     },
     {
       "question": "How would you write a query to find the second highest salary?",
-      "modelAnswer": "There are several ways to do this, a common one is using OFFSET and FETCH:\\n\`\`\`sql\\nSELECT salary\\nFROM employees\\nORDER BY salary DESC\\nOFFSET 1 ROWS\\nFETCH NEXT 1 ROWS ONLY;\\n\`\`\`\\n- This query sorts salaries in descending order and skips the first result to get the second."
+      "modelAnswer": "There are several ways to do this, a common one is using OFFSET and FETCH:\\n\`\`\`sql\\nSELECT salary\\nFROM employees\\nORDER BY salary DESC\\nOFFSET 1 ROWS\\nFETCH NEXT 1 ROWS ONLY;\\n\`\`\`\\n- This query sorts salaries in descending order.\\n- OFFSET 1 skips the highest salary.\\n- FETCH NEXT 1 ROWS ONLY retrieves the subsequent row, which is the second highest."
     }
   ]
 }

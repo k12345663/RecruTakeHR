@@ -15,11 +15,9 @@ import { Checkbox } from '@/components/ui/checkbox';
 
 // Helper component to render the model answer with special handling for code blocks
 const ModelAnswer = ({ answer, questionId }: { answer: string; questionId: string }) => {
-    // Check for bullet points first, then split by triple newline for older formats
+    // Check for bullet points first, then split by newline for other cases
     const hasBulletPoints = /-\s/.test(answer);
-    const sections = hasBulletPoints 
-        ? answer.split('\n').filter(section => section.trim().startsWith('-'))
-        : answer.split('\n\n\n').filter(section => section.trim() !== '');
+    const sections = answer.split('\n').filter(section => section.trim() !== '');
 
     return (
         <div className="space-y-4">
@@ -47,7 +45,7 @@ const ModelAnswer = ({ answer, questionId }: { answer: string; questionId: strin
                            </div>
                         </div>
                     );
-                } else if (hasBulletPoints) {
+                } else if (hasBulletPoints && trimmedSection.startsWith('-')) {
                     const pointText = trimmedSection.substring(1).trim();
                     const pointId = `${questionId}-bullet-${sectionIndex}`;
                     return (
@@ -60,17 +58,13 @@ const ModelAnswer = ({ answer, questionId }: { answer: string; questionId: strin
                     );
                 }
                 else {
-                    // Fallback for old format: a title and explanation
-                    const [title, ...explanationParts] = section.split('\n');
-                    const explanation = explanationParts.join('\n').trim();
+                    // Fallback for non-bulleted lines or titles
                     const pointId = `${questionId}-point-${sectionIndex}`;
-                    
                     return (
                         <div key={pointId} className="flex items-start space-x-3">
                             <Checkbox id={pointId} className="mt-1 flex-shrink-0" />
                             <label htmlFor={pointId} className="text-sm font-normal w-full space-y-1">
-                                {title && <p className="font-semibold">{title.trim()}</p>}
-                                {explanation && <p className="text-muted-foreground">{explanation}</p>}
+                               <p>{trimmedSection}</p>
                             </label>
                         </div>
                     );
