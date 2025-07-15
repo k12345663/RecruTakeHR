@@ -26,13 +26,13 @@ export type GenerateInterviewKitInput = z.infer<typeof GenerateInterviewKitInput
 
 const QuestionAnswerPairSchema = z.object({
   id: z.string().optional().describe("A unique identifier. Do not generate this field; it will be added later."),
-  question: z.string().describe("A crisp, direct, and deeply technical interview question. The question MUST NOT be open-ended, philosophical, or behavioral (e.g., AVOID 'How would you handle X?', 'Describe a time when...'). It must be a direct probe for factual, technical knowledge or a specific problem to solve."),
-  modelAnswer: z.string().describe("A comprehensive, multi-point answer. For each point, provide a title followed by a detailed explanation. Separate each point with a triple newline ('\\n\\n\\n'). The entire answer MUST be a single string. For coding questions, provide the complete code snippet first, followed by a multi-point explanation of the code's logic, structure, and efficiency."),
+  question: z.string().describe("A crisp, direct, and deeply technical interview question."),
+  modelAnswer: z.string().describe("A comprehensive, multi-point answer formatted as a single string with bullet points."),
 });
 
 const GenerateInterviewKitOutputSchema = z.object({
   questions: z.array(QuestionAnswerPairSchema)
-    .describe('A list of 30 purely technical interview questions with comprehensive, multi-point answers.'),
+    .describe('A list of technical interview questions with comprehensive, multi-point answers.'),
 });
 export type GenerateInterviewKitOutput = z.infer<typeof GenerateInterviewKitOutputSchema>;
 
@@ -46,84 +46,78 @@ const generateInterviewKitPrompt = ai.definePrompt({
   input: {schema: GenerateInterviewKitInputSchema},
   output: {schema: GenerateInterviewKitOutputSchema},
   prompt: `
-Generate a JSON object containing a comprehensive list of *30 purely technical, specific, and practical interview questions*, with corresponding gold-standard model answers. Follow these rules and structure:
+You are an expert technical assessment architect. Your primary function is to generate insightful and role-specific technical questions based on a provided Job Description (JD). The goal is to create an assessment that accurately gauges a candidate's practical and theoretical expertise.
 
-# Rules for Question Generation
+*Core Directives for Question Generation:*
 
-1. *Align Strictly with Job Description*: Formulate ONLY questions directly aligned with the listed skills and responsibilities from the provided Job Description ({{{jobDescription}}}). The focus must remain on the core technical competencies outlined in the JD.
-2. *Exclude Irrelevant Skills*: Do NOT create questions about skills or technologies unrelated to the Job Description, even if they appear in the candidate’s resume or profile.
-3. *No Behavioral Questions*: Avoid open-ended or opinion-based questions. Stick exclusively to technical, fact-based, and performance-driven prompts.
-4. *Balance and Depth*:
-   - Cover the full range of core technical skills mentioned in the JD.
-   - Ensure a practical approach, including real-world applications, scenarios, and exercises where appropriate.
-   - For coding-related roles, include short function-based coding prompts.
-   - For finance or analytical roles, include problem-solving exercises and spreadsheet-oriented challenges.
-   - For tool-based expertise (e.g., CRM systems), ensure the questions are specific to features, workflows, or use cases of the tool.
+1.  *JD as the Single Source of Truth:* All questions must directly map to the technical skills, tools, and responsibilities explicitly stated in the Job Description. Do not introduce concepts or technologies not mentioned in the JD.
+2.  *Balance Theory and Practice:* Formulate questions that probe both foundational knowledge (the "why") and practical application (the "how"). This ensures a holistic evaluation of the candidate's capabilities.
+3.  *Clarity and Conciseness:* Questions should be direct, unambiguous, and focused on a single technical concept. Avoid compound questions or subjective inquiries.
+4.  *No Behavioral Questions:* Focus exclusively on technical proficiency. Omit questions about teamwork, past experiences, or personal opinions (e.g., "Describe a time when...", "What is your favorite...").
 
-# Rules for Model Answers
+*Contextual Analysis:*
 
-1. *Structure*: Each model answer must follow this format:
-   - Begin with the direct answer (e.g., code snippet, formula, method name, etc.)
-   - Follow with multiple bullet points, formatted as:
-     
-     A title for the point.
+  * *Job Description*: {{{jobDescription}}}
+  * *Candidate Profile (Optional)*: {{{unstopProfileLink}}} and {{{candidateResumeDataUri}}} may provide context but should not be the primary source for question topics. A maximum of two questions can be tailored to the candidate's experience if it directly aligns with a core JD requirement.
 
-     A detailed, self-explanatory explanation for that point.
-     
-     Separate each bullet point with triple newlines ('\\n\\n\\n').
-2. *Content*:
-   - Provide detailed and accurate expert-level responses, including variations or nuances where appropriate.
-   - For coding questions, include well-commented code along with detailed explanations.
-   - For finance-related questions, include step-by-step calculations and conceptual clarifications.
-   - For tool-focused questions, describe workflows and key feature applications.
-3. *No Instructions*: Write the answers as if provided by an expert candidate. Avoid commentary or instructions for the interviewer.
+*Task: Generate Technical Assessment Questions*
 
-# Task Steps
+1.  *Analyze the Job Description:* Identify the key technical competencies required for the role.
+2.  *Formulate Questions:* Create a list of questions that cover the identified competencies. Questions should be concise, ideally between 10 to 15 words.
+3.  *Provide Model Answers:* For each question, supply a "gold-standard" model answer.
+      * *Format:* The modelAnswer must be a single string. Use bullet points (e.g., - Point one.\\n- Point two.) for clarity.
+      * *Content:* Answers should be accurate, expert-level, and serve as a clear evaluation benchmark. Each point within the answer should also be concise (10-15 words).
+      * *Perspective:* Write the answer as the ideal candidate would articulate it. Do not include instructions for the interviewer.
 
-1. *Analyze the Job Description*: Isolate the core technical skills explicitly listed in {{{jobDescription}}}.
-2. *Generate 30 Questions*:
-   - Base the majority (at least 25) on skills from the Job Description.
-   - Optionally include up to 2 questions tailored to the resume ({{candidateResumeFileName}}) if it directly aligns with JD requirements.
-   - Ensure all questions are relevant and practical, avoiding theoretical or abstract phrasing.
-3. *Provide Model Answers*: Each model answer must be a robust and detailed response to the corresponding question.
+The final output must be a single JSON object containing a "questions" key with an array of question-answer objects.
 
-# Output Format
+-----
 
-The final output must be a single JSON object with the following structure:
-json
+### *Example Questions and Answers (Based on a Hypothetical Data Analyst JD)*
 {
   "questions": [
     {
-      "question": "[Insert a clearly defined technical question here, fully aligned with the JD.]",
-      "modelAnswer": "[Insert a gold-standard model answer here, following the formatting rules specified.]"
+      "question": "What is the primary difference between a LEFT JOIN and an INNER JOIN?",
+      "modelAnswer": "- INNER JOIN: Returns records with matching values in both tables.\\n- LEFT JOIN: Returns all records from the left table, and matched from the right."
     },
-    ...
+    {
+      "question": "In SQL, what is the purpose of the GROUP BY clause?",
+      "modelAnswer": "- It groups rows that have the same values into summary rows.\\n- Often used with aggregate functions like COUNT(), MAX(), SUM()."
+    },
+    {
+      "question": "How would you write a query to find the second highest salary?",
+      "modelAnswer": "- Use OFFSET and FETCH with ORDER BY SALARY DESC.\\n- Alternatively, use a subquery with the MAX() function."
+    },
+    {
+      "question": "What is the main difference between UNION and UNION ALL set operators?",
+      "modelAnswer": "- UNION: Combines result sets and removes duplicate records.\\n- UNION ALL: Combines result sets but includes all duplicate records."
+    },
+    {
+      "question": "In Power BI, what is the primary function of DAX?",
+      "modelAnswer": "- DAX (Data Analysis Expressions) is a formula language.\\n- Used to create custom calculations in Power BI models."
+    },
+    {
+      "question": "What is the difference between a calculated column and a measure in DAX?",
+      "modelAnswer": "- Calculated Column: Stored in the model, consumes RAM, row-by-row context.\\n- Measure: Calculated on the fly, uses CPU, evaluated in filter context."
+    },
+    {
+      "question": "How do you define data modeling in the context of Power BI?",
+      "modelAnswer": "- Connecting different data tables using relationships.\\n- Creates a structured and efficient data model for analysis."
+    },
+    {
+      "question": "What is the difference between SUM and SUMX in DAX?",
+      "modelAnswer": "- SUM: Aggregates numbers in a single column.\\n- SUMX: An iterator function that calculates a sum over a table expression."
+    },
+    {
+      "question": "Explain what a p-value represents in statistical hypothesis testing.",
+      "modelAnswer": "- The probability of obtaining results as extreme as the observed results.\\n- A small p-value (typically ≤ 0.05) indicates strong evidence against the null hypothesis."
+    },
+    {
+      "question": "What is the key difference between correlation and causation?",
+      "modelAnswer": "- Correlation: Indicates a relationship or association between two variables.\\n- Causation: Indicates that one event is the result of the occurrence of the other."
+    }
   ]
 }
-
-
-# Examples (For Clarity)
-
-*If a JD emphasizes financial modeling and Excel:*
-json
-{
-  "question": "How would you use VLOOKUP in Excel to match values from two data tables based on a shared key?",
-  "modelAnswer": "BEGIN MODEL ANSWER\\n\\n\\nUsing VLOOKUP Syntax.\\n\\nThe standard syntax for VLOOKUP is '=VLOOKUP(lookup_value, table_array, col_index_num, [range_lookup])'. The key elements are:\\n\\n- 'lookup_value': The value to be searched for.\\n- 'table_array': The range where the search will occur...\\n\\n\\nCorrect Formula.\\n\\nIf matching Employee IDs in Column A with Departments in Table B from Range B1:D50, the formula would be:\\n'=VLOOKUP(A2, $B$1:$D$50, 3, FALSE)'...\\n\\n..."
-}
-
-
-*If a JD emphasizes coding skills (e.g., Python for a backend role):*
-json
-{
-  "question": "Write a Python function to reverse a linked list and explain its time complexity.",
-  "modelAnswer": "BEGIN MODEL ANSWER\\n\\n\\nPython Function.\\n\\nHere is a Python implementation for reversing a linked list:\\n'python'\\ndef reverse_linked_list(head):\\n    prev = None\\n    current = head\\n    while current:\\n        next_temp = current.next\\n        current.next = prev\\n        prev = current\\n        current = next_temp\\n    return prev\\n\\n\\n\\nExplanation of Logic.\\n\\nThe function leverages a 'while' loop to traverse...\\n\\n\\nTime Complexity Analysis.\\n\\nThe function's time complexity is...\\n\\n..."
-}
-
-
-# Notes
-- You MUST provide exactly 30 high-quality technical questions.
-- Maintain the JSON structure strictly for ease of integration.
-- Use the context ({{{jobDescription}}}, {{{candidateResumeFileName}}}, etc.) correctly without deviating from outlined guidelines.
 
 # Context for Analysis
 *   **Job Description**: {{{jobDescription}}}
@@ -132,7 +126,7 @@ json
 {{#if candidateExperienceContext}}*   **Additional Candidate Context**: {{{candidateExperienceContext}}}{{/if}}
 
 
-Remember, the entire output MUST be a single JSON object with a "questions" key, containing an array of 30 question-answer objects.
+Remember, the entire output MUST be a single JSON object with a "questions" key, containing an array of question-answer objects.
 `,
 });
 
