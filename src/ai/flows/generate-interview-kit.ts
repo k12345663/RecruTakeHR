@@ -42,43 +42,74 @@ export async function generateInterviewKit(input: GenerateInterviewKitInput): Pr
 
 const generateInterviewKitPrompt = ai.definePrompt({
   name: 'generateInterviewKitPrompt',
-  model: 'googleai/gemini-2.0-flash',
+  model: 'googleai/gemini-1.5-pro-latest',
   input: {schema: GenerateInterviewKitInputSchema},
   output: {schema: GenerateInterviewKitOutputSchema},
   prompt: `
-You are an expert technical interviewer and recruitment strategist. Your single mission is to generate a comprehensive list of 30 **purely technical, specific, and practical interview questions**.
+Generate a JSON object containing a comprehensive list of *30 purely technical, specific, and practical interview questions*, with corresponding gold-standard model answers. Follow these rules and structure:
 
-**ABSOLUTE RULES FOR QUESTION GENERATION:**
+# Rules for Question Generation
 
-1.  **JD IS KING**: You MUST generate questions that are laser-focused on the skills explicitly listed in the Job Description. If the JD emphasizes 'Excel', 'Financial Modeling', or 'Customer Relationship Management', then the vast majority of the 30 questions MUST be about those specific topics.
-2.  **IGNORE IRRELEVANT SKILLS**: DO NOT generate questions about programming languages (like Python, Java) or other technical skills IF THEY ARE NOT MENTIONED IN THE JOB DESCRIPTION, even if they appear on the candidate's resume.
-3.  **ONLY TECHNICAL QUESTIONS**: NO BEHAVIORAL OR OPEN-ENDED QUESTIONS. Questions MUST be direct, factual, and technical probes. **ABSOLUTELY AVOID** vague questions like "Describe your experience with X", "What are the responsibilities of...", "How would you handle Y?", "Why are X skills important?", or "Explain the importance of...".
+1. *Align Strictly with Job Description*: Formulate ONLY questions directly aligned with the listed skills and responsibilities from the provided Job Description ({{{jobDescription}}}). The focus must remain on the core technical competencies outlined in the JD.
+2. *Exclude Irrelevant Skills*: Do NOT create questions about skills or technologies unrelated to the Job Description, even if they appear in the candidate’s resume or profile.
+3. *No Behavioral Questions*: Avoid open-ended or opinion-based questions. Stick exclusively to technical, fact-based, and performance-driven prompts.
+4. *Balance and Depth*:
+   - Cover the full range of core technical skills mentioned in the JD.
+   - Ensure a practical approach, including real-world applications, scenarios, and exercises where appropriate.
+   - For coding-related roles, include short function-based coding prompts.
+   - For finance or analytical roles, include problem-solving exercises and spreadsheet-oriented challenges.
+   - For tool-based expertise (e.g., CRM systems), ensure the questions are specific to features, workflows, or use cases of the tool.
 
-CONTEXT FOR ANALYSIS:
+# Rules for Model Answers
+
+1. *Structure*: Each model answer must follow this format:
+   - Begin with the direct answer (e.g., code snippet, formula, method name, etc.)
+   - Follow with multiple bullet points, formatted as:
+     
+     A title for the point.
+
+     A detailed, self-explanatory explanation for that point.
+     
+     Separate each bullet point with triple newlines (\\n\\n\\n).
+2. *Content*:
+   - Provide detailed and accurate expert-level responses, including variations or nuances where appropriate.
+   - For coding questions, include well-commented code along with detailed explanations.
+   - For finance-related questions, include step-by-step calculations and conceptual clarifications.
+   - For tool-focused questions, describe workflows and key feature applications.
+3. *No Instructions*: Write the answers as if provided by an expert candidate. Avoid commentary or instructions for the interviewer.
+
+# Task Steps
+
+1. *Analyze the Job Description*: Isolate the core technical skills explicitly listed in {{{jobDescription}}}.
+2. *Generate 30 Questions*:
+   - Base the majority (at least 25) on skills from the Job Description.
+   - Optionally include up to 2 questions tailored to the resume ({{candidateResumeFileName}}) if it directly aligns with JD requirements.
+   - Ensure all questions are relevant and practical, avoiding theoretical or abstract phrasing.
+3. *Provide Model Answers*: Each model answer must be a robust and detailed response to the corresponding question.
+
+# Output Format
+
+The final output must be a single JSON object with the following structure:
+
+{
+  "questions": [
+    {
+      "question": "[Insert a clearly defined technical question here, fully aligned with the JD.]",
+      "modelAnswer": "[Insert a gold-standard model answer here, following the formatting rules specified.]"
+    },
+    ...
+  ]
+}
+
+
+# Context for Analysis
 *   **Job Description**: {{{jobDescription}}}
 *   **Unstop Profile Link**: {{{unstopProfileLink}}}
 {{#if candidateResumeDataUri}}*   **Candidate Resume ({{candidateResumeFileName}})**: {{media url=candidateResumeDataUri}} (Analyze this for context, but only use it to tailor questions if the skills are relevant to the JD.){{/if}}
 {{#if candidateExperienceContext}}*   **Additional Candidate Context**: {{{candidateExperienceContext}}}{{/if}}
 
-YOUR TASK:
 
-1.  **Analyze Job Description & Formulate Questions**: First, deeply analyze the Job Description to identify the core technical skills required. Then, formulate exactly 30 technical questions that are perfectly aligned with those skills, covering the full range of requirements.
-    *   **For Software Roles (Software Development, Backend, Frontend, DevOps, SDET):** Questions must cover specific languages, frameworks, algorithms, data structures, and system design concepts mentioned in the JD. You MUST include several short, function-based coding questions that require the candidate to write actual code.
-    *   **For Sales Roles (SDR, Account Executive):** Questions must focus on sales methodologies, CRM tools (like Salesforce), lead qualification, and process-oriented tasks mentioned in the JD.
-    *   **For Finance Roles (Financial Analyst, Investment Banker):** Questions must focus on financial modeling, valuation methods, and specific spreadsheet functions (like VLOOKUP, Pivot Tables in Excel) if required by the JD. Include questions that require formulas or calculations.
-    *   **For Customer Support Roles:** Questions must be practical and scenario-based, focusing on troubleshooting processes, communication techniques, and proficiency with required tools (like Excel for reporting).
-
-2.  **Ensure High Quality & Proper Sourcing**:
-    *   The **Job Description is the primary source**. The majority of your questions (at least 25) must be derived from the technical skills and responsibilities mentioned in the JD.
-    *   If a resume is provided, you may generate **a maximum of two (2) questions** that are directly tailored to the candidate's specific projects or experiences listed on the resume. **CRITICAL: Only do this if the skill is directly relevant to the Job Description's domain.**
-    *   All questions must be tailored to the specified seniority level.
-
-3.  **Provide GOLD-STANDARD MODEL ANSWERS**:
-    *   **Format**: The 'modelAnswer' MUST be a single string containing multiple evaluation points, separated by a triple newline ('\\n\\n\\n'). Each point MUST follow this format EXACTLY: \`A title for the point.\\n\\nA detailed, self-explanatory explanation for that point.\`
-    *   **Content**: For coding questions, provide the full code snippet first, then a multi-point explanation following the format above. For other questions, provide a comprehensive, multi-point answer. Each point must provide a clear, detailed piece of information. The goal is to create a simple, yet thorough checklist for the interviewer.
-    *   **CRITICAL RULE FOR MODEL ANSWERS**: The 'modelAnswer' MUST be the **actual answer** to the question, written from the perspective of an expert candidate. **DO NOT** provide instructions or commentary for the interviewer (e.g., AVOID 'The candidate should explain...').
-
-The entire output MUST be a single JSON object with a "questions" key, containing an array of 30 question-answer objects.
+Remember, the entire output MUST be a single JSON object with a "questions" key, containing an array of 30 question-answer objects.
 `,
 });
 
